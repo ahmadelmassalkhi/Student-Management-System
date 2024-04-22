@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="299.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mavenproject1.UpdateStudentController">
+    <children>
+        <Pane prefHeight="554.0" prefWidth="793.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label layoutX="33.0" layoutY="21.0" text="Update Student" textFill="#322d2d">
+                    <font>
+                    <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+            <VBox layoutX="282.0" layoutY="106.0" prefHeight="87.0" prefWidth="85.0" spacing="3.0">
+               <children>
+                  <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="150.0" promptText="Grade" />
+                  <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="150.0" promptText="English" />
+                  <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="85.0" promptText="InActive" />
+               </children>
+            </VBox>
+            <VBox layoutX="124.0" layoutY="106.0" prefHeight="81.0" prefWidth="100.0" spacing="3.0">
+               <children>
+                  <TextField fx:id="tf_FirstName" prefHeight="27.0" prefWidth="145.0" promptText="First Name" styleClass="input" stylesheets="@../css/style.css" />
+                  <TextField fx:id="tf_LastName" prefHeight="27.0" prefWidth="134.0" promptText="Last Name" styleClass="input" stylesheets="@../css/style.css" />
+                  <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" styleClass="input" stylesheets="@../css/style.css" />
+               </children>
+            </VBox>
+            <ComboBox fx:id="comboBox_CountryCode" layoutX="32.0" layoutY="166.0" prefHeight="27.0" prefWidth="85.0" promptText="Code" />
+            <HBox layoutX="129.0" layoutY="251.0" prefHeight="27.0" prefWidth="153.0" spacing="3.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0" stylesheets="@../css/style.css">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#updateStudent" prefHeight="25.0" prefWidth="174.0" text="Ok">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" stylesheets="@../css/style.css">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="121.0" text="Cancel">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
