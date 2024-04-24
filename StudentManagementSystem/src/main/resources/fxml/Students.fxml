@@ -128,6 +128,7 @@
                     <TableColumn fx:id="col_Grade" prefWidth="68.0" text="Grade" />
                     <TableColumn fx:id="col_Language" prefWidth="126.0" text="Language" />
                     <TableColumn fx:id="col_Subscription" minWidth="0.0" prefWidth="159.0" text="Subscription" />
+                  <TableColumn fx:id="col_ID" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="ID" />
                 </columns>
                 </TableView>
                 <Label layoutX="33.0" layoutY="21.0" text="Students" textFill="#322d2d">

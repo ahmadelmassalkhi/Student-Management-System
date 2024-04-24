@@ -82,6 +82,8 @@ public class StudentsController implements Initializable {
     
     /* COLUMNS */
     @FXML
+    private TableColumn col_ID;
+    @FXML
     private TableColumn col_FirstName;
     @FXML
     private TableColumn col_LastName;
@@ -101,6 +103,7 @@ public class StudentsController implements Initializable {
         studentsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         // associate data to columns
+        col_ID.setCellValueFactory(new PropertyValueFactory<Student, String>("id"));
         col_FirstName.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
         col_LastName.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
         col_Grade.setCellValueFactory(new PropertyValueFactory<Student, String>("grade"));

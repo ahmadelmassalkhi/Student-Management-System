@@ -212,7 +212,7 @@ public class StudentsModel {
                 GRADE,
                 LANGUAGE,
                 SUBSCRIPTION,
-                PHONE
+                ID
         );
         
         // set parameters
@@ -223,7 +223,7 @@ public class StudentsModel {
             updatedS.getGrade(),
             updatedS.getLanguage(),
             updatedS.getSubscriptionStatus(),
-            oldS.getPhone()
+            oldS.getId()
         };
         
         // execute query
