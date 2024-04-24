@@ -22,7 +22,7 @@
                     <children>
                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                         <children>
-                            <Label text="22000" textFill="#2a73ff">
+                            <Label fx:id="label_TotalStudents" text="22000" textFill="#2a73ff">
                                 <font>
                                 <Font name="System Bold" size="26.0" />
                                 </font>
@@ -32,7 +32,7 @@
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="92.0" prefWidth="112.0">
                         <children>
-                            <Label text="1500" textFill="#26bfbc">
+                            <Label fx:id="label_TotalSubscriptions" text="1500" textFill="#26bfbc">
                                 <font>
                                 <Font name="System Bold" size="26.0" />
                                 </font>

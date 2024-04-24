@@ -59,7 +59,11 @@ public class StudentsModel {
         System.out.println("Database initialized successfully.");
     }
     
-    private List<Student> fetchAllStudents() throws SQLException {
+    public int NumberOfActiveSubscriptionsOfLastQuery = 0;
+    private List<Student> fetchAllRows() throws SQLException { return fetchAllRows(false); }
+    private List<Student> fetchAllRows(boolean countSubscriptions) throws SQLException {
+        if(countSubscriptions) NumberOfActiveSubscriptionsOfLastQuery = 0;
+        
         List<Student> students = new ArrayList<>();
         while(database.result.next()) {
             // create student
@@ -71,6 +75,8 @@ public class StudentsModel {
             s.setGrade(database.result.getInt(GRADE));
             s.setLanguage(database.result.getString(LANGUAGE));
             s.setSubscriptionStatus(database.result.getString(SUBSCRIPTION));
+            
+            if(countSubscriptions && s.getSubscriptionStatus().equalsIgnoreCase("active"))  NumberOfActiveSubscriptionsOfLastQuery++;
             
             // add student to list
             students.add(s);
@@ -182,7 +188,7 @@ public class StudentsModel {
         database.executeQuery(query, params.toArray());
         
         // fetch and return results
-        return fetchAllStudents();
+        return fetchAllRows(true);
     }
     
     public void updateStudent(Student oldS, Student updatedS) throws SQLException, PhoneAlreadyExistsException {
