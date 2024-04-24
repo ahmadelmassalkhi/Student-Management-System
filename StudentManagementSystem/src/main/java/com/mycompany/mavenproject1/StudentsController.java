@@ -28,6 +28,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -47,6 +48,11 @@ public class StudentsController implements Initializable {
     /*******************************************************************/
 
     private StudentsModel model;
+    
+    @FXML
+    private Label label_TotalStudents;
+    @FXML
+    private Label label_TotalSubscriptions;
     
     /*******************************************************************/
     
@@ -298,7 +304,12 @@ public class StudentsController implements Initializable {
     // refresh data in students table
     public void refreshStudentsTable() {
         try {
-            studentsTable.setItems(FXCollections.observableArrayList(model.getAllStudents()));
+            List<Student> result = model.getAllStudents();
+            studentsTable.setItems(FXCollections.observableArrayList(result));
+            
+            // set statistical data
+            label_TotalStudents.setText(result.size() + "");
+            label_TotalSubscriptions.setText(model.NumberOfActiveSubscriptionsOfLastQuery + "");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
