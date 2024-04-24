@@ -13,6 +13,7 @@ import com.mycompany.mavenproject1.models.StudentsModel;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -91,6 +92,13 @@ public class UpdateStudentController implements Initializable {
                     // set country-code
                     setText(Common.getCountryCode(item));
                 }
+            }
+        });
+
+        // force the field `Phone` to be numeric only
+        tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
     }
