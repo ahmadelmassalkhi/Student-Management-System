@@ -19,35 +19,35 @@
                     <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
-            <VBox layoutX="282.0" layoutY="106.0" prefHeight="87.0" prefWidth="85.0" spacing="3.0">
+            <VBox layoutX="274.0" layoutY="106.0" prefHeight="87.0" prefWidth="87.0" spacing="3.0">
                <children>
-                  <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="150.0" promptText="Grade" />
-                  <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="150.0" promptText="English" />
-                  <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="85.0" promptText="InActive" />
+                  <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="100.0" promptText="Grade" stylesheets="@../css/ComboBox.css" />
+                  <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="100.0" promptText="English" stylesheets="@../css/ComboBox.css" />
+                  <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="100.0" promptText="InActive" stylesheets="@../css/ComboBox.css" />
                </children>
             </VBox>
             <VBox layoutX="124.0" layoutY="106.0" prefHeight="81.0" prefWidth="100.0" spacing="3.0">
                <children>
-                  <TextField fx:id="tf_FirstName" prefHeight="27.0" prefWidth="145.0" promptText="First Name" styleClass="input" stylesheets="@../css/style.css" />
-                  <TextField fx:id="tf_LastName" prefHeight="27.0" prefWidth="134.0" promptText="Last Name" styleClass="input" stylesheets="@../css/style.css" />
-                  <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" styleClass="input" stylesheets="@../css/style.css" />
+                  <TextField fx:id="tf_FirstName" prefHeight="27.0" prefWidth="145.0" promptText="First Name" stylesheets="@../css/TextField.css" />
+                  <TextField fx:id="tf_LastName" prefHeight="27.0" prefWidth="134.0" promptText="Last Name" stylesheets="@../css/TextField.css" />
+                  <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" stylesheets="@../css/TextField.css" />
                </children>
             </VBox>
-            <ComboBox fx:id="comboBox_CountryCode" layoutX="32.0" layoutY="166.0" prefHeight="27.0" prefWidth="85.0" promptText="Code" />
+            <ComboBox fx:id="comboBox_CountryCode" layoutX="32.0" layoutY="166.0" prefHeight="27.0" prefWidth="76.0" promptText="Code" stylesheets="@../css/ComboBox.css" />
             <HBox layoutX="129.0" layoutY="251.0" prefHeight="27.0" prefWidth="153.0" spacing="3.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" stylesheets="@../css/style.css">
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#updateStudent" prefHeight="25.0" prefWidth="174.0" text="Ok">
+                        <Button mnemonicParsing="false" onAction="#updateStudent" prefHeight="25.0" prefWidth="174.0" stylesheets="@../css/Button.css" text="Ok">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" stylesheets="@../css/style.css">
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="121.0" text="Cancel">
+                        <Button mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="121.0" stylesheets="@../css/Button.css" text="Cancel">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
