@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -115,7 +117,7 @@ public class StudentsController implements Initializable {
         studentsTable.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 Student s = (Student) studentsTable.getSelectionModel().getSelectedItem();
-                if (s != null) openNewWindow(s);
+                if (s != null) updateStudent(s);
             }
         });
     }
@@ -205,14 +207,14 @@ public class StudentsController implements Initializable {
             System.exit(1);
         }
         
-        // set students table
-        this.refreshStudentsTable();
+        // set students data
+        this.refresh();
     }
     
     /*******************************************************************/
-    // MAIN METHODS
+    // CRUD OPERATIONS (FROM UI)
     
-    // called by `btnAddStudent` button (+)
+    // CREATE
     public void AddStudent() {
         
         // extract data from input-fields
@@ -247,10 +249,10 @@ public class StudentsController implements Initializable {
             // add student to database
             model.addStudent(s);
             
-            // update students list
-            clearInputs();
-            Search();
-            
+            // adopt to data changes
+            this.clearTextFields(); // make adding another new student easier
+            this.refresh();
+                           
             // print out a message
             System.out.println("Student added successfully !");
         } catch (SQLException ex) {
@@ -262,83 +264,8 @@ public class StudentsController implements Initializable {
         }
     }
     
-    public void deleteSelectedStudents() {
-        // get all selected students
-        ObservableList<Student> selectedStudents = studentsTable.getSelectionModel().getSelectedItems();
-        if(selectedStudents.isEmpty()) return; // nothing was selected
-        
-        // get all their phone numbers
-        List<String> phones = new ArrayList<>();
-        for(Student s : selectedStudents) phones.add(s.getPhone());
-        
-        // delete from database all students with these phone numbers
-        try {
-            model.deleteStudentsByPhone(phones);
-            this.refreshStudentsTable();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    public void refreshPage() {
-        clearInputs();
-        clearComboBoxes();
-        refreshStudentsTable();
-    }
-    
-    /*******************************************************************/
-    // HELPER METHODS
-    
-    private void clearInputs() {
-        // clear inputs
-        tf_FirstName.clear();
-        tf_LastName.clear();
-        tf_Phone.clear();
-    }
-    
-    private void clearComboBoxes() {
-        // clear drop-down menus
-        comboBox_Language.setValue("Any");
-        comboBox_Subscription.setValue("Any");
-        comboBox_Grade.setValue("Any");
-    }
-    
-    // refresh data in students table
-    public void refreshStudentsTable() {
-        try {
-            List<Student> result = model.getAllStudents();
-            studentsTable.setItems(FXCollections.observableArrayList(result));
-            
-            // set statistical data
-            label_TotalStudents.setText(result.size() + "");
-            label_TotalSubscriptions.setText(model.NumberOfActiveSubscriptionsOfLastQuery + "");
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    private void Search() {
-        // extract data from input-fields
-        String firstName = tf_FirstName.getText();
-        String lastName = tf_LastName.getText();
-        String phone = tf_Phone.getText();
-        String grade =  (String) comboBox_Grade.getValue();
-        String language = (String) comboBox_Language.getValue();
-        String subscription = (String) comboBox_Subscription.getValue();
-
-        // perform search
-        try {
-            List<Student> result = model.searchStudent(firstName, lastName, phone, grade, language, subscription);
-            studentsTable.setItems(FXCollections.observableArrayList(result));
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    private void openNewWindow(Student s) {
+    // UPDATE
+    private void updateStudent(Student s) {
         try {
             // load resource
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudent.fxml"));
@@ -356,10 +283,93 @@ public class StudentsController implements Initializable {
             // wait until student is successfully updated or cancelled
             stage.showAndWait();
             
-            // refresh table data after successful update or cancellation
-            this.refreshStudentsTable();
+            // adopt to data changes
+            this.refresh();
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    // DELETE
+    public void deleteSelectedStudents() {
+        // get all selected students
+        ObservableList<Student> selectedStudents = studentsTable.getSelectionModel().getSelectedItems();
+        if(selectedStudents.isEmpty()) return; // nothing was selected
+        
+        // get all their IDs
+        List<Integer> IDs = new ArrayList<>();
+        for(Student s : selectedStudents) IDs.add(s.getId());
+        
+        // delete from database
+        try {
+            model.deleteStudentsByIDs(IDs);
+            
+            // adopt to data changes
+            this.refresh();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    public void clearButton() {
+        // clear all inputs
+        this.clearTextFields();
+        this.clearComboBoxes();
+        
+        // refresh data
+        this.refresh();
+    }
+    
+    /*******************************************************************/
+    // HELPER METHODS
+    
+    private void refresh() {
+        this.refreshStats();
+        this.Search();
+    }
+    
+    private void clearTextFields() {
+        // clear inputs
+        tf_FirstName.clear();
+        tf_LastName.clear();
+        tf_Phone.clear();
+    }
+    
+    private void clearComboBoxes() {
+        // clear drop-down menus
+        comboBox_Language.setValue("Any");
+        comboBox_Subscription.setValue("Any");
+        comboBox_Grade.setValue("Any");
+    }
+    
+    private void refreshStats() {
+        // set statistical data
+        try {
+            label_TotalStudents.setText(model.getNumberOfStudents() + "");
+            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // refresh table based on input
+    private void Search() {
+        // extract data from input-fields
+        String firstName = tf_FirstName.getText();
+        String lastName = tf_LastName.getText();
+        String phone = tf_Phone.getText();
+        String grade =  (String) comboBox_Grade.getValue();
+        String language = (String) comboBox_Language.getValue();
+        String subscription = (String) comboBox_Subscription.getValue();
+
+        // perform search
+        try {
+            List<Student> result = model.searchStudents(firstName, lastName, phone, grade, language, subscription);
+            studentsTable.setItems(FXCollections.observableArrayList(result));
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             System.exit(1);
         }
     }

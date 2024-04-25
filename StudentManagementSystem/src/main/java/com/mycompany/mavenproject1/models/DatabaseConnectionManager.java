@@ -74,7 +74,7 @@ public class DatabaseConnectionManager {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         
         // Bind parameters if provided
-        if (params.length > 0) {
+        if (params != null && params.length > 0) {
             String types = processParameters(params);
             for (int i = 0; i < params.length; i++) {
                 switch (types.charAt(i)) {

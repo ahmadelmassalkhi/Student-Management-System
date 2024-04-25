@@ -58,38 +58,14 @@ public class StudentsModel {
         // print out a message
         System.out.println("Database initialized successfully.");
     }
+
+    /*******************************************************************/
+    // CRUD OPERATIONS
     
-    public int NumberOfActiveSubscriptionsOfLastQuery = 0;
-    private List<Student> fetchAllRows() throws SQLException { return fetchAllRows(false); }
-    private List<Student> fetchAllRows(boolean countSubscriptions) throws SQLException {
-        if(countSubscriptions) NumberOfActiveSubscriptionsOfLastQuery = 0;
-        
-        List<Student> students = new ArrayList<>();
-        while(database.result.next()) {
-            // create student
-            Student s = new Student();
-            s.setId(database.result.getInt(ID));
-            s.setFirstName(database.result.getString(FIRSTNAME));
-            s.setLastName(database.result.getString(LASTNAME));
-            s.setPhone(database.result.getString(PHONE));
-            s.setGrade(database.result.getInt(GRADE));
-            s.setLanguage(database.result.getString(LANGUAGE));
-            s.setSubscriptionStatus(database.result.getInt(SUBSCRIPTION));
-            
-            if(countSubscriptions && s.getSubscriptionStatus().equalsIgnoreCase("active"))  NumberOfActiveSubscriptionsOfLastQuery++;
-            
-            // add student to list
-            students.add(s);
-        }
-        // close resources
-        database.closeResult();
-        // return
-        return students;
-    }
-    
+    // CREATE
     public void addStudent(Student s) throws PhoneAlreadyExistsException, SQLException {
         // check if student already exists
-        if(searchStudentByPhone(s.getPhone()).isEmpty() == false) throw new PhoneAlreadyExistsException();
+        if(this.existsStudent(s)) throw new PhoneAlreadyExistsException();
         
         // prepare query & its parameters
         String query = String.format(
@@ -115,30 +91,9 @@ public class StudentsModel {
         database.executeQuery(query, params.toArray());
     }
     
-    public void deleteStudentsByPhone(List<String> phones) throws SQLException {
-        // Check if the list is empty
-        if (phones.isEmpty()) return;
-
-        // Construct the IN clause with properly formatted phone numbers
-        StringBuilder phoneListString = new StringBuilder();
-        for (String phone : phones) phoneListString.append("?,");
-
-        // Remove the trailing comma
-        phoneListString.deleteCharAt(phoneListString.length() - 1);
-
-        // Construct the SQL query
-        String query = String.format("DELETE FROM %s WHERE %s IN (%s)", TABLE, PHONE, phoneListString.toString());
-
-        // execute query
-        database.executeQuery(query, phones.toArray());
-    }
-
-    public List<Student> getAllStudents() throws SQLException { return searchStudent("", "", "", "", "", ""); }
-    public List<Student> searchStudentByPhone(String phone) throws SQLException { return searchStudent("", "", phone, "", "", ""); }
-    
-    private String whereClauseHelper(String colName) { return String.format(" WHERE %s LIKE ?", colName); }
-    private String andClauseHelper(String colName) { return String.format(" AND %s LIKE ?", colName); }
-    public List<Student> searchStudent(
+    // READ
+    public List<Student> getAllStudents() throws SQLException { return searchStudents("", "", "", "", "", ""); }
+    public List<Student> searchStudents(
             String firstName, 
             String lastName, 
             String phone, 
@@ -188,16 +143,17 @@ public class StudentsModel {
         database.executeQuery(query, params.toArray());
         
         // fetch and return results
-        return fetchAllRows(true);
+        return fetchAllRows();
     }
     
+    // UPDATE
     public void updateStudent(Student oldS, Student updatedS) throws SQLException, PhoneAlreadyExistsException {
         
         // check if updated phone number
         if(oldS.getPhone().equals(updatedS.getPhone()) == false) {
             // check if the updated phone number already exists in the database
-            if(this.searchStudentByPhone(updatedS.getPhone()).isEmpty() == false) {
-                throw new PhoneAlreadyExistsException();
+            if(this.existsStudent(updatedS)) {
+                throw new PhoneAlreadyExistsException(); // (phone is the only unique attribute besides ID)
             }
         }
         
@@ -229,4 +185,74 @@ public class StudentsModel {
         // execute query
         database.executeQuery(query, params);
     }
+    
+    // DELETE
+    public void deleteStudentsByIDs(List<Integer> IDs) throws SQLException {
+        // Check if the list is empty
+        if (IDs.isEmpty()) return;
+
+        // Construct the IN clause with properly formatted phone numbers
+        StringBuilder idListString = new StringBuilder();
+        for (int id : IDs) idListString.append("?,");
+
+        // Remove the trailing comma
+        idListString.deleteCharAt(idListString.length() - 1);
+
+        // Construct the SQL query
+        String query = String.format("DELETE FROM %s WHERE %s IN (%s)", TABLE, ID, idListString.toString());
+
+        // execute query
+        database.executeQuery(query, IDs.toArray());
+    }
+    
+    /*******************************************************************/
+    // HELPERS
+
+    private String whereClauseHelper(String colName) { return String.format(" WHERE %s LIKE ?", colName); }
+    private String andClauseHelper(String colName) { return String.format(" AND %s LIKE ?", colName); }
+    
+    private List<Student> fetchAllRows() throws SQLException {
+        List<Student> students = new ArrayList<>();
+        while(database.result.next()) {
+            // create student
+            Student s = new Student();
+            s.setId(database.result.getInt(ID));
+            s.setFirstName(database.result.getString(FIRSTNAME));
+            s.setLastName(database.result.getString(LASTNAME));
+            s.setPhone(database.result.getString(PHONE));
+            s.setGrade(database.result.getInt(GRADE));
+            s.setLanguage(database.result.getString(LANGUAGE));
+            s.setSubscriptionStatus(database.result.getInt(SUBSCRIPTION));
+            
+            // add student to list
+            students.add(s);
+        }
+        // close resources
+        database.closeResult();
+        // return
+        return students;
+    }
+    
+    /*******************************************************************/
+
+    public boolean existsStudent(Student s) throws SQLException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ?", TABLE, PHONE);
+        database.executeQuery(query, new Object[] {s.getPhone()});
+        return database.result.next();
+    }
+    
+    // time complexity = O(1)
+    public int getNumberOfStudents() throws SQLException {
+        String query = "SELECT COUNT(*) AS rowCount FROM " + TABLE;
+        database.executeQuery(query, new Object[] {});
+        return database.result.getInt("rowCount");
+    }
+    
+    public int getNumberOfSubscriptions() throws SQLException {
+        String query = String.format("SELECT COUNT(*) AS subsCount FROM %s WHERE %s = 1", TABLE, SUBSCRIPTION);
+        database.executeQuery(query, new Object[] {});
+        return database.result.getInt("subsCount");
+    }
+    
+    /*******************************************************************/
 }

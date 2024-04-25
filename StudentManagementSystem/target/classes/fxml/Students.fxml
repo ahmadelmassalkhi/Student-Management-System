@@ -83,11 +83,11 @@
                         <children>
                             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                                 <children>
-                                <Button fx:id="btnClear" mnemonicParsing="false" onAction="#refreshPage" prefHeight="27.0" prefWidth="79.0" stylesheets="@../css/Button.css">
+                                <Button fx:id="btnClear" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="79.0" stylesheets="@../css/Button.css">
                                     <graphic>
                                         <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                            <Image url="@../images/icons8-refresh-24.png" />
+                                            <Image url="@../images/icons8-clear-24.png" />
                                             </image>
                                         </ImageView>
                                     </graphic>
