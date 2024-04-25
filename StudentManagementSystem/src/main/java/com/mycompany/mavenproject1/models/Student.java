@@ -4,6 +4,8 @@
  */
 package com.mycompany.mavenproject1.models;
 
+import com.mycompany.mavenproject1.Exceptions.InvalidMarkException;
+
 /**
  *
  * @author AHMAD
@@ -17,18 +19,23 @@ public class Student {
     private int grade;
     private String language;
     private int subscriptionStatus;
+    private double mark; // over 20
     
     // CONSTRUCTORS
     public Student() {}
     
     // SETTERS
+    public void setId(int id) { this.id = id; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
     public void setPhone(String phone) { this.phone = phone; }
     public void setGrade(int grade) { this.grade = grade; }
     public void setLanguage(String language) { this.language = language; }
     public void setSubscriptionStatus(int subscribtionStatus) { this.subscriptionStatus = subscribtionStatus; }
-    public void setId(int id) { this.id = id; }
+    public void setMark(double mark) {
+        if(mark > 20 || mark < 0) throw new InvalidMarkException();
+        this.mark = mark;
+    }
     
     // GETTERS
     public int getId() { return id; }
@@ -37,10 +44,10 @@ public class Student {
     public String getPhone() { return phone; }
     public String getLanguage() { return language; }
     public int getGrade() { return grade; }
+    public double getMark() { return mark; }
     
     // official getter (uses naming convension)
     public String getSubscriptionStatus() { return Student.getSubscriptionStatusString(subscriptionStatus); }
-    
     // to inject into database
     public int getSubscriptionStatusInt() { return subscriptionStatus; }
     

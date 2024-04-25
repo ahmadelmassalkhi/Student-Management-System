@@ -19,6 +19,8 @@ public class Controller implements Initializable {
     @FXML
     private Button btnStudents;
     @FXML
+    private Button btnMarks;
+    @FXML
     private Button btnSettings;
     @FXML
     private Button btnSignout;
@@ -28,6 +30,8 @@ public class Controller implements Initializable {
     private AnchorPane anchorPane_Students;
     @FXML
     private AnchorPane anchorPane_Settings;
+    @FXML
+    private AnchorPane anchorPane_Marks;
     
     /*******************************************************************/
 
@@ -49,6 +53,13 @@ public class Controller implements Initializable {
         if(actionEvent.getSource() == btnSettings) {
             System.out.println("Pushed `Settings` Pane to front !");
             anchorPane_Settings.toFront();
+        }
+
+        // handle clicks from `Marks` button
+        if(actionEvent.getSource() == btnMarks) {
+            System.out.println("Pushed `Marks` Pane to front !");
+            MarksController.getController().Search(); // update data incase other pages made changes to the database
+            anchorPane_Marks.toFront();
         }
         
         // handle clicks from `Signout` button

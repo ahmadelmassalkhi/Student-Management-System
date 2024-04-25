@@ -122,8 +122,25 @@ public class StudentsController implements Initializable {
         });
     }
     
-    protected static ObservableList<String> countryList;
-    private void initializeInputs() {
+    private void initializeTextFields() {
+        // set interactive filtering feature
+        tf_FirstName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            Search();
+        });
+        tf_LastName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            Search();
+        });
+        tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            // force the field `Phone` to be numeric only
+            if (!newValue.matches("\\d*")) {
+                tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            Search();
+        });
+    }
+    
+    private static ObservableList<String> countryList;
+    private void initializeComboBoxes() {
         // Add items to the `Subscription` ComboBox
         comboBox_Subscription.setItems(FXCollections.observableArrayList("Any", "Active", "InActive"));
         comboBox_Subscription.setValue("Any");        
@@ -167,12 +184,6 @@ public class StudentsController implements Initializable {
         });
         
         // set interactive filtering feature
-        tf_FirstName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            Search();
-        });
-        tf_LastName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            Search();
-        });
         comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
             Search();
         });
@@ -185,19 +196,13 @@ public class StudentsController implements Initializable {
         comboBox_Subscription.valueProperty().addListener((obs, oldValue, newValue) -> {
             Search();
         });
-        tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            // force the field `Phone` to be numeric only
-            if (!newValue.matches("\\d*")) {
-                tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-            Search();
-        });
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeTable();
-        initializeInputs();
+        initializeTextFields();
+        initializeComboBoxes();
     
         // initialize Students Controller (with its model)
         try {

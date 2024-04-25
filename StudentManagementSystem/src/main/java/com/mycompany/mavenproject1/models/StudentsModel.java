@@ -23,6 +23,7 @@ public class StudentsModel {
     private static final String GRADE = "grade";
     private static final String LANGUAGE = "language";
     private static final String SUBSCRIPTION = "subscriptionStatus";
+    private static final String MARK = "mark";
     
     // restrict to one object (no need of more)
     private static StudentsModel model = null;
@@ -41,7 +42,7 @@ public class StudentsModel {
         // Create tables
         String query = String.format(
             "CREATE TABLE IF NOT EXISTS %s "
-                    + "(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT UNIQUE NOT NULL, %s INTEGER NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL)",
+                    + "(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT UNIQUE NOT NULL, %s INTEGER NOT NULL, %s TEXT NOT NULL, %s INTEGER NOT NULL, %s FLOAT)",
             TABLE,
             ID,
             FIRSTNAME,
@@ -49,7 +50,8 @@ public class StudentsModel {
             PHONE,
             GRADE,
             LANGUAGE,
-            SUBSCRIPTION
+            SUBSCRIPTION,
+            MARK
         );
         
         // execute
