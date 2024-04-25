@@ -16,18 +16,10 @@ public class Student {
     private String phone;
     private int grade;
     private String language;
-    private String subscriptionStatus;
+    private int subscriptionStatus;
     
     // CONSTRUCTORS
     public Student() {}
-    public Student(String firstName, String lastName, String phone, int grade, String language, String subscriptionStatus) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.grade = grade;
-        this.language = language;
-        this.subscriptionStatus = subscriptionStatus;
-    }
     
     // SETTERS
     public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -35,17 +27,22 @@ public class Student {
     public void setPhone(String phone) { this.phone = phone; }
     public void setGrade(int grade) { this.grade = grade; }
     public void setLanguage(String language) { this.language = language; }
-    public void setSubscriptionStatus(String subscribtionStatus) { this.subscriptionStatus = subscribtionStatus; }
+    public void setSubscriptionStatus(int subscribtionStatus) { this.subscriptionStatus = subscribtionStatus; }
     public void setId(int id) { this.id = id; }
     
     // GETTERS
-    public String getFirstName() { return this.firstName; }
-    public String getLastName() { return this.lastName; }
-    public String getPhone() { return this.phone; }
-    public String getLanguage() { return this.language; }
-    public int getGrade() { return this.grade; }
-    public String getSubscriptionStatus() { return this.subscriptionStatus; }
-    public int getId() { return this.id; }
+    public int getId() { return id; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getPhone() { return phone; }
+    public String getLanguage() { return language; }
+    public int getGrade() { return grade; }
+    
+    // official getter (uses naming convension)
+    public String getSubscriptionStatus() { return Student.getSubscriptionStatusString(subscriptionStatus); }
+    
+    // to inject into database
+    public int getSubscriptionStatusInt() { return subscriptionStatus; }
     
     @Override
     public String toString() {
@@ -58,5 +55,12 @@ public class Student {
                 ", language='" + language + '\'' +
                 ", subscriptionStatus='" + subscriptionStatus + '\'' +
                 '}';
+    }
+    
+    public static String getSubscriptionStatusString(int status) {
+        return (status == 1) ? "Active":"InActive" ;
+    }
+    public static int getSubscriptionStatusInt(String status) {
+        return status.equalsIgnoreCase("active") ? 1 : 0 ;
     }
 }

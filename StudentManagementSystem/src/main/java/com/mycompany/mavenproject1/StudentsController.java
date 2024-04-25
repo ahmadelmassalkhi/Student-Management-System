@@ -241,7 +241,7 @@ public class StudentsController implements Initializable {
         s.setPhone(countryCode + " " + phone);
         s.setGrade(Integer.parseInt(grade));
         s.setLanguage(language);
-        s.setSubscriptionStatus(subscription);
+        s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
         
         try {
             // add student to database

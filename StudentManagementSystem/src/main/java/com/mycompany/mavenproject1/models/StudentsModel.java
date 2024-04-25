@@ -74,7 +74,7 @@ public class StudentsModel {
             s.setPhone(database.result.getString(PHONE));
             s.setGrade(database.result.getInt(GRADE));
             s.setLanguage(database.result.getString(LANGUAGE));
-            s.setSubscriptionStatus(database.result.getString(SUBSCRIPTION));
+            s.setSubscriptionStatus(database.result.getInt(SUBSCRIPTION));
             
             if(countSubscriptions && s.getSubscriptionStatus().equalsIgnoreCase("active"))  NumberOfActiveSubscriptionsOfLastQuery++;
             
@@ -109,7 +109,7 @@ public class StudentsModel {
         params.add(s.getPhone());
         params.add(s.getGrade());
         params.add(s.getLanguage());
-        params.add(s.getSubscriptionStatus());
+        params.add(s.getSubscriptionStatusInt());
         
         // execute query
         database.executeQuery(query, params.toArray());
@@ -168,7 +168,7 @@ public class StudentsModel {
         }
         if(!grade.isEmpty() && !grade.equals("Any")) {
             if(first) query += String.format(" WHERE %s = ?", GRADE);
-            else query += this.andClauseHelper(GRADE);
+            else query += String.format(" AND %s = ?", GRADE);
             params.add(Integer.valueOf(grade));
             first = false;
         }
@@ -179,9 +179,9 @@ public class StudentsModel {
             first = false;
         }
         if(!subscription.isEmpty() && !subscription.equals("Any")) {
-            if(first) query += this.whereClauseHelper(SUBSCRIPTION);
-            else query += this.andClauseHelper(SUBSCRIPTION);
-            params.add("%" + subscription + "%");
+            if(first) query += String.format(" WHERE %s = ?", SUBSCRIPTION);
+            else query += String.format(" AND %s = ?", SUBSCRIPTION);
+            params.add(Student.getSubscriptionStatusInt(subscription));
         }
         
         // execute query
@@ -222,7 +222,7 @@ public class StudentsModel {
             updatedS.getPhone(),
             updatedS.getGrade(),
             updatedS.getLanguage(),
-            updatedS.getSubscriptionStatus(),
+            updatedS.getSubscriptionStatusInt(),
             oldS.getId()
         };
         
