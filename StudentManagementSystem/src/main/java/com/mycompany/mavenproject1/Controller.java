@@ -58,7 +58,7 @@ public class Controller implements Initializable {
         // handle clicks from `Marks` button
         if(actionEvent.getSource() == btnMarks) {
             System.out.println("Pushed `Marks` Pane to front !");
-            MarksController.getController().Search(); // update data incase other pages made changes to the database
+            MarksController.getController().refresh(); // update data incase other pages made changes to the database
             anchorPane_Marks.toFront();
         }
         

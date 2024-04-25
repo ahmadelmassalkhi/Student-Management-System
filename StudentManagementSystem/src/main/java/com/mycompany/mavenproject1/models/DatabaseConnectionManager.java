@@ -51,7 +51,9 @@ public class DatabaseConnectionManager {
         for (Object param : params) {
             if (param instanceof Integer) {
                 types.append("i"); // Integer
-            } else if (param instanceof Double || param instanceof Float) {
+            } else if(param instanceof Float) {
+                types.append("f"); // Float
+            } else if (param instanceof Double) {
                 types.append("d"); // Double
             } else if (param instanceof String) {
                 types.append("s"); // String
@@ -79,6 +81,7 @@ public class DatabaseConnectionManager {
             for (int i = 0; i < params.length; i++) {
                 switch (types.charAt(i)) {
                     case 'i' -> preparedStatement.setInt(i+1, (int) params[i]);
+                    case 'f' -> preparedStatement.setFloat(i+1, (float) params[i]);
                     case 'd' -> preparedStatement.setDouble(i+1, (double) params[i]);
                     case 's' -> preparedStatement.setString(i+1, (String) params[i]);
                     case 'l' -> preparedStatement.setLong(i+1, (long) params[i]);

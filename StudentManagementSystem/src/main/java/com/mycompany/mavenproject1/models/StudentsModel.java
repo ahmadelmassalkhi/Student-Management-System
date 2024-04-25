@@ -225,6 +225,7 @@ public class StudentsModel {
             s.setGrade(database.result.getInt(GRADE));
             s.setLanguage(database.result.getString(LANGUAGE));
             s.setSubscriptionStatus(database.result.getInt(SUBSCRIPTION));
+            s.setMark(database.result.getFloat(MARK));
             
             // add student to list
             students.add(s);
@@ -254,6 +255,11 @@ public class StudentsModel {
         String query = String.format("SELECT COUNT(*) AS subsCount FROM %s WHERE %s = 1", TABLE, SUBSCRIPTION);
         database.executeQuery(query, new Object[] {});
         return database.result.getInt("subsCount");
+    }
+
+    public void updateStudentMark(int id, Float mark) throws SQLException {
+        String query = String.format("UPDATE %s SET %s = ? WHERE %s = ?", TABLE, MARK, ID);
+        database.executeQuery(query, new Object[] { mark, id });
     }
     
     /*******************************************************************/

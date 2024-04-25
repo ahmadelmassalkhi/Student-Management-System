@@ -9,9 +9,9 @@ com\mycompany\mavenproject1\StudentsController.class
 com\mycompany\mavenproject1\Common\Common.class
 com\mycompany\mavenproject1\models\StudentsModel.class
 com\mycompany\mavenproject1\models\Student.class
+com\mycompany\mavenproject1\UpdateStudentMarkController.class
 com\mycompany\mavenproject1\MarksController.class
 com\mycompany\mavenproject1\StudentsController$1.class
 com\mycompany\mavenproject1\SettingsController.class
 com\mycompany\mavenproject1\Exceptions\PhoneAlreadyExistsException.class
 com\mycompany\mavenproject1\UpdateStudentController.class
-com\mycompany\mavenproject1\Exceptions\InvalidMarkException.class

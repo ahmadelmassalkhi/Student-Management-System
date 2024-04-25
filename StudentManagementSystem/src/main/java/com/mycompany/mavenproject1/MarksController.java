@@ -9,16 +9,18 @@ import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 
 // other imports
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -28,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 
 /**
  *
@@ -152,7 +155,7 @@ public class MarksController implements Initializable {
         col_Grade.setCellValueFactory(new PropertyValueFactory<Student, String>("grade"));
         col_Language.setCellValueFactory(new PropertyValueFactory<Student, String>("language"));
         col_Phone.setCellValueFactory(new PropertyValueFactory<Student, String>("phone"));
-        col_Mark.setCellValueFactory(new PropertyValueFactory<Student, String>("mark"));
+        col_Mark.setCellValueFactory(new PropertyValueFactory<Student, Float>("mark"));
         
         // Handle double click event
         studentsTable.setOnMouseClicked(event -> {
@@ -213,11 +216,47 @@ public class MarksController implements Initializable {
             System.exit(1);
         }
 
-        this.setStats();
-        this.Search();
+        this.refresh();
     }
     
     /*******************************************************************/
+    
+        private void updateStudentMark(Student s) {
+        try {
+            // load resource
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudentMark.fxml"));
+            Parent root = loader.load();
+
+            // create window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
+            
+            // Access the controller and set the data
+            UpdateStudentMarkController controller = loader.getController();
+            controller.setWindowInformation(stage, root);
+            controller.setStudent(s);
+            
+            // wait until student is successfully updated or cancelled
+            stage.showAndWait();
+            
+            // adopt to data changes
+            this.refresh();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
+        
+    /*******************************************************************/
+    
+    /*
+     * refresh data (stats, and table based on inputs)
+     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by the previous page
+     */
+    public void refresh() {
+        this.setStats();
+        this.Search();
+    }
     
     private void unCheckAllCheckBoxes() {
         checkbox_FirstName.setSelected(false);
@@ -234,12 +273,17 @@ public class MarksController implements Initializable {
         checkbox_Grade.setSelected(true);
         checkbox_Language.setSelected(true);
     }
-
-    /*
-     * refresh table based on input
-     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by the previous page
-     */
-    public void Search() {
+    
+    private void setStats() {
+        try {
+            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    private void Search() {
         // extract data from input-fields
         String firstName = tf_FirstName.getText();
         String lastName = tf_LastName.getText();
@@ -251,20 +295,6 @@ public class MarksController implements Initializable {
         try {
             List<Student> result = model.searchStudents(firstName, lastName, phone, grade, language, "Active");
             studentsTable.setItems(FXCollections.observableArrayList(result));
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    /*******************************************************************/
-    
-    private void updateStudentMark(Student s) {
-    }
-    
-    private void setStats() {
-        try {
-            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
