@@ -13,12 +13,15 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,6 +34,11 @@ import javafx.scene.input.MouseButton;
  * @author AHMAD
  */
 public class MarksController implements Initializable {
+    
+    private StudentsModel model;
+
+    @FXML
+    private Label label_TotalSubscriptions;
     
     /*******************************************************************/
 
@@ -190,7 +198,6 @@ public class MarksController implements Initializable {
         });
     }
     
-    private StudentsModel model;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.initializeCheckBoxes();
@@ -206,6 +213,7 @@ public class MarksController implements Initializable {
             System.exit(1);
         }
         
+        this.setStats();
         this.Search();
     }
     
@@ -252,6 +260,15 @@ public class MarksController implements Initializable {
     /*******************************************************************/
     
     private void updateStudentMark(Student s) {
+    }
+    
+    private void setStats() {
+        try {
+            this.label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
     }
     
     /*******************************************************************/
