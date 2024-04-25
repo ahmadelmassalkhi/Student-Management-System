@@ -212,7 +212,7 @@ public class MarksController implements Initializable {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
-        
+
         this.setStats();
         this.Search();
     }
@@ -264,7 +264,7 @@ public class MarksController implements Initializable {
     
     private void setStats() {
         try {
-            this.label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
