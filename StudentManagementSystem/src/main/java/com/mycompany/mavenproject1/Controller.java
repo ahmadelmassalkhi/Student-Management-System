@@ -23,7 +23,7 @@ public class Controller implements Initializable {
     @FXML
     private Button btnSettings;
     @FXML
-    private Button btnSignout;
+    private Button btnExit;
     
     /* PANES */
     @FXML
@@ -63,11 +63,11 @@ public class Controller implements Initializable {
         }
         
         // handle clicks from `Signout` button
-        if(actionEvent.getSource() == btnSignout) {
+        if(actionEvent.getSource() == btnExit) {
             System.out.println("Closing the application !");
                         
             // Get the stage from the button
-            Stage stage = (Stage) btnSignout.getScene().getWindow();
+            Stage stage = (Stage) btnExit.getScene().getWindow();
 
             // Close the stage
             stage.close();
