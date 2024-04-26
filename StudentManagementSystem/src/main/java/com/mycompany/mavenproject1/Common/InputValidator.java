@@ -15,15 +15,17 @@ public class InputValidator {
             String phone, 
             String grade, 
             String language, 
-            String subscription) {
+            String subscription,
+            String countryCode) {
         
         // make sure all fields were filled
         if(firstName.isEmpty() 
                 || lastName.isEmpty() 
                 || phone.isEmpty()
-                || grade.equals("Any") 
-                || language.equals("Any") 
-                || subscription.equals("Any")) return "Please fill all fields !";
+                || countryCode.isEmpty()
+                || grade.equalsIgnoreCase("any")
+                || language.equalsIgnoreCase("any")
+                || subscription.equalsIgnoreCase("any")) return "Please fill all fields !";
 
         return null;
     }

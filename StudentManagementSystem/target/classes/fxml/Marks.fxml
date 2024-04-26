@@ -121,6 +121,25 @@
                         </VBox>
                         </children>
                     </HBox>
+                  <HBox alignment="BOTTOM_LEFT" layoutX="358.0" layoutY="10.0" prefHeight="58.0" prefWidth="167.0" spacing="3.0">
+                     <children>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="197.0">
+                           <children>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="37.0" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <ComboBox fx:id="comboBox_MarksOrder" prefHeight="27.0" prefWidth="82.0" promptText="DESC" stylesheets="@../css/ComboBox.css" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="3.0">
+                                 <children>
+                                    <TextField fx:id="tf_MinimumMark" prefHeight="27.0" prefWidth="100.0" promptText="Minimum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                    <TextField fx:id="tf_MaximumMark" layoutX="10.0" layoutY="11.0" prefHeight="27.0" prefWidth="100.0" promptText="Maximum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                     </children>
                 </HBox>
                 <TableView fx:id="studentsTable" layoutX="13.0" layoutY="186.0" prefHeight="390.0" prefWidth="768.0" stylesheets="@../css/Table.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="199.0">

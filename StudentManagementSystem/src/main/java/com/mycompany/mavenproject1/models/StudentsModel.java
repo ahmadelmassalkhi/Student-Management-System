@@ -93,8 +93,11 @@ public class StudentsModel {
         database.executeQuery(query, params.toArray());
     }
     
+    /*******************************************************************/
     // READ
+    
     public List<Student> getAllStudents() throws SQLException { return searchStudents("", "", "", "", "", ""); }
+    
     public List<Student> searchStudents(
             String firstName, 
             String lastName, 
@@ -102,43 +105,90 @@ public class StudentsModel {
             String grade, 
             String language, 
             String subscription) throws SQLException {
+        return searchStudents(firstName, lastName, phone, grade, language, subscription, "", "", "");
+    }
+    
+    public List<Student> searchStudents(
+            String firstName, 
+            String lastName, 
+            String phone, 
+            String grade, 
+            String language, 
+            String subscription,
+            String minMark,
+            String maxMark,
+            String marksOrder) throws SQLException {
         String query = "SELECT * FROM " + TABLE;
         List<Object> params = new ArrayList<>();
         
         boolean first = true;
         if(!firstName.isEmpty()) {
-            query += this.whereClauseHelper(FIRSTNAME);
+            query += this.whereLike(FIRSTNAME);
             params.add("%" + firstName + "%");
             first = false;
         }
         if(!lastName.isEmpty()) {
-            if(first) query += this.whereClauseHelper(LASTNAME);
-            else query += this.andClauseHelper(LASTNAME);
+            if(first) query += this.whereLike(LASTNAME);
+            else query += this.andLike(LASTNAME);
             params.add("%" + lastName + "%");
             first = false;
         }
         if(!phone.isEmpty()) {
-            if(first) query += this.whereClauseHelper(PHONE);
-            else query += this.andClauseHelper(PHONE);
+            if(first) query += this.whereLike(PHONE);
+            else query += this.andLike(PHONE);
             params.add("%" + phone + "%");
             first = false;
         }
-        if(!grade.isEmpty() && !grade.equals("Any")) {
-            if(first) query += String.format(" WHERE %s = ?", GRADE);
-            else query += String.format(" AND %s = ?", GRADE);
+        if(!grade.isEmpty() && !grade.equalsIgnoreCase("any")) {
+            if(first) query += this.whereEqual(GRADE);
+            else query += this.andEqual(GRADE);
             params.add(Integer.valueOf(grade));
             first = false;
         }
-        if(!language.isEmpty() && !language.equals("Any")) {
-            if(first) query += this.whereClauseHelper(LANGUAGE);
-            else query += this.andClauseHelper(LANGUAGE);
+        if(!language.isEmpty() && !language.equalsIgnoreCase("any")) {
+            if(first) query += this.whereLike(LANGUAGE);
+            else query += this.andLike(LANGUAGE);
             params.add("%" + language + "%");
             first = false;
         }
-        if(!subscription.isEmpty() && !subscription.equals("Any")) {
-            if(first) query += String.format(" WHERE %s = ?", SUBSCRIPTION);
-            else query += String.format(" AND %s = ?", SUBSCRIPTION);
+        if(!subscription.isEmpty() && !subscription.equalsIgnoreCase("any")) {
+            if(first) query += this.whereEqual(SUBSCRIPTION);
+            else query += this.andEqual(SUBSCRIPTION);
             params.add(Student.getSubscriptionStatusInt(subscription));
+            first = false;
+        }
+        if(!minMark.isEmpty() || !maxMark.isEmpty()) {
+            if(first) {
+                if(minMark.isEmpty()) {
+                    query += this.whereLessEqual(MARK);
+                    params.add(Float.valueOf(maxMark));
+                } else if(maxMark.isEmpty()) {
+                    query += this.whereGreaterEqual(MARK);
+                    params.add(Float.valueOf(minMark));
+                } else {
+                    query += this.whereBetween(MARK);
+                    params.add(Float.valueOf(minMark));
+                    params.add(Float.valueOf(maxMark));
+                }
+            } else {
+                if(minMark.isEmpty()) {
+                    query += this.andLessEqual(MARK);
+                    params.add(Float.valueOf(maxMark));
+                } else if(maxMark.isEmpty()) {
+                    query += this.andGreaterEqual(MARK);
+                    params.add(Float.valueOf(minMark));
+                } else {
+                    query += this.andBetween(MARK);
+                    params.add(Float.valueOf(minMark));
+                    params.add(Float.valueOf(maxMark));
+                }
+            }
+        }
+        
+        // ORDER must be last
+        if(!marksOrder.isEmpty() && !marksOrder.equalsIgnoreCase("any")) {
+            if(marksOrder.equalsIgnoreCase("asc")) query += this.orderByASC(MARK);
+            else query += this.orderByDESC(MARK);
         }
         
         // execute query
@@ -148,7 +198,14 @@ public class StudentsModel {
         return fetchAllRows();
     }
     
+    /*******************************************************************/
     // UPDATE
+    
+    public void updateStudentMark(int id, Float mark) throws SQLException {
+        String query = String.format("UPDATE %s SET %s = ? WHERE %s = ?", TABLE, MARK, ID);
+        database.executeQuery(query, new Object[] { mark, id });
+    }
+    
     public void updateStudent(Student oldS, Student updatedS) throws SQLException, PhoneAlreadyExistsException {
         
         // check if updated phone number
@@ -188,7 +245,9 @@ public class StudentsModel {
         database.executeQuery(query, params);
     }
     
-    // DELETE
+    /*******************************************************************/
+    // DELETE    
+
     public void deleteStudentsByIDs(List<Integer> IDs) throws SQLException {
         // Check if the list is empty
         if (IDs.isEmpty()) return;
@@ -208,11 +267,45 @@ public class StudentsModel {
     }
     
     /*******************************************************************/
-    // HELPERS
-
-    private String whereClauseHelper(String colName) { return String.format(" WHERE %s LIKE ?", colName); }
-    private String andClauseHelper(String colName) { return String.format(" AND %s LIKE ?", colName); }
+    // PUBLIC GETTERS
     
+    public boolean existsStudent(Student s) throws SQLException {
+        String query = String.format("SELECT * FROM %s WHERE %s = ?", TABLE, PHONE);
+        database.executeQuery(query, new Object[] {s.getPhone()});
+        return database.result.next();
+    }
+    
+    // time complexity = O(1)
+    public int getNumberOfStudents() throws SQLException {
+        String query = "SELECT COUNT(*) AS rowCount FROM " + TABLE;
+        database.executeQuery(query, new Object[] {});
+        return database.result.getInt("rowCount");
+    }
+    
+    public int getNumberOfSubscriptions() throws SQLException {
+        String query = String.format("SELECT COUNT(*) AS subsCount FROM %s WHERE %s = 1", TABLE, SUBSCRIPTION);
+        database.executeQuery(query, new Object[] {});
+        return database.result.getInt("subsCount");
+    }
+    
+    /*******************************************************************/
+    // QUERY HELPERS
+
+    private String whereLike(String colName) { return String.format(" WHERE %s LIKE ?", colName); }
+    private String whereEqual(String colName) { return String.format(" WHERE %s = ?", colName); }
+    private String whereLessEqual(String colName) { return String.format(" WHERE %s <= ?", colName); }
+    private String whereGreaterEqual(String colName) { return String.format(" WHERE %s >= ?", colName); }
+    private String whereBetween(String colName) { return String.format(" WHERE %s BETWEEN ? AND ?", colName); }
+
+    private String andLike(String colName) { return String.format(" AND %s LIKE ?", colName); }
+    private String andEqual(String colName) { return String.format(" AND %s = ?", colName); }
+    private String andLessEqual(String colName) { return String.format(" AND %s <= ?", colName); }
+    private String andGreaterEqual(String colName) { return String.format(" AND %s >= ?", colName); }
+    private String andBetween(String colName) { return String.format(" AND %s BETWEEN ? AND ?", colName); }
+    
+    private String orderByASC(String colName) { return String.format(" ORDER BY %s ASC", colName); }
+    private String orderByDESC(String colName) { return String.format(" ORDER BY %s DESC", colName); }
+
     private List<Student> fetchAllRows() throws SQLException {
         List<Student> students = new ArrayList<>();
         while(database.result.next()) {
@@ -234,32 +327,6 @@ public class StudentsModel {
         database.closeResult();
         // return
         return students;
-    }
-    
-    /*******************************************************************/
-
-    public boolean existsStudent(Student s) throws SQLException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?", TABLE, PHONE);
-        database.executeQuery(query, new Object[] {s.getPhone()});
-        return database.result.next();
-    }
-    
-    // time complexity = O(1)
-    public int getNumberOfStudents() throws SQLException {
-        String query = "SELECT COUNT(*) AS rowCount FROM " + TABLE;
-        database.executeQuery(query, new Object[] {});
-        return database.result.getInt("rowCount");
-    }
-    
-    public int getNumberOfSubscriptions() throws SQLException {
-        String query = String.format("SELECT COUNT(*) AS subsCount FROM %s WHERE %s = 1", TABLE, SUBSCRIPTION);
-        database.executeQuery(query, new Object[] {});
-        return database.result.getInt("subsCount");
-    }
-
-    public void updateStudentMark(int id, Float mark) throws SQLException {
-        String query = String.format("UPDATE %s SET %s = ? WHERE %s = ?", TABLE, MARK, ID);
-        database.executeQuery(query, new Object[] { mark, id });
     }
     
     /*******************************************************************/

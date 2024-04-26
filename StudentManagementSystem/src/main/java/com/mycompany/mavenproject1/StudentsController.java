@@ -229,17 +229,15 @@ public class StudentsController implements Initializable {
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String subscription = (String) comboBox_Subscription.getValue();
+        String countryCode = Common.getCountryCode((String) comboBox_CountryCode.getValue());
         
         // validate input data
-        String errorMessage = InputValidator.inputErrorMessage(firstName, lastName, phone, grade, language, subscription);
+        String errorMessage = InputValidator.inputErrorMessage(firstName, lastName, phone, grade, language, subscription, countryCode);
         if(errorMessage != null) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", errorMessage);
             alert.showAndWait();
             return;
         }
-
-        // no need to validate this, it is already enforced within the UI
-        String countryCode = Common.getCountryCode((String) comboBox_CountryCode.getValue());
 
         // fill student information
         Student s = new Student();

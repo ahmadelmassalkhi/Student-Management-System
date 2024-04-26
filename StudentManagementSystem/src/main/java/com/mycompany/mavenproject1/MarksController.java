@@ -52,12 +52,18 @@ public class MarksController implements Initializable {
     private TextField tf_LastName;
     @FXML
     private TextField tf_Phone;
+    @FXML
+    private TextField tf_MinimumMark;
+    @FXML
+    private TextField tf_MaximumMark;
     
     /* COMBO BOXES */
     @FXML
     private ComboBox comboBox_Language;
     @FXML
     private ComboBox comboBox_Grade;
+    @FXML
+    private ComboBox comboBox_MarksOrder;
 
     /*******************************************************************/
     
@@ -181,6 +187,20 @@ public class MarksController implements Initializable {
             }
             Search();
         });
+
+        // force the field `Mark` to be numeric only (can contain up to 1 decimal point too)
+        tf_MinimumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                tf_MinimumMark.setText(oldValue); // Revert to the old value if not matching
+            }
+            Search();
+        });
+        tf_MaximumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                tf_MaximumMark.setText(oldValue); // Revert to the old value if not matching
+            }
+            Search();
+        });
     }
     
     private void initializeComboBoxes() {
@@ -191,6 +211,10 @@ public class MarksController implements Initializable {
         // Add items to the `Grade` ComboBox
         comboBox_Grade.setItems(FXCollections.observableArrayList("Any", "8", "9", "10", "11", "12"));
         comboBox_Grade.setValue("Any");
+
+        // Add items to the `MarksOrder` ComboBox
+        comboBox_MarksOrder.setItems(FXCollections.observableArrayList("Any", "ASC", "DESC"));
+        comboBox_MarksOrder.setValue("DESC");
         
         // set interactive filtering feature
         comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
@@ -199,6 +223,10 @@ public class MarksController implements Initializable {
         comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
             Search();
         });
+        comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> {
+            Search();
+        });
+        
     }
     
     @Override
@@ -290,11 +318,17 @@ public class MarksController implements Initializable {
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
-
-        // perform search
+        String MarksOrder = (String) comboBox_MarksOrder.getValue();
+        
+        // the new letter added might be a `.` => `19.` is not a number !!
+        String MinimumMark, MaximumMark;
         try {
-            List<Student> result = model.searchStudents(firstName, lastName, phone, grade, language, "Active");
+            MinimumMark = tf_MinimumMark.getText();
+            MaximumMark = tf_MaximumMark.getText();
+            
+            List<Student> result = model.searchStudents(firstName, lastName, phone, grade, language, "Active", MinimumMark, MaximumMark, MarksOrder);
             studentsTable.setItems(FXCollections.observableArrayList(result));
+        } catch (NumberFormatException ex) {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
