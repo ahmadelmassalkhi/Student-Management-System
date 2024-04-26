@@ -158,7 +158,7 @@
                     <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
-            <Button layoutX="688.0" layoutY="26.0" mnemonicParsing="false" stylesheets="@../css/Button.css" text="EXPORT">
+            <Button layoutX="688.0" layoutY="26.0" mnemonicParsing="false" onAction="#export" stylesheets="@../css/Button.css" text="EXPORT">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

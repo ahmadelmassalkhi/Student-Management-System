@@ -4,7 +4,10 @@
  */
 package com.mycompany.mavenproject1.models;
 
+// imports from same package
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
+
+// other imports
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

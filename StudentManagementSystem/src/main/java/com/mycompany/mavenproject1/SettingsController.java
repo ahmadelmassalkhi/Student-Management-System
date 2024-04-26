@@ -4,9 +4,12 @@
  */
 package com.mycompany.mavenproject1;
 
+// imports from javafx
+import javafx.fxml.Initializable;
+
+// other imports
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
 
 /**
  *

@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.mavenproject1.models;
+
+// other imports
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.sql.Blob;
-
 
 /**
  *

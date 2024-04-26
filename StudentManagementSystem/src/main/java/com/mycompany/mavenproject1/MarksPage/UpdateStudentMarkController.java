@@ -4,13 +4,13 @@
  */
 package com.mycompany.mavenproject1.MarksPage;
 
+// imports from same package
 import com.mycompany.mavenproject1.Common.Common;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
+
+// imports from javafx
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +20,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+// other imports
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  *

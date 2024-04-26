@@ -1,14 +1,19 @@
 package com.mycompany.mavenproject1;
 
+// imports from same package
 import com.mycompany.mavenproject1.MarksPage.MarksController;
-import java.net.URL;
-import java.util.ResourceBundle;
+
+// imports from javafx
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
+
+// other imports
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {

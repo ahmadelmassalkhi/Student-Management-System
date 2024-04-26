@@ -1,16 +1,18 @@
 package com.mycompany.mavenproject1;
 
+// imports from javafx
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.StageStyle;
+
+// other imports
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * JavaFX App

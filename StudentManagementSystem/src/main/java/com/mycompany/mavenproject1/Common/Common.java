@@ -4,7 +4,14 @@
  */
 package com.mycompany.mavenproject1.Common;
 
+// imports from same package
 import com.mycompany.mavenproject1.App;
+
+// imports from javafx
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+// other imports
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +19,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  *

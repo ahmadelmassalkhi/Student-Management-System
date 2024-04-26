@@ -5,15 +5,12 @@
 package com.mycompany.mavenproject1.MarksPage;
 
 // imports from same package
+import com.itextpdf.text.DocumentException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import com.mycompany.mavenproject1.Common.StudentsTablePDFExporter;
 
-// other imports
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.ResourceBundle;
+// imports from javafx
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -31,6 +28,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+
+// other imports
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -161,7 +166,10 @@ public class MarksController implements Initializable {
         col_Grade.setCellValueFactory(new PropertyValueFactory<Student, String>("grade"));
         col_Language.setCellValueFactory(new PropertyValueFactory<Student, String>("language"));
         col_Phone.setCellValueFactory(new PropertyValueFactory<Student, String>("phone"));
-        col_Mark.setCellValueFactory(new PropertyValueFactory<Student, Float>("mark"));
+        col_Mark.setCellValueFactory(new PropertyValueFactory<Student, String>("mark"));
+        
+        // hide ID column by default (made to be interacted with, programmatically)
+        col_ID.setVisible(false);
         
         // Handle double click event
         studentsTable.setOnMouseClicked(event -> {
@@ -226,7 +234,6 @@ public class MarksController implements Initializable {
         comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> {
             Search();
         });
-        
     }
     
     @Override
@@ -247,9 +254,7 @@ public class MarksController implements Initializable {
         this.refresh();
     }
     
-    /*******************************************************************/
-    
-        private void updateStudentMark(Student s) {
+    private void updateStudentMark(Student s) {
         try {
             // load resource
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudentMark.fxml"));
@@ -330,6 +335,28 @@ public class MarksController implements Initializable {
             studentsTable.setItems(FXCollections.observableArrayList(result));
         } catch (NumberFormatException ex) {
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    /*******************************************************************/
+    
+    public void export() {
+        try {
+            StudentsTablePDFExporter exporter = new StudentsTablePDFExporter(studentsTable);
+            
+            // set target columns
+            exporter.setColFirstName(col_FirstName);
+            exporter.setColLastName(col_LastName);
+            exporter.setColPhone(col_Phone);
+            exporter.setColGrade(col_Grade);
+            exporter.setColLanguage(col_Language);
+            exporter.setColMark(col_Mark);
+            
+            // export
+            exporter.Export();
+        } catch (FileNotFoundException | DocumentException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

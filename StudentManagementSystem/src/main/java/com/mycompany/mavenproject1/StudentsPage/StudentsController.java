@@ -12,15 +12,7 @@ import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 
-// other imports
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+// imports from javafx
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +32,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
+// other imports
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -112,6 +113,9 @@ public class StudentsController implements Initializable {
         col_Language.setCellValueFactory(new PropertyValueFactory<Student, String>("language"));
         col_Phone.setCellValueFactory(new PropertyValueFactory<Student, String>("phone"));
         col_Subscription.setCellValueFactory(new PropertyValueFactory<Student, String>("subscriptionStatus"));
+        
+        // hide ID column by default (made to be interacted with, programmatically)
+        col_ID.setVisible(false);
         
         // Handle double click event
         studentsTable.setOnMouseClicked(event -> {
