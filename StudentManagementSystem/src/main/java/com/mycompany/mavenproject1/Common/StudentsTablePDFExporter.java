@@ -64,22 +64,33 @@ public class StudentsTablePDFExporter {
     
     /*******************************************************************/
 
-    public void Export() throws FileNotFoundException, DocumentException, NullPointerException {
-        Document document = new Document();
+    public void Export() throws FileNotFoundException, DocumentException {
+        try {
+            Document document = new Document();
 
-        // create the pdf (empty) at the saveLocation
-        PdfWriter.getInstance(document, new FileOutputStream(chooseSaveLocation()));
+            // create the pdf (empty) at the saveLocation
+            PdfWriter.getInstance(document, new FileOutputStream(chooseSaveLocation())); // (throws NullPointerException)
 
-        // open the document for writing
-        document.open();
+            // open the document for writing
+            document.open();
 
-        // convert TableView to PdfPTable
-        PdfPTable pdfTable = this.createPDFTable();
-        this.addRows(pdfTable, studentsTable.getItems());
+            // convert TableView to PdfPTable
+            PdfPTable pdfTable = this.createPDFTable();
+            this.addRows(pdfTable, studentsTable.getItems());
 
-        // add the PDF table to the document
-        document.add(pdfTable);
-        document.close();
+            // add the PDF table to the document
+            document.add(pdfTable);
+            document.close();
+        } catch (NullPointerException ex) {
+            /*
+             * if user clicked `Cancel` on FileChooser
+             * => no SaveLocation was chosen 
+             * => FileChooser finished and closed 
+             * => FileOutputStream throws NullPointerException
+             * => execution stopped due exception
+             */
+            // do nothing
+        }
     }
 
     // Prompts the user to choose a save location for the PDF file

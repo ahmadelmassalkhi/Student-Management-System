@@ -5,9 +5,10 @@
 package com.mycompany.mavenproject1.StudentsPage;
 
 // imports from same package
-import com.mycompany.mavenproject1.Common.Common;
+import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
-import com.mycompany.mavenproject1.Common.InputValidator;
+import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
+import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
@@ -59,7 +60,7 @@ public class UpdateStudentController implements Initializable {
     
     /*******************************************************************/
     
-    private static ObservableList<String> countryList = Common.getCountryCodesList();
+    private static ObservableList<String> countryList = CountryCodesManager.getCountryCodesList();
     private void initializeComboBoxes() {
         // Add items to the `Subscription` ComboBox
         comboBox_Subscription.setItems(FXCollections.observableArrayList("Active", "InActive"));
@@ -71,7 +72,7 @@ public class UpdateStudentController implements Initializable {
         comboBox_Grade.setItems(FXCollections.observableArrayList("8", "9", "10", "11", "12"));
         
         // Add items to the `Code` ComboBox
-        countryList = Common.getCountryCodesList();
+        countryList = CountryCodesManager.getCountryCodesList();
         comboBox_CountryCode.setItems(countryList);
         
         // set ComboBox search on key-press feature
@@ -95,7 +96,7 @@ public class UpdateStudentController implements Initializable {
                     setText(null);
                 } else {
                     // set country-code
-                    setText(Common.getCountryCode(item));
+                    setText(CountryCodesManager.getCountryCode(item));
                 }
             }
         });
@@ -158,9 +159,9 @@ public class UpdateStudentController implements Initializable {
     private void displayStudent() {
         tf_FirstName.setText(student.getFirstName());
         tf_LastName.setText(student.getLastName());
-        tf_Phone.setText(Common.getNumber(student.getPhone()));
+        tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
         
-        comboBox_CountryCode.setValue(Common.getCountryCode(student.getPhone()));
+        comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade()+"");
         comboBox_Language.setValue(student.getLanguage());
         comboBox_Subscription.setValue(student.getSubscriptionStatus());
@@ -178,36 +179,33 @@ public class UpdateStudentController implements Initializable {
         String firstName = tf_FirstName.getText();
         String lastName = tf_LastName.getText();
         String phone = tf_Phone.getText();
+        String countryCode = (String) comboBox_CountryCode.getValue();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String subscription = (String) comboBox_Subscription.getValue();
-        String countryCode = Common.getCountryCode((String) comboBox_CountryCode.getValue());
-
-        // validate input data
-        String errorMessage = InputValidator.inputErrorMessage(firstName, lastName, phone, grade, language, subscription, countryCode);
-        if(errorMessage != null) {
-            ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", errorMessage);
-            alert.showAndWait();
-            return;
-        }
         
-        // create updated student
-        Student s = new Student();
-        s.setFirstName(firstName);
-        s.setLastName(lastName);
-        s.setPhone(countryCode + " " + phone);
-        s.setGrade(grade);
-        s.setLanguage(language);
-        s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
-        
-        // update student in the database
         try {
-            model.updateStudent(student, s);
+            // validate input (throws MissingInputFieldException)
+            InputValidatorForStudentFields.validateUpdateFields(firstName, lastName, phone, grade, language, subscription, countryCode);
+        
+            // create updated student
+            Student s = new Student();
+            s.setFirstName(firstName);
+            s.setLastName(lastName);
+            s.setPhone(countryCode + " " + phone);
+            s.setGrade(grade);
+            s.setLanguage(language);
+            s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
+
+            // update student in the database
+            model.updateStudent(student, s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
+            
+            // return back to parent (StudentsController) page
             closeStage();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
-        } catch (PhoneAlreadyExistsException ex) {
+        } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", ex.getMessage());
             alert.showAndWait();
         }

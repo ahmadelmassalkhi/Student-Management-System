@@ -5,7 +5,7 @@
 package com.mycompany.mavenproject1.MarksPage;
 
 // imports from same package
-import com.mycompany.mavenproject1.Common.Common;
+import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
@@ -110,10 +110,10 @@ public class UpdateStudentMarkController implements Initializable {
     private void displayStudent() {
         tf_FirstName.setText(student.getFirstName());
         tf_LastName.setText(student.getLastName());
-        tf_Phone.setText(Common.getNumber(student.getPhone()));
+        tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
         tf_Mark.setText(student.getMark() + "");
         
-        comboBox_CountryCode.setValue(Common.getCountryCode(student.getPhone()));
+        comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade()+"");
         comboBox_Language.setValue(student.getLanguage());
         comboBox_Subscription.setValue(student.getSubscriptionStatus());

@@ -366,7 +366,6 @@ public class MarksController implements Initializable {
             
             // export
             exporter.Export();
-        } catch (NullPointerException ex) {
         } catch (FileNotFoundException | DocumentException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);

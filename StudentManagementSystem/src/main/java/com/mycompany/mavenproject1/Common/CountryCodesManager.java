@@ -24,10 +24,9 @@ import java.util.List;
  *
  * @author AHMAD
  */
-public class Common {
+public class CountryCodesManager {
     
-    
-    public static String getCountryCode(String phone) {
+    public static String getCountryCode(String phone) throws NullPointerException {
         int indexOfPlus = phone.indexOf("+");
         if(indexOfPlus == -1) return "Not Found"; // "+" doesn't exist in the string
         
@@ -37,7 +36,7 @@ public class Common {
         return phone.substring(indexOfPlus, indexOfSpace); // Extract the substring from "+" to the space
     }
 
-    public static String getNumber(String phone) {
+    public static String getNumber(String phone) throws NullPointerException {
         int lastSpace = phone.lastIndexOf(" ");
         if(lastSpace == -1) return "Not Found";
         return phone.substring(lastSpace + 1); // Extract the substring from the last space to the end

@@ -6,8 +6,9 @@ package com.mycompany.mavenproject1.StudentsPage;
 
 // imports from same package
 import com.mycompany.mavenproject1.Common.ErrorAlert;
-import com.mycompany.mavenproject1.Common.Common;
-import com.mycompany.mavenproject1.Common.InputValidator;
+import com.mycompany.mavenproject1.Common.CountryCodesManager;
+import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
+import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
@@ -186,7 +187,7 @@ public class StudentsController implements Initializable {
         comboBox_Grade.setValue("Any");
         
         // Add items to the `Code` ComboBox
-        countryList = Common.getCountryCodesList();
+        countryList = CountryCodesManager.getCountryCodesList();
         comboBox_CountryCode.setItems(countryList);
         comboBox_CountryCode.setValue("+961");
         
@@ -210,7 +211,7 @@ public class StudentsController implements Initializable {
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(Common.getCountryCode(item));
+                    setText(CountryCodesManager.getCountryCode(item));
                 }
             }
         });
@@ -258,42 +259,34 @@ public class StudentsController implements Initializable {
         String firstName = tf_FirstName.getText();
         String lastName = tf_LastName.getText();
         String phone = tf_Phone.getText();
+        String countryCode = (String) comboBox_CountryCode.getValue();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String subscription = (String) comboBox_Subscription.getValue();
-        String countryCode = Common.getCountryCode((String) comboBox_CountryCode.getValue());
-        
-        // validate input data
-        String errorMessage = InputValidator.inputErrorMessage(firstName, lastName, phone, grade, language, subscription, countryCode);
-        if(errorMessage != null) {
-            ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", errorMessage);
-            alert.showAndWait();
-            return;
-        }
-
-        // fill student information
-        Student s = new Student();
-        s.setFirstName(firstName);
-        s.setLastName(lastName);
-        s.setPhone(countryCode + " " + phone);
-        s.setGrade(grade);
-        s.setLanguage(language);
-        s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
         
         try {
+            // validate input (throws MissingInputFieldException)
+            InputValidatorForStudentFields.validateAddFields(firstName, lastName, phone, grade, language, subscription, countryCode);
+
+            // fill student information
+            Student s = new Student();
+            s.setFirstName(firstName);
+            s.setLastName(lastName);
+            s.setPhone(countryCode + " " + phone);
+            s.setGrade(grade);
+            s.setLanguage(language);
+            s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
+
             // add student to database
-            model.addStudent(s);
+            model.addStudent(s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
             
             // adopt to data changes
             this.clearTextFields(); // make adding another new student easier
             this.refresh();
-                           
-            // print out a message
-            System.out.println("Student added successfully !");
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
-        } catch (PhoneAlreadyExistsException ex) {
+        } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", ex.getMessage());
             alert.showAndWait();
         }
