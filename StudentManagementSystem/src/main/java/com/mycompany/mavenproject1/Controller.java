@@ -1,5 +1,6 @@
 package com.mycompany.mavenproject1;
 
+import com.mycompany.mavenproject1.MarksPage.MarksController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
