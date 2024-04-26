@@ -124,6 +124,23 @@ public class StudentsController implements Initializable {
                 if (s != null) updateStudent(s);
             }
         });
+        
+        ObservableList<TableColumn> allColumns = studentsTable.getColumns();
+        for (TableColumn column : allColumns) {
+            column.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+                // get sum of all currently set widths (widths)
+                double widthSum = 0;
+                for(TableColumn col : allColumns) widthSum += col.getWidth();
+
+                // if exceeds totalWidth, set the max width to the oldWidth
+                if (widthSum > studentsTable.getWidth()) {
+                    column.setMaxWidth(oldWidth.doubleValue()); // Revert back to oldWidth 
+                                                                // (by setting maxWidth to oldWidth we enforce prefWidth = oldWidth without overlapping listener events resulting in errors)
+                } else {
+                    column.setMaxWidth(Double.MAX_VALUE); // reset max width
+                }
+            });
+        }
     }
     
     private void initializeTextFields() {
@@ -154,7 +171,18 @@ public class StudentsController implements Initializable {
         comboBox_Language.setValue("Any");        
 
         // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(FXCollections.observableArrayList("Any", "8", "9", "10", "11", "12"));
+        comboBox_Grade.setItems(FXCollections.observableArrayList(
+                "Any", 
+                "8", 
+                "Brevet", 
+                "10", 
+                "11",
+                "Terminal SE",
+                "Terminal LS",
+                "Terminal GS",
+                "Terminal LH"
+            )
+        );
         comboBox_Grade.setValue("Any");
         
         // Add items to the `Code` ComboBox
@@ -248,7 +276,7 @@ public class StudentsController implements Initializable {
         s.setFirstName(firstName);
         s.setLastName(lastName);
         s.setPhone(countryCode + " " + phone);
-        s.setGrade(Integer.parseInt(grade));
+        s.setGrade(grade);
         s.setLanguage(language);
         s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
         

@@ -14,7 +14,7 @@ public class Student {
     private String firstName;
     private String lastName;
     private String phone;
-    private int grade;
+    private String grade;
     private String language;
     private int subscriptionStatus;
     private float mark; // over 20
@@ -27,7 +27,7 @@ public class Student {
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
     public void setPhone(String phone) { this.phone = phone; }
-    public void setGrade(int grade) { this.grade = grade; }
+    public void setGrade(String grade) { this.grade = grade; }
     public void setLanguage(String language) { this.language = language; }
     public void setSubscriptionStatus(int subscribtionStatus) { this.subscriptionStatus = subscribtionStatus; }
     public void setMark(float mark) { this.mark = mark; }
@@ -38,7 +38,7 @@ public class Student {
     public String getLastName() { return lastName; }
     public String getPhone() { return phone; }
     public String getLanguage() { return language; }
-    public int getGrade() { return grade; }
+    public String getGrade() { return grade; }
     public float getMark() { return mark; }
     
     // official getter (uses naming convension)

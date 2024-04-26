@@ -42,7 +42,7 @@
                     </VBox>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER_LEFT" layoutX="17.0" layoutY="114.0" prefHeight="58.0" prefWidth="768.0" spacing="35.0">
+                <HBox alignment="CENTER_LEFT" layoutX="17.0" layoutY="114.0" prefHeight="58.0" prefWidth="762.0" spacing="35.0">
                     <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="313.0" spacing="3.0">
                         <children>
@@ -70,7 +70,7 @@
                                 <children>
                                 <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <ComboBox fx:id="comboBox_CountryCode" prefHeight="25.0" prefWidth="132.0" promptText="Code" stylesheets="@../css/ComboBox.css" />
+                                        <ComboBox fx:id="comboBox_CountryCode" prefHeight="27.0" prefWidth="193.0" promptText="Code" stylesheets="@../css/ComboBox.css" />
                                     </children>
                                 </HBox>
                                 <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -82,11 +82,23 @@
                             </VBox>
                         </children>
                     </HBox>
-                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="259.0" spacing="3.0">
+                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="259.0">
                         <children>
-                            <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="82.0" promptText="Grade" stylesheets="@../css/ComboBox.css" />
-                            <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" stylesheets="@../css/ComboBox.css" />
-                            <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="87.0" promptText="InActive" stylesheets="@../css/ComboBox.css" />
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="172.0" spacing="3.0">
+                           <children>
+                              <HBox layoutX="10.0" layoutY="37.0" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                        <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="506.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="3.0">
+                                 <children>
+                                        <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" stylesheets="@../css/ComboBox.css" />
+                                        <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="87.0" promptText="InActive" stylesheets="@../css/ComboBox.css" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                         </children>
                     </HBox>
                     <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="121.0" spacing="3.0">

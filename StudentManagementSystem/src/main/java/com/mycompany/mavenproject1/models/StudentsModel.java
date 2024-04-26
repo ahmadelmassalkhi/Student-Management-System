@@ -45,7 +45,7 @@ public class StudentsModel {
         // Create tables
         String query = String.format(
             "CREATE TABLE IF NOT EXISTS %s "
-                    + "(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT UNIQUE NOT NULL, %s INTEGER NOT NULL, %s TEXT NOT NULL, %s INTEGER NOT NULL, %s FLOAT)",
+                    + "(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT UNIQUE NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s INTEGER NOT NULL, %s FLOAT)",
             TABLE,
             ID,
             FIRSTNAME,
@@ -145,7 +145,7 @@ public class StudentsModel {
         if(!grade.isEmpty() && !grade.equalsIgnoreCase("any")) {
             if(first) query += this.whereEqual(GRADE);
             else query += this.andEqual(GRADE);
-            params.add(Integer.valueOf(grade));
+            params.add(grade);
             first = false;
         }
         if(!language.isEmpty() && !language.equalsIgnoreCase("any")) {
@@ -318,7 +318,7 @@ public class StudentsModel {
             s.setFirstName(database.result.getString(FIRSTNAME));
             s.setLastName(database.result.getString(LASTNAME));
             s.setPhone(database.result.getString(PHONE));
-            s.setGrade(database.result.getInt(GRADE));
+            s.setGrade(database.result.getString(GRADE));
             s.setLanguage(database.result.getString(LANGUAGE));
             s.setSubscriptionStatus(database.result.getInt(SUBSCRIPTION));
             s.setMark(database.result.getFloat(MARK));

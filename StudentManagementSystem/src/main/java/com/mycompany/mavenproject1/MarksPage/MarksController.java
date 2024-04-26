@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.io.FileNotFoundException;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -178,6 +179,23 @@ public class MarksController implements Initializable {
                 if (s != null) updateStudentMark(s);
             }
         });
+        
+        ObservableList<TableColumn> allColumns = studentsTable.getColumns();
+        for (TableColumn column : allColumns) {
+            column.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+                // get sum of all currently set widths (widths)
+                double widthSum = 0;
+                for(TableColumn col : allColumns) widthSum += col.getWidth();
+
+                // if exceeds totalWidth, set the max width to the oldWidth
+                if (widthSum > studentsTable.getWidth()) {
+                    column.setMaxWidth(oldWidth.doubleValue()); // Revert back to oldWidth 
+                                                                // (by setting maxWidth to oldWidth we enforce prefWidth = oldWidth without overlapping listener events resulting in errors)
+                } else {
+                    column.setMaxWidth(Double.MAX_VALUE); // reset max width
+                }
+            });
+        }
     }
     
     private void initializeTextFields() {
@@ -291,14 +309,6 @@ public class MarksController implements Initializable {
         this.Search();
     }
     
-    private void unCheckAllCheckBoxes() {
-        checkbox_FirstName.setSelected(false);
-        checkbox_LastName.setSelected(false);
-        checkbox_Phone.setSelected(false);
-        checkbox_Grade.setSelected(false);
-        checkbox_Language.setSelected(false);
-    }
-    
     private void checkAllCheckBoxes() {
         checkbox_FirstName.setSelected(true);
         checkbox_LastName.setSelected(true);
@@ -356,6 +366,7 @@ public class MarksController implements Initializable {
             
             // export
             exporter.Export();
+        } catch (NullPointerException ex) {
         } catch (FileNotFoundException | DocumentException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);

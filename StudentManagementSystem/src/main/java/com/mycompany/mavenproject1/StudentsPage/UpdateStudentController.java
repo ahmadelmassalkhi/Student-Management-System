@@ -196,7 +196,7 @@ public class UpdateStudentController implements Initializable {
         s.setFirstName(firstName);
         s.setLastName(lastName);
         s.setPhone(countryCode + " " + phone);
-        s.setGrade(Integer.parseInt(grade));
+        s.setGrade(grade);
         s.setLanguage(language);
         s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
         

@@ -64,7 +64,7 @@ public class StudentsTablePDFExporter {
     
     /*******************************************************************/
 
-    public void Export() throws FileNotFoundException, DocumentException {
+    public void Export() throws FileNotFoundException, DocumentException, NullPointerException {
         Document document = new Document();
 
         // create the pdf (empty) at the saveLocation
