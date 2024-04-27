@@ -117,8 +117,15 @@ public class MarksController implements Initializable {
     /*******************************************************************/
     
     private void initializeCheckBoxes() {
-        this.checkAllCheckBoxes();
         
+        // initially check all checkboxes
+        checkbox_FirstName.setSelected(true);
+        checkbox_LastName.setSelected(true);
+        checkbox_Phone.setSelected(true);
+        checkbox_Grade.setSelected(true);
+        checkbox_Language.setSelected(true);
+        
+        // add checkbox functionality to hide its corresponding column
         checkbox_FirstName.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 col_FirstName.setVisible(true);
@@ -155,7 +162,6 @@ public class MarksController implements Initializable {
             }
         });
     }
-    
     private void initializeTable() {
         // allow multiple selections
         studentsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -172,7 +178,7 @@ public class MarksController implements Initializable {
         // hide ID column by default (made to be interacted with, programmatically)
         col_ID.setVisible(false);
         
-        // Handle double click event
+        // add functionality on row double clicks
         studentsTable.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 Student s = (Student) studentsTable.getSelectionModel().getSelectedItem();
@@ -180,6 +186,7 @@ public class MarksController implements Initializable {
             }
         });
         
+        // restrict columns totalWidth = tableWidth
         ObservableList<TableColumn> allColumns = studentsTable.getColumns();
         for (TableColumn column : allColumns) {
             column.widthProperty().addListener((obs, oldWidth, newWidth) -> {
@@ -197,8 +204,8 @@ public class MarksController implements Initializable {
             });
         }
     }
-    
     private void initializeTextFields() {
+        
         // set interactive filtering feature
         tf_FirstName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             Search();
@@ -228,14 +235,25 @@ public class MarksController implements Initializable {
             Search();
         });
     }
-    
     private void initializeComboBoxes() {
         // Add items to the `Language` ComboBox
         comboBox_Language.setItems(FXCollections.observableArrayList("Any", "English", "French"));
         comboBox_Language.setValue("Any");        
 
         // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(FXCollections.observableArrayList("Any", "8", "9", "10", "11", "12"));
+        comboBox_Grade.setItems(
+            FXCollections.observableArrayList(
+                "Any", 
+                "8", 
+                "Brevet", 
+                "10", 
+                "11",
+                "Terminal SE",
+                "Terminal LS",
+                "Terminal GS",
+                "Terminal LH"
+            )
+        );
         comboBox_Grade.setValue("Any");
 
         // Add items to the `MarksOrder` ComboBox
@@ -307,14 +325,6 @@ public class MarksController implements Initializable {
     public void refresh() {
         this.setStats();
         this.Search();
-    }
-    
-    private void checkAllCheckBoxes() {
-        checkbox_FirstName.setSelected(true);
-        checkbox_LastName.setSelected(true);
-        checkbox_Phone.setSelected(true);
-        checkbox_Grade.setSelected(true);
-        checkbox_Language.setSelected(true);
     }
     
     private void setStats() {

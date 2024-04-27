@@ -34,3 +34,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-border-color: #ccc; /* Popup border color */
     -fx-border-width: 1px; /* Popup border width */
 }
+
+.grade {
+    -fx-pref-width: 108px;  /* Set your desired width here */
+}
+
+.language {
+    -fx-pref-width: 82px; /* Set your desired width here */
+}
+
+.subscription {
+    -fx-pref-width: 87px; /* Set your desired width here */
+}
+
+.countryCode {
+    -fx-pref-width: 87px; /* Set your desired width here */
+}
