@@ -109,15 +109,32 @@ public class StudentsTablePDFExporter {
     // Create PDF table
     
     private PdfPTable createPDFTable() {
-        // get all visible columns
+        // get all visible columns (and set their widths)
+        List<Float> widths = new ArrayList<>();
         List<String> columns = new ArrayList<>();
         for (TableColumn column : (ObservableList<TableColumn>)studentsTable.getColumns()) {
             if(column.isVisible()) columns.add(column.getText());
+            if(column == col_ID) widths.add(2f);
+            if(column == col_FirstName) widths.add(2f);
+            if(column == col_LastName) widths.add(2f);
+            if(column == col_Phone) widths.add(3f);
+            if(column == col_Grade) widths.add(2f);
+            if(column == col_Language) widths.add(1.5f);
+            if(column == col_Mark) widths.add(1.5f);
+            if(column == col_Subscription) widths.add(1.5f);
         }
-
+        
         // create the table with its columns
         PdfPTable table = new PdfPTable(columns.size());
         table.setWidthPercentage(100); // set width to 100%
+        
+        try {
+            float[] widthsArray = new float[widths.size()];
+            for (int i = 0; i < widths.size(); i++) widthsArray[i] = widths.get(i);
+            table.setWidths(widthsArray);
+        } catch (DocumentException ex) {
+            // do nothing (keep default widths)
+        }
 
         // add column headers with styling
         Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
