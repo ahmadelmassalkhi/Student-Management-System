@@ -366,6 +366,9 @@ public class MarksController implements Initializable {
         try {
             StudentsTablePDFExporter exporter = new StudentsTablePDFExporter(studentsTable);
             
+            // set stage (used to prevent interaction with it during FileChooser)
+            exporter.setStage((Stage) studentsTable.getScene().getWindow());
+            
             // set target columns
             exporter.setColFirstName(col_FirstName);
             exporter.setColLastName(col_LastName);

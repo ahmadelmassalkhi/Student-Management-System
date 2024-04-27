@@ -31,12 +31,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.stage.Stage;
 
 /**
  *
  * @author AHMAD
  */
 public class StudentsTablePDFExporter {
+    
+    // parent stage
+    private Stage stage = null;
     
     // columns
     private TableColumn col_ID = null;
@@ -53,6 +57,7 @@ public class StudentsTablePDFExporter {
         this.studentsTable = studentsTable;
     }
     
+    public void setStage(Stage stage) { this.stage = stage; }
     public void setColID(TableColumn col_ID) { this.col_ID = col_ID; }
     public void setColFirstName(TableColumn col_FirstName) { this.col_FirstName = col_FirstName; }
     public void setColLastName(TableColumn col_LastName) { this.col_LastName = col_LastName; }
@@ -102,7 +107,7 @@ public class StudentsTablePDFExporter {
         fileChooser.getExtensionFilters().add(extFilter);
 
         // Show the save file dialog and return the selected file
-        return fileChooser.showSaveDialog(null);
+        return fileChooser.showSaveDialog(stage);
     }
     
     /*******************************************************************/
