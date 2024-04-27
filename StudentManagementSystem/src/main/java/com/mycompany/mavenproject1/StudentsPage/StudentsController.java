@@ -101,6 +101,13 @@ public class StudentsController implements Initializable {
     private TableColumn col_Subscription;
     
     /*******************************************************************/
+
+    // so we are able to refresh data changes from outside the class object
+    public StudentsController() { studentsController = this; }
+    private static StudentsController studentsController = null;
+    public static StudentsController getController() { return studentsController; }
+    
+    /*******************************************************************/
     
     private void initializeTable() {
         // allow multiple selections
@@ -237,7 +244,7 @@ public class StudentsController implements Initializable {
         initializeTextFields();
         initializeComboBoxes();
     
-        // initialize Students Controller (with its model)
+        // initialize model
         try {
             model = StudentsModel.getModel();
         } catch (SQLException ex) {
@@ -259,15 +266,15 @@ public class StudentsController implements Initializable {
         String firstName = tf_FirstName.getText();
         String lastName = tf_LastName.getText();
         String phone = tf_Phone.getText();
-        String countryCode = (String) comboBox_CountryCode.getValue();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String subscription = (String) comboBox_Subscription.getValue();
+        String countryCode = (String) comboBox_CountryCode.getValue();
         
         try {
             // validate input (throws MissingInputFieldException)
             InputValidatorForStudentFields.validateAddFields(firstName, lastName, phone, grade, language, subscription, countryCode);
-
+            
             // fill student information
             Student s = new Student();
             s.setFirstName(firstName);
@@ -353,7 +360,11 @@ public class StudentsController implements Initializable {
     /*******************************************************************/
     // HELPER METHODS
     
-    private void refresh() {
+    /*
+     * refresh data (stats, and table based on inputs)
+     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
+     */
+    public void refresh() {
         this.refreshStats();
         this.Search();
     }

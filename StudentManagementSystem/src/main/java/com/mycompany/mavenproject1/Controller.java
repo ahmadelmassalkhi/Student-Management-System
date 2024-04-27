@@ -2,6 +2,7 @@ package com.mycompany.mavenproject1;
 
 // imports from same package
 import com.mycompany.mavenproject1.MarksPage.MarksController;
+import com.mycompany.mavenproject1.StudentsPage.StudentsController;
 
 // imports from javafx
 import javafx.event.ActionEvent;
@@ -51,32 +52,26 @@ public class Controller implements Initializable {
         
         // handle clicks from `Students` button
         if (actionEvent.getSource() == btnStudents) {
-            System.out.println("Pushed `Students` Pane to front !");
+            StudentsController.getController().refresh(); // update data incase other pages made changes to the database
             anchorPane_Students.toFront();
-        }
-        
-        // handle clicks from `Settings` button
-        if(actionEvent.getSource() == btnSettings) {
-            System.out.println("Pushed `Settings` Pane to front !");
-            anchorPane_Settings.toFront();
         }
 
         // handle clicks from `Marks` button
         if(actionEvent.getSource() == btnMarks) {
-            System.out.println("Pushed `Marks` Pane to front !");
             MarksController.getController().refresh(); // update data incase other pages made changes to the database
             anchorPane_Marks.toFront();
+        }
+        
+        // handle clicks from `Settings` button
+        if(actionEvent.getSource() == btnSettings) {
+            anchorPane_Settings.toFront();
         }
         
         // handle clicks from `Signout` button
         if(actionEvent.getSource() == btnExit) {
             System.out.println("Closing the application !");
-                        
-            // Get the stage from the button
-            Stage stage = (Stage) btnExit.getScene().getWindow();
-
-            // Close the stage
-            stage.close();
+            Stage stage = (Stage) btnExit.getScene().getWindow(); // get the stage
+            stage.close(); // close
         }
     }
       

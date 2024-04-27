@@ -31,12 +31,12 @@ public class InputValidatorForStudentFields {
 
         // validate
         if(!validFirstName(firstName)
-                && !validLastName(lastName) 
-                && !validPhone(lastName) 
-                && !validGrade(lastName) 
-                && !validLanguage(lastName) 
-                && !validSubscription(lastName) 
-                && !validCountryCode(lastName)) throw new MissingInputFieldException();
+                || !validLastName(lastName) 
+                || !validPhone(phone) 
+                || !validGrade(grade) 
+                || !validLanguage(language) 
+                || !validSubscription(subscription) 
+                || !validCountryCode(countryCode)) throw new MissingInputFieldException();
     }
     
     public static void validateUpdateFields(

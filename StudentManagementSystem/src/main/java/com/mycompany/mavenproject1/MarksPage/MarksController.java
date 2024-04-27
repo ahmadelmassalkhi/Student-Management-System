@@ -320,7 +320,7 @@ public class MarksController implements Initializable {
     
     /*
      * refresh data (stats, and table based on inputs)
-     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by the previous page
+     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
      */
     public void refresh() {
         this.setStats();

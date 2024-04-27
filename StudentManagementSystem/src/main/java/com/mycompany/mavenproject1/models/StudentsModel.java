@@ -269,6 +269,11 @@ public class StudentsModel {
         database.executeQuery(query, IDs.toArray());
     }
     
+    public void deleteAllStudents() throws SQLException {
+        String query = "DELETE FROM " + TABLE;
+        database.executeQuery(query, new Object[] {});
+    }
+    
     /*******************************************************************/
     // PUBLIC GETTERS
     
