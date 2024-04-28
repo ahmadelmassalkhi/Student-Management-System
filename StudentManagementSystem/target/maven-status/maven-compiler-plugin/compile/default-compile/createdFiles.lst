@@ -1,7 +1,6 @@
 com\mycompany\mavenproject1\StudentsPage\StudentsController$1.class
 com\mycompany\mavenproject1\StudentsPage\UpdateStudentController.class
 com\mycompany\mavenproject1\Common\ErrorAlert.class
-com\mycompany\mavenproject1\Controller.class
 com\mycompany\mavenproject1\Common\StudentsTablePDFExporter.class
 com\mycompany\mavenproject1\MarksPage\MarksController.class
 com\mycompany\mavenproject1\Exceptions\InvalidDatabaseSchemaException.class
@@ -18,6 +17,7 @@ com\mycompany\mavenproject1\Managers\DatabaseManager.class
 com\mycompany\mavenproject1\StudentsPage\StudentsController.class
 com\mycompany\mavenproject1\Common\ComboBoxesOptions.class
 com\mycompany\mavenproject1\Common\InputValidatorForStudentFields.class
+com\mycompany\mavenproject1\BaseController.class
 com\mycompany\mavenproject1\Common\CountryCodesManager.class
 com\mycompany\mavenproject1\Managers\DatabaseConnectionManager.class
 com\mycompany\mavenproject1\StudentsPage\UpdateStudentController$1.class
