@@ -104,9 +104,9 @@ public class DatabaseManager {
         fileChooser.getExtensionFilters().add(dbFilter);
 
         // Show the file chooser dialog
-        return fileChooser.showOpenDialog(null);
+        return fileChooser.showOpenDialog(stage);
         /*
-         * we use null instead of stage because
+         * we can use null instead of stage because
          * we do not need to prevent interaction with the application during this time
          * because any interaction will be useless (we are changing the database)
          */

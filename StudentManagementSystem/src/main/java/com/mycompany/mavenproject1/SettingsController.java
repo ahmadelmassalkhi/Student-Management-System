@@ -4,24 +4,37 @@
  */
 package com.mycompany.mavenproject1;
 
-// imports from javafx
+// imports from same project
 import com.mycompany.mavenproject1.Exceptions.InvalidDatabaseSchemaException;
 import com.mycompany.mavenproject1.Managers.DatabaseManager;
-import com.mycompany.mavenproject1.models.StudentsModel;
-import java.io.IOException;
-import java.net.URISyntaxException;
+
+// imports from javafx
 import javafx.fxml.Initializable;
 
 // other imports
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.stage.Stage;
 
 /**
  *
  * @author AHMAD
  */
 public class SettingsController implements Initializable {
+    
+    private static Stage stage = null;
+    public static void setStage(Stage primaryStage) {
+        stage = primaryStage;
+        try {
+            DatabaseManager.getManager().setStage(stage);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

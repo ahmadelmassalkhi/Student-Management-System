@@ -14,7 +14,7 @@
     <children>
         <Pane prefHeight="554.0" prefWidth="793.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Label layoutX="33.0" layoutY="21.0" text="Settings" textFill="#322d2d">
+                <Label fx:id="label_Settings" layoutX="33.0" layoutY="21.0" text="Settings" textFill="#322d2d">
                    <font>
                    <Font name="System Bold" size="24.0" />
                    </font>

@@ -64,6 +64,7 @@ public class Controller implements Initializable {
         
         // handle clicks from `Settings` button
         if(actionEvent.getSource() == btnSettings) {
+            SettingsController.setStage((Stage) anchorPane_Settings.getScene().getWindow());
             anchorPane_Settings.toFront();
         }
         
