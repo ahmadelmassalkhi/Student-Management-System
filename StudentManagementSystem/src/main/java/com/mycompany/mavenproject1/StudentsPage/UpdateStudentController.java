@@ -32,6 +32,8 @@ import javafx.stage.StageStyle;
 // other imports
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -64,14 +66,22 @@ public class UpdateStudentController implements Initializable {
     
     private static ObservableList<String> countryList;
     private void initializeComboBoxes() {
+        List<String> options;
+        
         // Add items to the `Subscription` ComboBox
-        comboBox_Subscription.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_SUBSCRIPTION));
+        options = new ArrayList<>(ComboBoxesOptions.OPTIONS_SUBSCRIPTION);
+        options.remove("Any");
+        comboBox_Subscription.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Language` ComboBox
-        comboBox_Language.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_LANGUAGE));
+        options = new ArrayList<>(ComboBoxesOptions.OPTIONS_LANGUAGE);
+        options.remove("Any");
+        comboBox_Language.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_GRADE));
+        options = new ArrayList<>(ComboBoxesOptions.OPTIONS_GRADE);
+        options.remove("Any");
+        comboBox_Grade.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Code` ComboBox
         countryList = FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_COUNTRYCODES);
