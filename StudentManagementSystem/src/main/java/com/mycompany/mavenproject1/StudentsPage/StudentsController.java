@@ -247,7 +247,7 @@ public class StudentsController implements Initializable {
         // initialize model
         try {
             model = StudentsModel.getModel();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

@@ -12,6 +12,7 @@ import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import java.io.IOException;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -118,7 +119,7 @@ public class UpdateStudentController implements Initializable {
         // initialize model
         try {
             model = StudentsModel.getModel();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

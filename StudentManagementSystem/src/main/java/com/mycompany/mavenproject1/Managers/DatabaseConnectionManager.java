@@ -2,45 +2,62 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.mavenproject1.models;
+package com.mycompany.mavenproject1.Managers;
 
 // other imports
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.sql.Blob;
+import java.sql.Statement;
 
 /**
  *
  * @author AHMAD
  */
 public class DatabaseConnectionManager {
+    
+    private static DatabaseConnectionManager manager = null;
+    public static DatabaseConnectionManager getManager() throws SQLException, IOException {
+        if(manager == null) manager = new DatabaseConnectionManager();
+        return manager;
+    }
 
-    public DatabaseConnectionManager() throws SQLException {
-        connection = this.connect("sqlite");
+    // so that classes in same package/directory can create more objects (for connection testing)
+    private DatabaseConnectionManager() throws SQLException, IOException {
+        connection = this.connect();
     }
     
     /*******************************************************/
 
     private Connection connection;
-    private Connection connect(String fileName) throws SQLException {
+    public Connection connect() throws SQLException, IOException {
         if(connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection("jdbc:sqlite:./databases/" + fileName + ".db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + ConfigurationManager.getCurrentDatabasePath());
         }
         return connection;
     }
+    
     public void disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
             connection = null;
+            this.closeResult();
         }
+    }
+    
+    // closes the result
+    public ResultSet result = null;
+    public void closeResult() throws SQLException {
+        if (result != null) result.close();
+        this.result = null;
+    }
+    
+    public ResultSet getSchemaInfo() throws SQLException {
+        return getSchemaInfo(connection);
     }
     
     /*******************************************************/
@@ -70,7 +87,6 @@ public class DatabaseConnectionManager {
         return types.toString();
     }
     
-    public ResultSet result = null;
     public void executeQuery(String query, Object... params) throws SQLException, IllegalArgumentException {
         
         // Create a statement
@@ -102,59 +118,43 @@ public class DatabaseConnectionManager {
     }
     
     /*******************************************************/
-    // RESULT PROCESSING
-    
-    // function to fetch one row (keeps the resultSet open)
-    public Map<String, Object> fetchRow() throws SQLException {
-        if (this.result == null) return null;
-        if (!this.result.next()) return null;
 
-        // get metaData information
-        ResultSetMetaData metaData = this.result.getMetaData();
-        int columnCount = metaData.getColumnCount();
-        
-        // fetch
-        Map<String, Object> row = new HashMap<>();
-        for (int i = 1; i <= columnCount; i++) {
-            String colName = metaData.getColumnName(i);
-            Object colValue = this.result.getObject(i);
-            row.put(colName, colValue);
-        }
-        return row;
+    // Method to retrieve schema information for a given database connection
+    private static ResultSet getSchemaInfo(Connection connection) throws SQLException {
+        Statement statement = connection.createStatement();
+        return statement.executeQuery("PRAGMA table_info;");
     }
-    
-    // function to fetch all rows (closes the resultSet)
-    public List<Map<String, Object>> fetchAll() throws SQLException {
-        if(this.result == null) return null;
+
+    // Method to compare the schema of two databases
+    public static boolean compareDatabaseSchemas(
+            Connection connectionA, 
+            Connection connectionB) throws SQLException {
         
-        // get metaData information
-        ResultSetMetaData metaData = this.result.getMetaData();
-        int columnCount = metaData.getColumnCount();
-        
-        // fetch
-        List<Map<String, Object>> rows = new ArrayList<>();
-        while(this.result.next()) {
-            Map<String, Object> row = new HashMap<>();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = metaData.getColumnName(i);
-                Object columnValue = this.result.getObject(i);
-                row.put(columnName, columnValue);
+        ResultSet schemaA = getSchemaInfo(connectionA);
+        ResultSet schemaB = getSchemaInfo(connectionB);
+
+        // Compare the schema information obtained for each database
+        while (schemaA.next() && schemaB.next()) {
+            // Compare table name, column name, and column type
+            String tableNameA = schemaA.getString("name");
+            String tableNameB = schemaB.getString("name");
+            if (!tableNameA.equals(tableNameB)) {
+                return false; // Table names are different
             }
-            rows.add(row);
+
+            String columnNameA = schemaA.getString("name");
+            String columnNameB = schemaB.getString("name");
+            if (!columnNameA.equals(columnNameB)) {
+                return false; // Column names are different
+            }
+
+            String columnTypeA = schemaA.getString("type");
+            String columnTypeB = schemaB.getString("type");
+            if (!columnTypeA.equals(columnTypeB)) {
+                return false; // Column types are different
+            }
         }
-        
-        // close result
-        this.closeResult();
-        
-        // return
-        return rows;
+
+        return !schemaA.next() && !schemaB.next();
     }
-    
-    // closes the result
-    public void closeResult() throws SQLException {
-        if (result != null) result.close();
-        this.result = null;
-    }
-    
-    /*******************************************************/
 }

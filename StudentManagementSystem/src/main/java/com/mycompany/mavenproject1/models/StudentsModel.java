@@ -5,7 +5,9 @@
 package com.mycompany.mavenproject1.models;
 
 // imports from same package
+import com.mycompany.mavenproject1.Managers.DatabaseConnectionManager;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
+import java.io.IOException;
 
 // other imports
 import java.sql.SQLException;
@@ -30,14 +32,14 @@ public class StudentsModel {
     
     // restrict to one object (no need of more)
     private static StudentsModel model = null;
-    public static StudentsModel getModel() throws SQLException {
+    public static StudentsModel getModel() throws SQLException, IOException {
         if(model == null) model = new StudentsModel();
         return model;
     }
     
-    private static DatabaseConnectionManager database;
-    private StudentsModel() throws SQLException {
-        this.database = new DatabaseConnectionManager();
+    private final DatabaseConnectionManager database;
+    private StudentsModel() throws SQLException, IOException {
+        this.database = DatabaseConnectionManager.getManager();
         this.CreateStudentsTable();
     }
     

@@ -5,15 +5,17 @@
 package com.mycompany.mavenproject1;
 
 // imports from javafx
+import com.mycompany.mavenproject1.Exceptions.InvalidDatabaseSchemaException;
+import com.mycompany.mavenproject1.Managers.DatabaseManager;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import javafx.fxml.Initializable;
 
 // other imports
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,24 +23,32 @@ import java.util.logging.Logger;
  */
 public class SettingsController implements Initializable {
     
-    private StudentsModel model;
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        // initialize model
+    }
+    
+    public void BackupDatabase() {
         try {
-            model = StudentsModel.getModel();
-        } catch (SQLException ex) {
+            DatabaseManager.getManager().Backup();
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
     }
     
-    public void Clean() {
+    public void CleanDatabase() {
         try {
-            model.deleteAllStudents();
-        } catch (SQLException ex) {
+            DatabaseManager.getManager().DeleteAllData();
+        } catch (IOException | SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    public void RestoreDatabase() {
+        try {
+            DatabaseManager.getManager().Restore();
+        } catch (InvalidDatabaseSchemaException | IOException | URISyntaxException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

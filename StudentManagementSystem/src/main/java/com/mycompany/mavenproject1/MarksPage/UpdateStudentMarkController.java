@@ -9,6 +9,7 @@ import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import java.io.IOException;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -64,7 +65,7 @@ public class UpdateStudentMarkController implements Initializable {
         // initialize model
         try {
             model = StudentsModel.getModel();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -128,8 +129,16 @@ public class UpdateStudentMarkController implements Initializable {
     
     // `Ok` button handler
     public void updateMark() {
-        // get mark
-        Float mark = Float.valueOf((String) tf_Mark.getText());
+
+        Float mark;
+        try {
+            // get mark
+            mark = Float.valueOf((String) tf_Mark.getText());
+        } catch (NumberFormatException ex) {
+            ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", "Please enter a Mark !");
+            alert.showAndWait();
+            return;
+        }
         
         // validate mark
         if(mark > 20 || mark < 0) {

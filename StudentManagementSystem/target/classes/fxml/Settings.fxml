@@ -19,7 +19,7 @@
                    <Font name="System Bold" size="24.0" />
                    </font>
                 </Label>
-                <VBox layoutX="33.0" layoutY="145.0" prefHeight="67.0" prefWidth="624.0">
+                <VBox layoutX="33.0" layoutY="145.0" prefHeight="67.0" prefWidth="720.0">
                     <children>
                        <HBox prefHeight="57.0" prefWidth="624.0">
                           <children>
@@ -30,11 +30,11 @@
                              </Label>
                           </children>
                        </HBox>
-                       <HBox prefHeight="40.0" prefWidth="624.0">
+                       <HBox prefHeight="40.0" prefWidth="624.0" spacing="4.0">
                           <children>
-                             <HBox prefHeight="32.0" prefWidth="361.0" spacing="3.0">
-                                <children>
-                                   <Button mnemonicParsing="false" onAction="#Clean" prefHeight="32.0" prefWidth="209.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="CLEAN">
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                                   <Button mnemonicParsing="false" onAction="#CleanDatabase" prefHeight="32.0" prefWidth="209.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="CLEAN">
                                       <graphic>
                                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -46,7 +46,11 @@
                                          <Font name="System Bold" size="12.0" />
                                       </font>
                                    </Button>
-                                   <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="130.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="BACKUP">
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                                   <Button mnemonicParsing="false" onAction="#BackupDatabase" prefHeight="32.0" prefWidth="130.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="BACKUP">
                                       <font>
                                          <Font name="System Bold" size="12.0" />
                                       </font>
@@ -58,7 +62,11 @@
                                          </ImageView>
                                       </graphic>
                                    </Button>
-                                   <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="209.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="RESTORE">
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                                   <Button mnemonicParsing="false" onAction="#RestoreDatabase" prefHeight="32.0" prefWidth="209.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="RESTORE">
                                       <font>
                                          <Font name="System Bold" size="12.0" />
                                       </font>
@@ -70,8 +78,8 @@
                                          </ImageView>
                                       </graphic>
                                    </Button>
-                                </children>
-                             </HBox>
+                           </children>
+                        </VBox>
                           </children>
                        </HBox>
                     </children>

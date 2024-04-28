@@ -282,7 +282,7 @@ public class MarksController implements Initializable {
         // initialize model
         try {
             model = StudentsModel.getModel();
-        } catch (SQLException ex) {
+        } catch (IOException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -379,7 +379,7 @@ public class MarksController implements Initializable {
             
             // export
             exporter.Export();
-        } catch (FileNotFoundException | DocumentException ex) {
+        } catch (DocumentException | FileNotFoundException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
