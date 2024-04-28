@@ -6,6 +6,7 @@ package com.mycompany.mavenproject1.MarksPage;
 
 // imports from same package
 import com.itextpdf.text.DocumentException;
+import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.Common.StudentsTablePDFExporter;
@@ -236,29 +237,18 @@ public class MarksController implements Initializable {
         });
     }
     private void initializeComboBoxes() {
+                
         // Add items to the `Language` ComboBox
-        comboBox_Language.setItems(FXCollections.observableArrayList("Any", "English", "French"));
-        comboBox_Language.setValue("Any");        
+        comboBox_Language.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_LANGUAGE));
+        comboBox_Language.setValue(ComboBoxesOptions.OPTION_DEFAULT_LANGUAGE);
 
         // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(
-            FXCollections.observableArrayList(
-                "Any", 
-                "8", 
-                "Brevet", 
-                "10", 
-                "11",
-                "Terminal SE",
-                "Terminal LS",
-                "Terminal GS",
-                "Terminal LH"
-            )
-        );
-        comboBox_Grade.setValue("Any");
-
+        comboBox_Grade.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_GRADE));
+        comboBox_Grade.setValue(ComboBoxesOptions.OPTION_DEFAULT_GRADE);
+        
         // Add items to the `MarksOrder` ComboBox
-        comboBox_MarksOrder.setItems(FXCollections.observableArrayList("Any", "ASC", "DESC"));
-        comboBox_MarksOrder.setValue("DESC");
+        comboBox_MarksOrder.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_MARKSORDER));
+        comboBox_MarksOrder.setValue(ComboBoxesOptions.OPTION_DEFAULT_MARKORDER);
         
         // set interactive filtering feature
         comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {

@@ -27,8 +27,9 @@ import java.util.List;
 public class CountryCodesManager {
     
     public static String getCountryCode(String phone) throws NullPointerException {
+        if(phone == null) throw new NullPointerException();
         int indexOfPlus = phone.indexOf("+");
-        if(indexOfPlus == -1) return "Not Found"; // "+" doesn't exist in the string
+        if(indexOfPlus == -1) throw new IllegalArgumentException(); // "+" doesn't exist in the string
         
         // Find the first space after "+"
         int indexOfSpace = phone.indexOf(" ", indexOfPlus);
@@ -36,15 +37,16 @@ public class CountryCodesManager {
         return phone.substring(indexOfPlus, indexOfSpace); // Extract the substring from "+" to the space
     }
 
-    public static String getNumber(String phone) throws NullPointerException {
+    public static String getNumber(String phone) throws NullPointerException, IllegalArgumentException {
+        if(phone == null) throw new NullPointerException();
         int lastSpace = phone.lastIndexOf(" ");
-        if(lastSpace == -1) return "Not Found";
+        if(lastSpace == -1) throw new IllegalArgumentException();
         return phone.substring(lastSpace + 1); // Extract the substring from the last space to the end
     }
     
-    private static ObservableList<String> countryList = null;
-    public static ObservableList<String> getCountryCodesList() {
-        if(countryList != null) return countryList;
+    private static List<String> countryCodesList = null;
+    public static List<String> getCountryCodesList() {
+        if(countryCodesList != null) return countryCodesList;
         
         // get resource
         URL resourceURL = App.class.getResource("/txt/countryCodes.txt");
@@ -63,13 +65,13 @@ public class CountryCodesManager {
                 while ((line = bufferedReader.readLine()) != null) countryCodes.add(line);
                 
                 // save extracted data
-                countryList = FXCollections.observableArrayList(countryCodes);
+                countryCodesList = countryCodes;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
                 System.exit(1);
             }
         }
         
-        return countryList;
+        return countryCodesList;
     }
 }

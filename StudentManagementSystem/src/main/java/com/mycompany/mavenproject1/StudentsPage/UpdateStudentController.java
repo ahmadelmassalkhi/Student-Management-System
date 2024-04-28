@@ -5,6 +5,7 @@
 package com.mycompany.mavenproject1.StudentsPage;
 
 // imports from same package
+import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
@@ -61,19 +62,19 @@ public class UpdateStudentController implements Initializable {
     
     /*******************************************************************/
     
-    private static ObservableList<String> countryList = CountryCodesManager.getCountryCodesList();
+    private static ObservableList<String> countryList;
     private void initializeComboBoxes() {
         // Add items to the `Subscription` ComboBox
-        comboBox_Subscription.setItems(FXCollections.observableArrayList("Active", "InActive"));
+        comboBox_Subscription.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_SUBSCRIPTION));
         
         // Add items to the `Language` ComboBox
-        comboBox_Language.setItems(FXCollections.observableArrayList("English", "French"));
+        comboBox_Language.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_LANGUAGE));
         
         // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(FXCollections.observableArrayList("8", "9", "10", "11", "12"));
+        comboBox_Grade.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_GRADE));
         
         // Add items to the `Code` ComboBox
-        countryList = CountryCodesManager.getCountryCodesList();
+        countryList = FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_COUNTRYCODES);
         comboBox_CountryCode.setItems(countryList);
         
         // set ComboBox search on key-press feature
@@ -203,7 +204,7 @@ public class UpdateStudentController implements Initializable {
             
             // return back to parent (StudentsController) page
             closeStage();
-        } catch (SQLException ex) {
+        } catch (NullPointerException | IllegalArgumentException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {

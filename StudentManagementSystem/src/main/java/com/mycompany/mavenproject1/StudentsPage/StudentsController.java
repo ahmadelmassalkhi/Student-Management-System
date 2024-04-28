@@ -7,6 +7,7 @@ package com.mycompany.mavenproject1.StudentsPage;
 // imports from same package
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.Common.CountryCodesManager;
+import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
 import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
@@ -167,34 +168,23 @@ public class StudentsController implements Initializable {
             Search();
         });
     }
-    
+
     private static ObservableList<String> countryList;
     private void initializeComboBoxes() {
         // Add items to the `Subscription` ComboBox
-        comboBox_Subscription.setItems(FXCollections.observableArrayList("Any", "Active", "InActive"));
-        comboBox_Subscription.setValue("Any");        
-
+        comboBox_Subscription.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_SUBSCRIPTION));
+        comboBox_Subscription.setValue(ComboBoxesOptions.OPTION_DEFAULT_SUBSCRIPTION);
+        
         // Add items to the `Language` ComboBox
-        comboBox_Language.setItems(FXCollections.observableArrayList("Any", "English", "French"));
-        comboBox_Language.setValue("Any");        
+        comboBox_Language.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_LANGUAGE));
+        comboBox_Language.setValue(ComboBoxesOptions.OPTION_DEFAULT_LANGUAGE);
 
         // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(FXCollections.observableArrayList(
-                "Any", 
-                "8", 
-                "Brevet", 
-                "10", 
-                "11",
-                "Terminal SE",
-                "Terminal LS",
-                "Terminal GS",
-                "Terminal LH"
-            )
-        );
-        comboBox_Grade.setValue("Any");
+        comboBox_Grade.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_GRADE));
+        comboBox_Grade.setValue(ComboBoxesOptions.OPTION_DEFAULT_GRADE);        
         
         // Add items to the `Code` ComboBox
-        countryList = CountryCodesManager.getCountryCodesList();
+        countryList = FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_COUNTRYCODES);
         comboBox_CountryCode.setItems(countryList);
         comboBox_CountryCode.setValue("+961");
         
@@ -279,7 +269,7 @@ public class StudentsController implements Initializable {
             Student s = new Student();
             s.setFirstName(firstName);
             s.setLastName(lastName);
-            s.setPhone(countryCode + " " + phone);
+            s.setPhone(CountryCodesManager.getCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
             s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
@@ -290,7 +280,7 @@ public class StudentsController implements Initializable {
             // adopt to data changes
             this.clearTextFields(); // make adding another new student easier
             this.refresh();
-        } catch (SQLException ex) {
+        } catch (NullPointerException | IllegalArgumentException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
