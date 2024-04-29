@@ -138,21 +138,15 @@ public class DatabaseConnectionManager {
             // Compare table name, column name, and column type
             String tableNameA = schemaA.getString("name");
             String tableNameB = schemaB.getString("name");
-            if (!tableNameA.equals(tableNameB)) {
-                return false; // Table names are different
-            }
+            if (!tableNameA.equals(tableNameB)) return false; // Table names are different
 
             String columnNameA = schemaA.getString("name");
             String columnNameB = schemaB.getString("name");
-            if (!columnNameA.equals(columnNameB)) {
-                return false; // Column names are different
-            }
+            if (!columnNameA.equals(columnNameB)) return false; // Column names are different
 
             String columnTypeA = schemaA.getString("type");
             String columnTypeB = schemaB.getString("type");
-            if (!columnTypeA.equals(columnTypeB)) {
-                return false; // Column types are different
-            }
+            if (!columnTypeA.equals(columnTypeB)) return false; // Column types are different
         }
 
         return !schemaA.next() && !schemaB.next();
