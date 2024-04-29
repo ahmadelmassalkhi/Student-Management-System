@@ -8,11 +8,12 @@ package com.mycompany.mavenproject1.Exceptions;
  *
  * @author AHMAD
  */
-public class MissingInputFieldException extends RuntimeException {
-    public MissingInputFieldException () {
-        super("Please fill all fields !");
+public class UserCancelledFileChooserException extends RuntimeException {
+    public UserCancelledFileChooserException() {
+        super("User cancelled FileChooser, take action !");
     }
-    public MissingInputFieldException(String message) {
+    
+    public UserCancelledFileChooserException(String message) {
         super(message);
     }
 }

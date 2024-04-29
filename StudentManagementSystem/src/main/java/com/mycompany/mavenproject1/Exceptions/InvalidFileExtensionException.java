@@ -8,11 +8,8 @@ package com.mycompany.mavenproject1.Exceptions;
  *
  * @author AHMAD
  */
-public class MissingInputFieldException extends RuntimeException {
-    public MissingInputFieldException () {
-        super("Please fill all fields !");
-    }
-    public MissingInputFieldException(String message) {
+public class InvalidFileExtensionException extends RuntimeException {
+    public InvalidFileExtensionException(String message) {
         super(message);
     }
 }

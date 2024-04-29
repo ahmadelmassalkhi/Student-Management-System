@@ -6,6 +6,7 @@ package com.mycompany.mavenproject1;
 
 // imports from same project
 import com.mycompany.mavenproject1.Exceptions.InvalidDatabaseSchemaException;
+import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
 import com.mycompany.mavenproject1.Managers.DatabaseManager;
 
 // imports from javafx
@@ -13,7 +14,6 @@ import javafx.fxml.Initializable;
 
 // other imports
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -24,6 +24,10 @@ import javafx.stage.Stage;
  * @author AHMAD
  */
 public class SettingsController implements Initializable {
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+    }
     
     private static Stage stage = null;
     public static void setStage(Stage primaryStage) {
@@ -36,13 +40,11 @@ public class SettingsController implements Initializable {
         }
     }
     
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    }
-    
     public void BackupDatabase() {
         try {
             DatabaseManager.getManager().Backup();
+        } catch (UserCancelledFileChooserException ex) {
+            // do nothing
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -61,7 +63,9 @@ public class SettingsController implements Initializable {
     public void RestoreDatabase() {
         try {
             DatabaseManager.getManager().Restore();
-        } catch (InvalidDatabaseSchemaException | IOException | URISyntaxException | SQLException ex) {
+        } catch (UserCancelledFileChooserException ex) {
+            // do nothing
+        } catch (InvalidDatabaseSchemaException | IOException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

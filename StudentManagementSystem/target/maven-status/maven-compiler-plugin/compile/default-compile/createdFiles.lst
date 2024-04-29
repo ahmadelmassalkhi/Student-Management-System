@@ -1,12 +1,16 @@
 com\mycompany\mavenproject1\StudentsPage\StudentsController$1.class
+com\mycompany\mavenproject1\Exceptions\NoFileExtensionException.class
 com\mycompany\mavenproject1\StudentsPage\UpdateStudentController.class
+com\mycompany\mavenproject1\Exceptions\UserCancelledFileChooserException.class
 com\mycompany\mavenproject1\Common\ErrorAlert.class
 com\mycompany\mavenproject1\Common\StudentsTablePDFExporter.class
+com\mycompany\mavenproject1\Exceptions\InvalidFileExtensionException.class
 com\mycompany\mavenproject1\MarksPage\MarksController.class
 com\mycompany\mavenproject1\Exceptions\InvalidDatabaseSchemaException.class
 com\mycompany\mavenproject1\models\Student.class
 com\mycompany\mavenproject1\SettingsController.class
 com\mycompany\mavenproject1\Exceptions\PhoneAlreadyExistsException.class
+com\mycompany\mavenproject1\Managers\FileManager.class
 com\mycompany\mavenproject1\Managers\ConfigurationManager.class
 com\mycompany\mavenproject1\App.class
 com\mycompany\mavenproject1\MarksPage\UpdateStudentMarkController.class

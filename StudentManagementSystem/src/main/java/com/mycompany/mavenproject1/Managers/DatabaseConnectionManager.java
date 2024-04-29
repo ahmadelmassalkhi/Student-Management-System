@@ -36,7 +36,7 @@ public class DatabaseConnectionManager {
     private Connection connection;
     public Connection connect() throws SQLException, IOException {
         if(connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection("jdbc:sqlite:" + ConfigurationManager.getCurrentDatabasePath());
+            connection = DriverManager.getConnection("jdbc:sqlite:" + ConfigurationManager.getManager().getCurrentDatabasePath());
         }
         return connection;
     }
