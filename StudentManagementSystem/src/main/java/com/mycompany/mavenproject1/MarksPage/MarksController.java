@@ -351,7 +351,7 @@ public class MarksController implements Initializable {
         Float MinimumMark, MaximumMark;
         try {
             MinimumMark = (tf_MinimumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MinimumMark.getText());
-            MaximumMark = (tf_MaximumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MinimumMark.getText());
+            MaximumMark = (tf_MaximumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MaximumMark.getText());
             
             // get & display filtered students
             List<Student> result = model.Read(

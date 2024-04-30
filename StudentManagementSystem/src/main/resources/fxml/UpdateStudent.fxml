@@ -58,6 +58,11 @@
                </children>
             </HBox>
             <DatePicker fx:id="datePicker_Date" layoutX="274.0" layoutY="201.0" prefHeight="25.0" prefWidth="108.0" promptText="Expire Date" />
+            <Label layoutX="155.0" layoutY="206.0" text="Subscription expires in :" textFill="#ababab">
+               <font>
+                  <Font name="System Bold Italic" size="10.0" />
+               </font>
+            </Label>
             </children>
         </Pane>
     </children>
