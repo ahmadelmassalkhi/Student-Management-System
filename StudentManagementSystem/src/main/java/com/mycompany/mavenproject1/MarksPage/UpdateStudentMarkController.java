@@ -38,9 +38,7 @@ public class UpdateStudentMarkController implements Initializable {
     
     /* TEXT FIELDS */
     @FXML
-    private TextField tf_FirstName;
-    @FXML
-    private TextField tf_LastName;
+    private TextField tf_FullName;
     @FXML
     private TextField tf_Phone;
     @FXML
@@ -110,8 +108,7 @@ public class UpdateStudentMarkController implements Initializable {
     
     // helper
     private void displayStudent() {
-        tf_FirstName.setText(student.getFirstName());
-        tf_LastName.setText(student.getLastName());
+        tf_FullName.setText(student.getFullName());
         tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
         tf_Mark.setText(student.getMark() + "");
         

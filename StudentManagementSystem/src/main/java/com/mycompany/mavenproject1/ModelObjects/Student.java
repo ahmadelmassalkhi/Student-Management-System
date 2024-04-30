@@ -11,8 +11,7 @@ package com.mycompany.mavenproject1.ModelObjects;
 public class Student {
     // ATTRIBUTES
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String phone;
     private String grade;
     private String language;
@@ -24,8 +23,7 @@ public class Student {
     
     // SETTERS
     public void setId(Long id) { this.id = id; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
     public void setPhone(String phone) { this.phone = phone; }
     public void setGrade(String grade) { this.grade = grade; }
     public void setLanguage(String language) { this.language = language; }
@@ -34,8 +32,7 @@ public class Student {
     
     // GETTERS
     public Long getId() { return id; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
+    public String getFullName() { return fullName; }
     public String getPhone() { return phone; }
     public String getGrade() { return grade; }
     public String getLanguage() { return language; }
@@ -55,8 +52,7 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", grade=" + grade +
                 ", language='" + language + '\'' +

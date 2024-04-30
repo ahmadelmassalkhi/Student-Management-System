@@ -1,63 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="299.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mavenproject1.MarksPage.UpdateStudentMarkController">
+<AnchorPane prefHeight="340.0" prefWidth="516.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mavenproject1.MarksPage.UpdateStudentMarkController">
     <children>
-        <Pane prefHeight="554.0" prefWidth="793.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <Label layoutX="33.0" layoutY="21.0" text="Update Mark" textFill="#322d2d">
-                    <font>
-                    <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-            <VBox layoutX="274.0" layoutY="106.0" prefHeight="87.0" prefWidth="87.0" spacing="3.0">
+      <VBox style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="69.0" prefWidth="516.0" spacing="15.0" style="-fx-background-color: #ababab;">
                <children>
-                  <ComboBox fx:id="comboBox_Grade" disable="true" prefHeight="27.0" prefWidth="100.0" promptText="Grade" stylesheets="@../css/ComboBox.css" />
-                  <ComboBox fx:id="comboBox_Language" disable="true" prefHeight="27.0" prefWidth="100.0" promptText="English" stylesheets="@../css/ComboBox.css" />
-                  <ComboBox fx:id="comboBox_Subscription" disable="true" prefHeight="27.0" prefWidth="100.0" promptText="InActive" stylesheets="@../css/ComboBox.css" />
+                  <Label text="Update Mark:" textFill="#322d2d">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tf_Mark" prefHeight="27.0" prefWidth="145.0" promptText="Mark /20" styleClass="mark" stylesheets="@../css/TextField.css" />
                </children>
-            </VBox>
-            <VBox layoutX="124.0" layoutY="106.0" prefHeight="81.0" prefWidth="100.0" spacing="3.0">
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="224.0" prefWidth="516.0" spacing="100.0">
                <children>
-                  <TextField fx:id="tf_FirstName" disable="true" editable="false" prefHeight="27.0" prefWidth="145.0" promptText="First Name" stylesheets="@../css/TextField.css" />
-                  <TextField fx:id="tf_LastName" disable="true" editable="false" prefHeight="27.0" prefWidth="134.0" promptText="Last Name" stylesheets="@../css/TextField.css" />
-                  <TextField fx:id="tf_Phone" disable="true" editable="false" prefHeight="27.0" prefWidth="224.0" promptText="Phone" stylesheets="@../css/TextField.css" />
-               </children>
-            </VBox>
-            <ComboBox fx:id="comboBox_CountryCode" disable="true" layoutX="32.0" layoutY="166.0" prefHeight="27.0" prefWidth="76.0" promptText="Code" stylesheets="@../css/ComboBox.css" />
-            <HBox layoutX="129.0" layoutY="251.0" prefHeight="27.0" prefWidth="153.0" spacing="3.0">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <VBox alignment="CENTER_RIGHT" fillWidth="false" prefHeight="131.0" prefWidth="192.0" spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#updateMark" prefHeight="25.0" prefWidth="174.0" stylesheets="@../css/Button.css" text="Ok">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
+                        <VBox alignment="CENTER" prefHeight="17.0" prefWidth="192.0">
+                           <children>
+                              <Label prefHeight="20.0" prefWidth="141.0" text="Student Information">
+                                 <font>
+                                    <Font name="System Bold Italic" size="14.0" />
+                                 </font>
+                                 <textFill>
+                                    <LinearGradient endX="1.0" endY="1.0">
+                                       <stops>
+                                          <Stop>
+                                             <color>
+                                                <Color red="0.5789473652839661" green="0.19030214846134186" blue="0.19030214846134186" />
+                                             </color>
+                                          </Stop>
+                                          <Stop offset="1.0">
+                                             <color>
+                                                <Color red="0.3921568691730499" blue="1.0" />
+                                             </color>
+                                          </Stop>
+                                       </stops>
+                                    </LinearGradient>
+                                 </textFill>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="126.0" prefWidth="192.0" spacing="15.0">
+                           <children>
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="57.0" prefWidth="192.0" spacing="4.0">
+                                 <children>
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="Country Code" textFill="#ababab">
+                                             <font>
+                                                <Font name="System Bold Italic" size="10.0" />
+                                             </font>
+                                          </Label>
+                                          <ComboBox fx:id="comboBox_CountryCode" disable="true" prefHeight="27.0" prefWidth="90.0" promptText="Code" styleClass="combo-box" stylesheets="@../css/ComboBox.css" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER_RIGHT" fillWidth="false" prefHeight="57.0" prefWidth="134.0" spacing="3.0">
+                                       <children>
+                                          <TextField fx:id="tf_FullName" disable="true" prefHeight="27.0" prefWidth="145.0" promptText="Full Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                          <TextField fx:id="tf_Phone" disable="true" prefHeight="27.0" prefWidth="224.0" promptText="Phone" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <VBox alignment="BOTTOM_RIGHT" fillWidth="false" layoutX="10.0" layoutY="82.0" prefHeight="67.0" prefWidth="175.0" spacing="3.0" styleClass="grade" stylesheets="@../css/ComboBox.css">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="57.0" prefWidth="121.0" spacing="3.0" styleClass="grade" stylesheets="@../css/ComboBox.css">
+                                       <children>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <Label text="Grade" textFill="#ababab">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="10.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="comboBox_Grade" disable="true" prefHeight="27.0" prefWidth="175.0" promptText="Terminal GS" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="70.0" prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <Label text="Language" textFill="#ababab">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="10.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="comboBox_Language" disable="true" prefHeight="27.0" prefWidth="138.0" promptText="English" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
                      </children>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="121.0" stylesheets="@../css/Button.css" text="Cancel">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
+                        <VBox prefHeight="106.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label text="Subscription">
+                                       <font>
+                                          <Font name="System Bold Italic" size="14.0" />
+                                       </font>
+                                       <textFill>
+                                          <LinearGradient endX="1.0" endY="1.0">
+                                             <stops>
+                                                <Stop>
+                                                   <color>
+                                                      <Color red="0.5789473652839661" green="0.19030214846134186" blue="0.19030214846134186" />
+                                                   </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                   <color>
+                                                      <Color red="0.3921568691730499" blue="1.0" />
+                                                   </color>
+                                                </Stop>
+                                             </stops>
+                                          </LinearGradient>
+                                       </textFill>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                                 <children>
+                                    <HBox prefHeight="100.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox prefHeight="33.0" prefWidth="100.0">
+                                             <children>
+                                                <Label text="Status" textFill="#ababab">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="10.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="comboBox_Subscription" disable="true" prefHeight="27.0" prefWidth="135.0" promptText="InActive" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <Label text="Expires In" textFill="#ababab">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="10.0" />
+                                                   </font>
+                                                </Label>
+                                                <DatePicker fx:id="datePicker_Date" disable="true" prefHeight="25.0" prefWidth="108.0" promptText="Expire Date" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="70.0" prefWidth="529.0" style="-fx-background-color: #ababab;">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="69.0" prefWidth="153.0" spacing="3.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#updateMark" prefHeight="25.0" prefWidth="174.0" stylesheets="@../css/Button.css" text="Ok">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="121.0" stylesheets="@../css/Button.css" text="Cancel">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <TextField fx:id="tf_Mark" layoutX="274.0" layoutY="29.0" prefHeight="27.0" prefWidth="87.0" promptText="Mark /20" stylesheets="@../css/TextField.css" />
-            </children>
-        </Pane>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>

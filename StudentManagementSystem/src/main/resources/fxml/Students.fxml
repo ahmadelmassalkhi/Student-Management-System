@@ -27,7 +27,10 @@
                                 <Font name="System Bold" size="26.0" />
                                 </font>
                             </Label>
-                            <Label text="Total Students" textFill="#e7e5e5" />
+                            <Label text="Total Students" textFill="#e7e5e5">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
                         </children>
                     </VBox>
                     <VBox alignment="CENTER" prefHeight="92.0" prefWidth="112.0">
@@ -37,36 +40,29 @@
                                 <Font name="System Bold" size="26.0" />
                                 </font>
                             </Label>
-                            <Label text="Total Subscriptions" textFill="#e7e5e5" />
+                            <Label text="Total Subscriptions" textFill="#e7e5e5">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
                         </children>
                     </VBox>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" layoutX="17.0" layoutY="114.0" prefHeight="58.0" prefWidth="762.0" spacing="35.0">
                     <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="313.0" spacing="3.0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="205.0" spacing="4.0">
                         <children>
                             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                                 <children>
                               <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
                               <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                      <TextField fx:id="tf_FirstName" prefHeight="27.0" prefWidth="100.0" promptText="First Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                      <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="100.0" promptText="Full Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
                                  </children>
                               </HBox>
                                 </children>
                             </VBox>
                             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                <children>
-                              <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                      <TextField fx:id="tf_LastName" prefHeight="27.0" prefWidth="100.0" promptText="Last Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                 </children>
-                              </HBox>
-                                </children>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="2.0">
                                 <children>
                                 <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                     <children>
@@ -82,26 +78,14 @@
                             </VBox>
                         </children>
                     </HBox>
-                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="259.0">
+                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="368.0" spacing="4.0">
                         <children>
-                        <VBox alignment="BOTTOM_CENTER" prefHeight="81.0" prefWidth="172.0" spacing="3.0">
-                           <children>
-                              <HBox layoutX="10.0" layoutY="37.0" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                        <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="506.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="3.0">
-                                 <children>
-                                        <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
-                                        <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="55.0" promptText="InActive" styleClass="subscription" stylesheets="@../css/ComboBox.css" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
+                            <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="119.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
+                            <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
+                            <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="55.0" promptText="InActive" styleClass="subscription" stylesheets="@../css/ComboBox.css" />
                         </children>
                     </HBox>
-                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="121.0" spacing="3.0">
+                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="121.0" spacing="4.0">
                         <children>
                             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                                 <children>
@@ -116,7 +100,7 @@
                                 </Button>
                                 </children>
                             </VBox>
-                            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                                 <children>
                                 <Button mnemonicParsing="false" onAction="#deleteSelectedStudents" prefHeight="27.0" prefWidth="79.0" stylesheets="@../css/Button.css">
                                     <graphic>
@@ -144,15 +128,14 @@
                 </HBox>
                 <TableView fx:id="studentsTable" layoutX="13.0" layoutY="186.0" prefHeight="390.0" prefWidth="768.0" stylesheets="@../css/Table.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="199.0">
                 <columns>
-                    <TableColumn fx:id="col_FirstName" prefWidth="121.0" text="First Name" />
-                    <TableColumn fx:id="col_LastName" prefWidth="111.0" text="Last Name" />
-                    <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="144.0" text="Phone" />
-                    <TableColumn fx:id="col_Grade" prefWidth="88.0" text="Grade" />
-                    <TableColumn fx:id="col_Language" prefWidth="87.0" text="Language" />
-                  <TableColumn fx:id="col_Subscription" prefWidth="205.0" text="Subscription">
+                    <TableColumn fx:id="col_FullName" prefWidth="175.0" text="Full Name" />
+                    <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="157.0" text="Phone" />
+                    <TableColumn fx:id="col_Grade" prefWidth="100.0" text="Grade" />
+                    <TableColumn fx:id="col_Language" prefWidth="117.0" text="Language" />
+                  <TableColumn fx:id="col_Subscription" prefWidth="168.0" text="Subscription">
                      <columns>
-                          <TableColumn fx:id="col_SubscriptionStatus" minWidth="0.0" prefWidth="63.0" text="Status" />
-                        <TableColumn fx:id="col_SubscriptionExpireDate" minWidth="0.0" prefWidth="152.0" text="Expire Date" />
+                          <TableColumn fx:id="col_SubscriptionStatus" minWidth="0.0" prefWidth="102.0" text="Status" />
+                        <TableColumn fx:id="col_SubscriptionExpireDate" minWidth="0.0" prefWidth="113.0" text="Expire Date" />
                      </columns>
                   </TableColumn>
                   <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />

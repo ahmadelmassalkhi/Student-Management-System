@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 
 /**
  *
@@ -65,9 +67,7 @@ public class StudentsController implements Initializable {
     
     /* TEXT FIELDS */
     @FXML
-    private TextField tf_FirstName;
-    @FXML
-    private TextField tf_LastName;
+    private TextField tf_FullName;
     @FXML
     private TextField tf_Phone;
     
@@ -91,17 +91,13 @@ public class StudentsController implements Initializable {
     @FXML
     private TableColumn col_ID;
     @FXML
-    private TableColumn col_FirstName;
-    @FXML
-    private TableColumn col_LastName;
+    private TableColumn col_FullName;
     @FXML
     private TableColumn col_Phone;
     @FXML
     private TableColumn col_Grade;
     @FXML
     private TableColumn col_Language;
-    @FXML
-    private TableColumn col_Subscription;
     @FXML
     private TableColumn col_SubscriptionStatus;
     @FXML
@@ -122,8 +118,7 @@ public class StudentsController implements Initializable {
         
         // associate data to columns
         col_ID.setCellValueFactory(new PropertyValueFactory<Student, String>("id"));
-        col_FirstName.setCellValueFactory(new PropertyValueFactory<Student, String>("firstName"));
-        col_LastName.setCellValueFactory(new PropertyValueFactory<Student, String>("lastName"));
+        col_FullName.setCellValueFactory(new PropertyValueFactory<Student, String>("fullName"));
         col_Grade.setCellValueFactory(new PropertyValueFactory<Student, String>("grade"));
         col_Language.setCellValueFactory(new PropertyValueFactory<Student, String>("language"));
         col_Phone.setCellValueFactory(new PropertyValueFactory<Student, String>("phone"));
@@ -166,10 +161,7 @@ public class StudentsController implements Initializable {
     
     private void initializeTextFields() {
         // set interactive filtering feature
-        tf_FirstName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            Search();
-        });
-        tf_LastName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+        tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             Search();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -265,8 +257,7 @@ public class StudentsController implements Initializable {
     public void AddStudent() {
         
         // extract data from input-fields
-        String firstName = tf_FirstName.getText();
-        String lastName = tf_LastName.getText();
+        String fullName = tf_FullName.getText();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
@@ -276,8 +267,7 @@ public class StudentsController implements Initializable {
         try {
             // validate input (throws MissingInputFieldException)
             InputValidatorForStudentFields.validateAddFields(
-                    firstName, // must not be Empty
-                    lastName, // must not be Empty
+                    fullName, // must not be Empty
                     phone, // must not be Empty
                     grade, // must not be `Any`
                     language, // must not be `Any`
@@ -299,8 +289,7 @@ public class StudentsController implements Initializable {
 
             // fill student information
             Student s = new Student();
-            s.setFirstName(firstName);
-            s.setLastName(lastName);
+            s.setFullName(fullName);
             s.setPhone(CountryCodesManager.getCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
@@ -328,11 +317,16 @@ public class StudentsController implements Initializable {
             // load resource
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudent.fxml"));
             Parent root = loader.load();
-
+            
             // create window
             Stage stage = new Stage();
             stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
             
+            // Center stage on screen
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX((screenBounds.getWidth() - root.prefWidth(-1)) / 2);
+            stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
+
             // Access the controller and set the data
             UpdateStudentController controller = loader.getController();
             controller.setWindowInformation(stage, root);
@@ -394,8 +388,7 @@ public class StudentsController implements Initializable {
     
     private void clearTextFields() {
         // clear inputs
-        tf_FirstName.clear();
-        tf_LastName.clear();
+        tf_FullName.clear();
         tf_Phone.clear();
     }
     
@@ -419,16 +412,14 @@ public class StudentsController implements Initializable {
     // refresh table based on input
     private void Search() {
         // extract data from input-fields
-        String firstName = tf_FirstName.getText();
-        String lastName = tf_LastName.getText();
+        String fullName = tf_FullName.getText();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String subscriptionStatus = (String) comboBox_Subscription.getValue();
 
         // fix input-data format
-        if(firstName.isEmpty()) firstName = null;
-        if(lastName.isEmpty()) lastName = null;
+        if(fullName.isEmpty()) fullName = null;
         if(phone.isEmpty()) phone = null;
         if(grade.isEmpty() || grade.equals("Any")) grade = null;
         if(language.isEmpty() || language.equals("Any")) language = null;
@@ -440,7 +431,7 @@ public class StudentsController implements Initializable {
         // perform search
         try {
             // get & display filtered students
-            List<Student> result = model.Read(null, firstName, lastName, phone, grade, language, subscription, null, null, null);
+            List<Student> result = model.Read(null, fullName, phone, grade, language, subscription, null, null, null);
             studentsTable.setItems(FXCollections.observableArrayList(result));
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

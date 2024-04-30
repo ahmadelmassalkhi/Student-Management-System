@@ -39,7 +39,7 @@
                                 <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <CheckBox fx:id="checkbox_FirstName" mnemonicParsing="false" text="First Name" textFill="#d7d7d7">
+                                    <CheckBox fx:id="checkbox_FullName" mnemonicParsing="false" text="Full Name" textFill="#d7d7d7">
                                        <font>
                                           <Font name="System Bold" size="10.0" />
                                        </font>
@@ -47,24 +47,7 @@
                                  </children></HBox>
                               <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                      <TextField fx:id="tf_FirstName" prefHeight="27.0" prefWidth="100.0" promptText="First Name" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                 </children>
-                              </HBox>
-                                </children>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <CheckBox fx:id="checkbox_LastName" mnemonicParsing="false" text="Last Name" textFill="#d7d7d7">
-                                       <font>
-                                          <Font name="System Bold" size="10.0" />
-                                       </font>
-                                    </CheckBox>
-                                 </children></HBox>
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                      <TextField fx:id="tf_LastName" prefHeight="27.0" prefWidth="100.0" promptText="Last Name" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                      <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="100.0" promptText="Full Name" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
                                  </children>
                               </HBox>
                                 </children>
@@ -144,13 +127,12 @@
                 </HBox>
                 <TableView fx:id="studentsTable" layoutX="13.0" layoutY="186.0" prefHeight="390.0" prefWidth="768.0" stylesheets="@../css/Table.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="199.0">
                 <columns>
-                    <TableColumn fx:id="col_FirstName" prefWidth="121.0" text="First Name" />
-                    <TableColumn fx:id="col_LastName" prefWidth="117.0" text="Last Name" />
-                    <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="175.0" text="Phone" />
-                    <TableColumn fx:id="col_Grade" prefWidth="108.0" text="Grade" />
-                    <TableColumn fx:id="col_Language" prefWidth="86.0" text="Language" />
-                    <TableColumn fx:id="col_Mark" minWidth="0.0" prefWidth="159.0" text="Mark /20" />
-                  <TableColumn fx:id="col_ID" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="ID" />
+                    <TableColumn fx:id="col_FullName" minWidth="50.0" prefWidth="204.0" text="Full Name" />
+                    <TableColumn fx:id="col_Phone" minWidth="50.0" prefWidth="145.0" text="Phone" />
+                    <TableColumn fx:id="col_Grade" minWidth="50.0" prefWidth="108.0" text="Grade" />
+                    <TableColumn fx:id="col_Language" minWidth="38.0" prefWidth="112.0" text="Language" />
+                    <TableColumn fx:id="col_Mark" minWidth="50.0" prefWidth="198.0" text="Mark /20" />
+                  <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />
                 </columns>
                 </TableView>
                 <Label layoutX="33.0" layoutY="21.0" text="Marks" textFill="#322d2d">

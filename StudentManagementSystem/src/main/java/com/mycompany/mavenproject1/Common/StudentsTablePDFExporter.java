@@ -45,8 +45,7 @@ public class StudentsTablePDFExporter {
     
     // columns
     private TableColumn col_ID = null;
-    private TableColumn col_FirstName = null;
-    private TableColumn col_LastName = null;
+    private TableColumn col_FullName = null;
     private TableColumn col_Phone = null;
     private TableColumn col_Grade = null;
     private TableColumn col_Language = null;
@@ -60,8 +59,7 @@ public class StudentsTablePDFExporter {
     
     public void setStage(Stage stage) { this.stage = stage; }
     public void setColID(TableColumn col_ID) { this.col_ID = col_ID; }
-    public void setColFirstName(TableColumn col_FirstName) { this.col_FirstName = col_FirstName; }
-    public void setColLastName(TableColumn col_LastName) { this.col_LastName = col_LastName; }
+    public void setColFullName(TableColumn col_FullName) { this.col_FullName = col_FullName; }
     public void setColPhone(TableColumn col_Phone) { this.col_Phone = col_Phone; }
     public void setColGrade(TableColumn col_Grade) { this.col_Grade = col_Grade; }
     public void setColLanguage(TableColumn col_Language) { this.col_Language = col_Language; }
@@ -121,8 +119,7 @@ public class StudentsTablePDFExporter {
         for (TableColumn column : (ObservableList<TableColumn>)studentsTable.getColumns()) {
             if(column.isVisible()) columns.add(column.getText());
             if(column == col_ID) widths.add(2f);
-            if(column == col_FirstName) widths.add(2f);
-            if(column == col_LastName) widths.add(2f);
+            if(column == col_FullName) widths.add(2f);
             if(column == col_Phone) widths.add(3f);
             if(column == col_Grade) widths.add(2f);
             if(column == col_Language) widths.add(1.5f);
@@ -159,8 +156,7 @@ public class StudentsTablePDFExporter {
     private void addRows(PdfPTable table, ObservableList<Student> studentList) {
         for (Student s : studentList) {
             if(col_ID != null && col_ID.isVisible()) table.addCell(createPdfPCell(s.getId() + ""));
-            if(col_FirstName != null && col_FirstName.isVisible()) table.addCell(createPdfPCell(s.getFirstName()));
-            if(col_LastName != null && col_LastName.isVisible()) table.addCell(createPdfPCell(s.getLastName()));
+            if(col_FullName != null && col_FullName.isVisible()) table.addCell(createPdfPCell(s.getFullName()));
             if(col_Phone != null && col_Phone.isVisible()) table.addCell(createPdfPCell(s.getPhone()));
             if(col_Grade != null && col_Grade.isVisible()) table.addCell(createPdfPCell(s.getGrade() + ""));
             if(col_Language != null && col_Language.isVisible()) table.addCell(createPdfPCell(s.getLanguage()));

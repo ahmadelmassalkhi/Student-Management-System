@@ -49,9 +49,7 @@ public class UpdateStudentController implements Initializable {
     
     /* TEXT FIELDS */
     @FXML
-    private TextField tf_FirstName;
-    @FXML
-    private TextField tf_LastName;
+    private TextField tf_FullName;
     @FXML
     private TextField tf_Phone;
     
@@ -195,8 +193,7 @@ public class UpdateStudentController implements Initializable {
     
     // helper
     private void displayStudent() {
-        tf_FirstName.setText(student.getFirstName());
-        tf_LastName.setText(student.getLastName());
+        tf_FullName.setText(student.getFullName());
         tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
         
         comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
@@ -215,8 +212,7 @@ public class UpdateStudentController implements Initializable {
     public void updateStudent() {
         
         // extract data from input-fields
-        String firstName = tf_FirstName.getText();
-        String lastName = tf_LastName.getText();
+        String fullName = tf_FullName.getText();
         String countryCode = (String) comboBox_CountryCode.getValue();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
@@ -229,8 +225,7 @@ public class UpdateStudentController implements Initializable {
             
             // validate input (throws MissingInputFieldException)
             InputValidatorForStudentFields.validateUpdateFields(
-                    firstName, // must not be Empty
-                    lastName, // must not be Empty
+                    fullName, // must not be Empty
                     phone, // must not be Empty
                     countryCode, // must not be Empty (might be because of its filtering mechanism)
                     subscription // must not be (active & null date)
@@ -247,8 +242,7 @@ public class UpdateStudentController implements Initializable {
         
             // create updated student
             Student s = new Student();
-            s.setFirstName(firstName);
-            s.setLastName(lastName);
+            s.setFullName(fullName);
             s.setPhone(CountryCodesManager.getCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);

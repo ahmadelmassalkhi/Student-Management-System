@@ -24,8 +24,7 @@ public final class StudentsModel extends Model {
     // TABLE ATTRIBUTES
     public static final String TABLE = "students";
     public static final String COL_ID = "student_id";
-    public static final String COL_FIRSTNAME = "firstName";
-    public static final String COL_LASTNAME = "lastName";
+    public static final String COL_FULLNAME = "fullName";
     public static final String COL_PHONE = "phone";
     public static final String COL_GRADE = "grade";
     public static final String COL_LANGUAGE = "language";
@@ -51,19 +50,17 @@ public final class StudentsModel extends Model {
         String query = String.format(
             "CREATE TABLE IF NOT EXISTS %s (" // TABLE
                     + "%s INTEGER PRIMARY KEY, " // ID
-                    + "%s TEXT NOT NULL, " // FIRSTNAME
-                    + "%s TEXT NOT NULL, " // LASTNAME
+                    + "%s TEXT NOT NULL, " // FULL NAME
                     + "%s TEXT UNIQUE NOT NULL, " // PHONE
                     + "%s TEXT NOT NULL, " // GRADE
                     + "%s TEXT NOT NULL, " // LANGUAGE
                     + "%s INTEGER NOT NULL, " // SUBSCRIPTION_ID
                     + "%s FLOAT, " // MARK
-                    + "FOREIGN KEY (%s) REFERENCES %s(%s)" // set foreign key constraint, to delete all subscriptions corresponding to deleted students
+                    + "FOREIGN KEY (%s) REFERENCES %s(%s)" // set foreign key (so that we can perform JOIN queries & create TRIGGERS easily)
                     + ")",
             TABLE,
             COL_ID,
-            COL_FIRSTNAME,
-            COL_LASTNAME,
+            COL_FULLNAME,
             COL_PHONE,
             COL_GRADE,
             COL_LANGUAGE,
@@ -105,10 +102,9 @@ public final class StudentsModel extends Model {
 
         // prepare query & its parameters
         String query = String.format(
-                "INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?);",
+                "INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?);",
                 TABLE, 
-                COL_FIRSTNAME,
-                COL_LASTNAME,
+                COL_FULLNAME,
                 COL_PHONE,
                 COL_GRADE,
                 COL_LANGUAGE,
@@ -116,8 +112,7 @@ public final class StudentsModel extends Model {
         );
                 
         List<Object> params = new ArrayList<>();
-        params.add(s.getFirstName());
-        params.add(s.getLastName());
+        params.add(s.getFullName());
         params.add(s.getPhone());
         params.add(s.getGrade());
         params.add(s.getLanguage());
@@ -135,14 +130,13 @@ public final class StudentsModel extends Model {
     /*******************************************************************/
     // READ
     
-    public List<Student> Read() throws SQLException { return Read(null, null, null, null, null, null, null, null, null, null); }
-    public List<Student> Read(Long id) throws SQLException { return Read(id, null, null, null, null, null, null, null, null, null); }
-    public List<Student> Read(String firstName) throws SQLException { return Read(null, firstName, null, null, null, null, null, null, null, null); }
-    public List<Student> Read(Subscription subscription) throws SQLException { return Read(null, null, null, null, null, null, subscription, null, null, null); }
+    public List<Student> Read() throws SQLException { return Read(null, null, null, null, null, null, null, null, null); }
+    public List<Student> Read(Long id) throws SQLException { return Read(id, null, null, null, null, null, null, null, null); }
+    public List<Student> Read(String fullName) throws SQLException { return Read(null, fullName, null, null, null, null, null, null, null); }
+    public List<Student> Read(Subscription subscription) throws SQLException { return Read(null, null, null, null, null, subscription, null, null, null); }
     public List<Student> Read(
             Long id,
-            String firstName,
-            String lastName,
+            String fullName,
             String phone,
             String grade,
             String language,
@@ -182,16 +176,10 @@ public final class StudentsModel extends Model {
             }
             first = false;
         }
-        if(firstName != null) {
-            if(first) query += this.whereLike(COL_FIRSTNAME);
-            else query += this.andLike(COL_FIRSTNAME);
-            params.add("%" + firstName + "%");
-            first = false;
-        }
-        if(lastName != null) {
-            if(first) query += this.whereLike(COL_LASTNAME);
-            else query += this.andLike(COL_LASTNAME);
-            params.add("%" + lastName + "%");
+        if(fullName != null) {
+            if(first) query += this.whereLike(COL_FULLNAME);
+            else query += this.andLike(COL_FULLNAME);
+            params.add("%" + fullName + "%");
             first = false;
         }
         if(phone != null) {
@@ -259,8 +247,7 @@ public final class StudentsModel extends Model {
             // create student
             Student s = new Student();
             s.setId(result.getLong(COL_ID));
-            s.setFirstName(result.getString(COL_FIRSTNAME));
-            s.setLastName(result.getString(COL_LASTNAME));
+            s.setFullName(result.getString(COL_FULLNAME));
             s.setPhone(result.getString(COL_PHONE));
             s.setGrade(result.getString(COL_GRADE));
             s.setLanguage(result.getString(COL_LANGUAGE));
@@ -299,10 +286,9 @@ public final class StudentsModel extends Model {
         /* update student information */
         // prepare query
         String query = String.format(
-                "UPDATE %s SET %s=?, %s=?, %s=?, %s=?, %s=? WHERE %s=?;",
+                "UPDATE %s SET %s=?, %s=?, %s=?, %s=? WHERE %s=?;",
                 TABLE,
-                COL_FIRSTNAME,
-                COL_LASTNAME,
+                COL_FULLNAME,
                 COL_PHONE,
                 COL_GRADE,
                 COL_LANGUAGE,
@@ -311,8 +297,7 @@ public final class StudentsModel extends Model {
         
         // set parameters
         Object[] params = new Object[] {
-            updatedS.getFirstName(),
-            updatedS.getLastName(),
+            updatedS.getFullName(),
             updatedS.getPhone(),
             updatedS.getGrade(),
             updatedS.getLanguage(),
@@ -354,8 +339,7 @@ public final class StudentsModel extends Model {
     
     public void Delete(
             Long id,
-            String firstName,
-            String lastName,
+            String fullName,
             String phone,
             String grade,
             String language,
@@ -388,16 +372,10 @@ public final class StudentsModel extends Model {
             }
             first = false;
         }
-        if(firstName != null) {
-            if(first) query += this.whereLike(COL_FIRSTNAME);
-            else query += this.andLike(COL_FIRSTNAME);
-            params.add("%" + firstName + "%");
-            first = false;
-        }
-        if(lastName != null) {
-            if(first) query += this.whereLike(COL_LASTNAME);
-            else query += this.andLike(COL_LASTNAME);
-            params.add("%" + lastName + "%");
+        if(fullName != null) {
+            if(first) query += this.whereLike(COL_FULLNAME);
+            else query += this.andLike(COL_FULLNAME);
+            params.add("%" + fullName + "%");
             first = false;
         }
         if(phone != null) {
