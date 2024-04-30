@@ -18,6 +18,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.mycompany.mavenproject1.models.Subscription;
 
 // imports from javafx
 import javafx.collections.ObservableList;
@@ -163,7 +164,7 @@ public class StudentsTablePDFExporter {
             if(col_Phone != null && col_Phone.isVisible()) table.addCell(createPdfPCell(s.getPhone()));
             if(col_Grade != null && col_Grade.isVisible()) table.addCell(createPdfPCell(s.getGrade() + ""));
             if(col_Language != null && col_Language.isVisible()) table.addCell(createPdfPCell(s.getLanguage()));
-            if(col_Subscription != null && col_Subscription.isVisible()) table.addCell(createPdfPCell(s.getSubscriptionStatus()));
+            if(col_Subscription != null && col_Subscription.isVisible()) table.addCell(createPdfPCell(s.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING));
             if(col_Mark != null && col_Mark.isVisible()) table.addCell(createPdfPCell(s.getMark() + ""));
         }
     }

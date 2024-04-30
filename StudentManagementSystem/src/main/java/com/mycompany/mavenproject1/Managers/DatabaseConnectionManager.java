@@ -25,9 +25,9 @@ public class DatabaseConnectionManager {
         if(manager == null) manager = new DatabaseConnectionManager();
         return manager;
     }
-
+    
     // so that classes in same package/directory can create more objects (for connection testing)
-    private DatabaseConnectionManager() throws SQLException, IOException {
+    protected DatabaseConnectionManager() throws SQLException, IOException {
         connection = this.connect();
     }
     
@@ -45,15 +45,7 @@ public class DatabaseConnectionManager {
         if (connection != null && !connection.isClosed()) {
             connection.close();
             connection = null;
-            this.closeResult();
         }
-    }
-    
-    // closes the result
-    public ResultSet result = null;
-    public void closeResult() throws SQLException {
-        if (result != null) result.close();
-        this.result = null;
     }
     
     public ResultSet getSchemaInfo() throws SQLException {
@@ -67,6 +59,7 @@ public class DatabaseConnectionManager {
     private String processParameters(Object[] params) throws IllegalArgumentException {
         StringBuilder types = new StringBuilder();
         for (Object param : params) {
+            if(param == null) continue; // for nullable columns
             if (param instanceof Integer) {
                 types.append("i"); // Integer
             } else if(param instanceof Float) {
@@ -80,14 +73,13 @@ public class DatabaseConnectionManager {
             } else if (param instanceof Blob) {
                 types.append("b"); // Blob
             } else {
-                if(param == null) throw new IllegalArgumentException("Why the fuck is param = null ?");
                 throw new IllegalArgumentException("Unknown or invalid type encountered: " + param.getClass().getName());
             }
         }
         return types.toString();
     }
     
-    public void executeQuery(String query, Object... params) throws SQLException, IllegalArgumentException {
+    public ResultSet executeQuery(String query, Object... params) throws SQLException, IllegalArgumentException {
         
         // Create a statement
         PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -95,7 +87,8 @@ public class DatabaseConnectionManager {
         // Bind parameters if provided
         if (params != null && params.length > 0) {
             String types = processParameters(params);
-            for (int i = 0; i < params.length; i++) {
+            for (int i = 0; i < types.length(); i++) {
+                if(params[i] == null) continue;
                 switch (types.charAt(i)) {
                     case 'i' -> preparedStatement.setInt(i+1, (int) params[i]);
                     case 'f' -> preparedStatement.setFloat(i+1, (float) params[i]);
@@ -111,10 +104,8 @@ public class DatabaseConnectionManager {
         // Execute query
         preparedStatement.execute();
 
-        // Get result if it's a SELECT query
-        if (query.trim().toLowerCase().startsWith("select")) {
-            this.result = preparedStatement.getResultSet();
-        }
+        // get & return ResultSet
+        return preparedStatement.getResultSet();
     }
     
     /*******************************************************/

@@ -5,6 +5,8 @@
 package com.mycompany.mavenproject1.Common;
 
 import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
+import com.mycompany.mavenproject1.models.Subscription;
+import java.time.LocalDate;
 
 /**
  *
@@ -17,8 +19,9 @@ public class InputValidatorForStudentFields {
     private static boolean validPhone(String phone) { return phone != null && !phone.isEmpty(); }
     private static boolean validGrade(String grade) { return grade != null && !grade.isEmpty() && !grade.equalsIgnoreCase("any"); }
     private static boolean validLanguage(String language) { return language != null && !language.isEmpty() && !language.equalsIgnoreCase("any"); }
-    private static boolean validSubscription(String subscription) { return subscription != null && !subscription.isEmpty() && !subscription.equalsIgnoreCase("any"); }
     private static boolean validCountryCode(String countryCode) { return countryCode != null && !countryCode.isEmpty(); }
+    private static boolean validSubscriptionStatus(String status) { return status != null && !status.isEmpty() && !status.equalsIgnoreCase("any"); }
+    private static boolean validSubscription(Subscription s) { return !(s.getStatus() && s.getDate() == null); }
     
     public static void validateAddFields(
             String firstName, 
@@ -26,7 +29,7 @@ public class InputValidatorForStudentFields {
             String phone, 
             String grade, 
             String language, 
-            String subscription,
+            String subscriptionStatus,
             String countryCode) throws MissingInputFieldException {
 
         // validate
@@ -35,7 +38,7 @@ public class InputValidatorForStudentFields {
                 || !validPhone(phone) 
                 || !validGrade(grade) 
                 || !validLanguage(language) 
-                || !validSubscription(subscription) 
+                || !validSubscriptionStatus(subscriptionStatus) 
                 || !validCountryCode(countryCode)) throw new MissingInputFieldException();
     }
     
@@ -43,11 +46,17 @@ public class InputValidatorForStudentFields {
             String firstName, 
             String lastName, 
             String phone, 
-            String grade, 
-            String language, 
-            String subscription,
-            String countryCode) throws MissingInputFieldException {
-        InputValidatorForStudentFields.validateAddFields(firstName, lastName, phone, grade, language, subscription, countryCode);
+            String countryCode,
+            Subscription subscription) throws MissingInputFieldException {
+        
+        // validate
+        if(!validFirstName(firstName)
+                || !validLastName(lastName) 
+                || !validPhone(phone) 
+                || !validCountryCode(countryCode)
+                || !validSubscription(subscription)) throw new MissingInputFieldException();
+        
+        // doesn't have to check other property as they are enforced within the UI
     }
     
     public static void validateSearchFields(

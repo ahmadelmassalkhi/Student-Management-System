@@ -10,6 +10,7 @@ import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.Common.StudentsTablePDFExporter;
+import com.mycompany.mavenproject1.models.Subscription;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -335,13 +336,36 @@ public class MarksController implements Initializable {
         String language = (String) comboBox_Language.getValue();
         String MarksOrder = (String) comboBox_MarksOrder.getValue();
         
+        // set to active (by convension, Marks page should contain students with active subscriptions)
+        Subscription subscription = new Subscription();
+        subscription.setStatus(Boolean.TRUE);
+        
+        // fix input-data format
+        if(firstName.isEmpty()) firstName = null;
+        if(lastName.isEmpty()) lastName = null;
+        if(phone.isEmpty()) phone = null;
+        if(grade.isEmpty() || grade.equals("Any")) grade = null;
+        if(language.isEmpty() || language.equals("Any")) language = null;
+        
         // the new letter added might be a `.` => `19.` is not a number !!
-        String MinimumMark, MaximumMark;
+        Float MinimumMark, MaximumMark;
         try {
-            MinimumMark = tf_MinimumMark.getText();
-            MaximumMark = tf_MaximumMark.getText();
+            MinimumMark = (tf_MinimumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MinimumMark.getText());
+            MaximumMark = (tf_MaximumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MinimumMark.getText());
             
-            List<Student> result = model.searchStudents(firstName, lastName, phone, grade, language, "Active", MinimumMark, MaximumMark, MarksOrder);
+            // get & display filtered students
+            List<Student> result = model.Read(
+                    null, 
+                    firstName, 
+                    lastName, 
+                    phone, 
+                    grade, 
+                    language, 
+                    subscription, 
+                    MinimumMark, 
+                    MaximumMark, 
+                    MarksOrder
+            );
             studentsTable.setItems(FXCollections.observableArrayList(result));
         } catch (NumberFormatException ex) {
         } catch (SQLException ex) {

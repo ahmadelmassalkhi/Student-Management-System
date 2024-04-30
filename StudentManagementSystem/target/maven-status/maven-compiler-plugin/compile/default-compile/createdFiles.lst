@@ -15,6 +15,8 @@ com\mycompany\mavenproject1\Managers\ConfigurationManager.class
 com\mycompany\mavenproject1\App.class
 com\mycompany\mavenproject1\MarksPage\UpdateStudentMarkController.class
 com\mycompany\mavenproject1\Exceptions\MissingInputFieldException.class
+com\mycompany\mavenproject1\models\SubscriptionsModel.class
+com\mycompany\mavenproject1\models\Subscription.class
 module-info.class
 com\mycompany\mavenproject1\models\StudentsModel.class
 com\mycompany\mavenproject1\Managers\DatabaseManager.class
@@ -25,3 +27,4 @@ com\mycompany\mavenproject1\BaseController.class
 com\mycompany\mavenproject1\Common\CountryCodesManager.class
 com\mycompany\mavenproject1\Managers\DatabaseConnectionManager.class
 com\mycompany\mavenproject1\StudentsPage\UpdateStudentController$1.class
+com\mycompany\mavenproject1\models\Model.class

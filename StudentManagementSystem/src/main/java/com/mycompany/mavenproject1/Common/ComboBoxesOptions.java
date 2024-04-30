@@ -6,6 +6,7 @@ package com.mycompany.mavenproject1.Common;
 
 import java.util.Arrays;
 import java.util.List;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -14,9 +15,9 @@ import java.util.List;
 public class ComboBoxesOptions {
     public static final List<String> OPTIONS_GRADE = Arrays.asList("Any", "8", "Brevet", "10", "11", "Terminal SE", "Terminal LS", "Terminal GS", "Terminal LH");
     public static final List<String> OPTIONS_SUBSCRIPTION = Arrays.asList("Any", "Active", "InActive");
-    public static final List<String> OPTIONS_COUNTRYCODES = CountryCodesManager.getCountryCodesList();
     public static final List<String> OPTIONS_LANGUAGE = Arrays.asList("Any", "English", "French");
     public static final List<String> OPTIONS_MARKSORDER = Arrays.asList("Any", "ASC", "DESC");
+    public static final ObservableList<String> OPTIONS_COUNTRYCODES = CountryCodesManager.countryCodesObservableList;
 
     public static final String OPTION_DEFAULT_GRADE = "Any";
     public static final String OPTION_DEFAULT_SUBSCRIPTION = "Any";

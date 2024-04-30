@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -19,11 +20,11 @@
                     <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
-            <VBox layoutX="274.0" layoutY="106.0" prefHeight="87.0" prefWidth="87.0" spacing="3.0">
+            <VBox layoutX="274.0" layoutY="106.0" prefHeight="87.0" prefWidth="108.0" spacing="3.0">
                <children>
-                  <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="100.0" promptText="Grade" stylesheets="@../css/ComboBox.css" />
-                  <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="100.0" promptText="English" stylesheets="@../css/ComboBox.css" />
-                  <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="100.0" promptText="InActive" stylesheets="@../css/ComboBox.css" />
+                  <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="175.0" promptText="Terminal GS" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                  <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="183.0" promptText="English" stylesheets="@../css/ComboBox.css" />
+                  <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="228.0" promptText="InActive" stylesheets="@../css/ComboBox.css" />
                </children>
             </VBox>
             <VBox layoutX="124.0" layoutY="106.0" prefHeight="81.0" prefWidth="100.0" spacing="3.0">
@@ -56,6 +57,7 @@
                   </HBox>
                </children>
             </HBox>
+            <DatePicker fx:id="datePicker_Date" layoutX="274.0" layoutY="201.0" prefHeight="25.0" prefWidth="108.0" promptText="Expire Date" />
             </children>
         </Pane>
     </children>

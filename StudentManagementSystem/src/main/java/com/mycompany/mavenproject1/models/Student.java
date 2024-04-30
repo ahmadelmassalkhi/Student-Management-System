@@ -10,42 +10,43 @@ package com.mycompany.mavenproject1.models;
  */
 public class Student {
     // ATTRIBUTES
-    private int id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String phone;
     private String grade;
     private String language;
-    private int subscriptionStatus;
-    private float mark; // over 20
+    private Float mark; // over 20
+    private Subscription subscription;
     
     // CONSTRUCTORS
     public Student() {}
     
     // SETTERS
-    public void setId(int id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
     public void setPhone(String phone) { this.phone = phone; }
     public void setGrade(String grade) { this.grade = grade; }
     public void setLanguage(String language) { this.language = language; }
-    public void setSubscriptionStatus(int subscribtionStatus) { this.subscriptionStatus = subscribtionStatus; }
-    public void setMark(float mark) { this.mark = mark; }
+    public void setMark(Float mark) { this.mark = mark; }
+    public void setSubscription(Subscription subscription) { this.subscription = subscription; }
     
     // GETTERS
-    public int getId() { return id; }
+    public Long getId() { return id; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
     public String getPhone() { return phone; }
-    public String getLanguage() { return language; }
     public String getGrade() { return grade; }
-    public float getMark() { return mark; }
+    public String getLanguage() { return language; }
+    public Float getMark() { return mark; }
+    public Subscription getSubscription() { return subscription; }
     
-    // official getter (uses naming convension)
-    public String getSubscriptionStatus() { return Student.getSubscriptionStatusString(subscriptionStatus); }
-    // to inject into database
-    public int getSubscriptionStatusInt() { return subscriptionStatus; }
-    
+    public String getSubscriptionStatus() {
+        if(subscription == null || subscription.getStatus() == null) return Subscription.INACTIVE_STRING;
+        return subscription.getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -55,14 +56,7 @@ public class Student {
                 ", phone='" + phone + '\'' +
                 ", grade=" + grade +
                 ", language='" + language + '\'' +
-                ", subscriptionStatus='" + subscriptionStatus + '\'' +
+                ", subscription='" + subscription.toString() + '\'' +
                 '}';
-    }
-    
-    public static String getSubscriptionStatusString(int status) {
-        return (status == 1) ? "Active":"InActive" ;
-    }
-    public static int getSubscriptionStatusInt(String status) {
-        return status.equalsIgnoreCase("active") ? 1 : 0 ;
     }
 }

@@ -9,6 +9,7 @@ import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import com.mycompany.mavenproject1.models.Subscription;
 import java.io.IOException;
 
 // imports from javafx
@@ -115,9 +116,9 @@ public class UpdateStudentMarkController implements Initializable {
         tf_Mark.setText(student.getMark() + "");
         
         comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
-        comboBox_Grade.setValue(student.getGrade()+"");
+        comboBox_Grade.setValue(student.getGrade() + "");
         comboBox_Language.setValue(student.getLanguage());
-        comboBox_Subscription.setValue(student.getSubscriptionStatus());
+        comboBox_Subscription.setValue(student.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING);
     }
     
     /*******************************************************************/
@@ -149,7 +150,7 @@ public class UpdateStudentMarkController implements Initializable {
         
         // update mark in the database
         try {
-            model.updateStudentMark(student.getId(), mark);
+            model.UpdateMark(student.getId(), mark);
             this.closeStage();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

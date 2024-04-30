@@ -7,6 +7,7 @@ package com.mycompany.mavenproject1.Managers;
 import com.mycompany.mavenproject1.Exceptions.InvalidDatabaseSchemaException;
 import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import com.mycompany.mavenproject1.models.SubscriptionsModel;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -60,8 +61,8 @@ public class DatabaseManager {
         this.ValidateSchema(restoredDbPath);
 
         // update connection
-        DatabaseConnectionManager.getManager().disconnect();
-        DatabaseConnectionManager.getManager().connect();
+        StudentsModel.getModel().reconnect();
+        SubscriptionsModel.getModel().reconnect();
     }
     
     public void ValidateSchema(Path dbFilePath) throws IOException, SQLException, InvalidDatabaseSchemaException {

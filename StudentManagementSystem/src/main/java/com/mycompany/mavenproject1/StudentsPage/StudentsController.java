@@ -13,6 +13,7 @@ import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import com.mycompany.mavenproject1.models.Subscription;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -38,6 +39,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -169,7 +171,7 @@ public class StudentsController implements Initializable {
         });
     }
 
-    private static ObservableList<String> countryList;
+    private static ObservableList<String> countryCodesObservableList;
     private void initializeComboBoxes() {
         // Add items to the `Subscription` ComboBox
         comboBox_Subscription.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_SUBSCRIPTION));
@@ -184,15 +186,15 @@ public class StudentsController implements Initializable {
         comboBox_Grade.setValue(ComboBoxesOptions.OPTION_DEFAULT_GRADE);        
         
         // Add items to the `Code` ComboBox
-        countryList = FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_COUNTRYCODES);
-        comboBox_CountryCode.setItems(countryList);
+        countryCodesObservableList = ComboBoxesOptions.OPTIONS_COUNTRYCODES;
+        comboBox_CountryCode.setItems(countryCodesObservableList);
         comboBox_CountryCode.setValue("+961");
         
         // set ComboBox search on key-press feature
         comboBox_CountryCode.setOnKeyPressed(event -> {
             String filter = event.getText();
             ObservableList<String> filteredList = FXCollections.observableArrayList();
-            for (String country : countryList) {
+            for (String country : countryCodesObservableList) {
                 if (country.toLowerCase().startsWith(filter.toLowerCase())) {
                     filteredList.add(country);
                 }
@@ -258,13 +260,33 @@ public class StudentsController implements Initializable {
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
-        String subscription = (String) comboBox_Subscription.getValue();
+        String subscriptionStatus = (String) comboBox_Subscription.getValue();
         String countryCode = (String) comboBox_CountryCode.getValue();
         
         try {
             // validate input (throws MissingInputFieldException)
-            InputValidatorForStudentFields.validateAddFields(firstName, lastName, phone, grade, language, subscription, countryCode);
+            InputValidatorForStudentFields.validateAddFields(
+                    firstName, // must not be Empty
+                    lastName, // must not be Empty
+                    phone, // must not be Empty
+                    grade, // must not be `Any`
+                    language, // must not be `Any`
+                    subscriptionStatus, // must not be `Any`
+                    countryCode // must not be Empty (might be because of its filtering mechanism)
+            );
             
+            // fill subscription information
+            Subscription subscription = new Subscription();
+            if(subscriptionStatus.equalsIgnoreCase(Subscription.ACTIVE_STRING)) {
+                // default for 1 month subscription
+                subscription.setDate(LocalDate.now().plusMonths(1));
+                subscription.setStatus(true);
+            } else {
+                // inactive subscription
+                subscription.setDate(null);
+                subscription.setStatus(false);
+            }
+
             // fill student information
             Student s = new Student();
             s.setFirstName(firstName);
@@ -272,7 +294,8 @@ public class StudentsController implements Initializable {
             s.setPhone(CountryCodesManager.getCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
-            s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
+            s.setSubscription(subscription);
+//            s.setMark(mark); // by convension, Students page should not allow adding/searching mark
 
             // add student to database
             model.addStudent(s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
@@ -280,7 +303,7 @@ public class StudentsController implements Initializable {
             // adopt to data changes
             this.clearTextFields(); // make adding another new student easier
             this.refresh();
-        } catch (NullPointerException | IllegalArgumentException | SQLException ex) {
+        } catch (NullPointerException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
@@ -323,7 +346,7 @@ public class StudentsController implements Initializable {
         if(selectedStudents.isEmpty()) return; // nothing was selected
         
         // get all their IDs
-        List<Integer> IDs = new ArrayList<>();
+        List<Long> IDs = new ArrayList<>();
         for(Student s : selectedStudents) IDs.add(s.getId());
         
         // delete from database
@@ -391,11 +414,23 @@ public class StudentsController implements Initializable {
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
-        String subscription = (String) comboBox_Subscription.getValue();
+        String subscriptionStatus = (String) comboBox_Subscription.getValue();
 
+        // fix input-data format
+        if(firstName.isEmpty()) firstName = null;
+        if(lastName.isEmpty()) lastName = null;
+        if(phone.isEmpty()) phone = null;
+        if(grade.isEmpty() || grade.equals("Any")) grade = null;
+        if(language.isEmpty() || language.equals("Any")) language = null;
+        Subscription subscription = new Subscription();
+        if(!(subscriptionStatus.isEmpty() || subscriptionStatus.equals("Any"))) {
+            subscription.setStatus(subscriptionStatus.equalsIgnoreCase(Subscription.ACTIVE_STRING));
+        } // else, its attributes default to null (because we defined them as objects not primitive types)
+        
         // perform search
         try {
-            List<Student> result = model.searchStudents(firstName, lastName, phone, grade, language, subscription);
+            // get & display filtered students
+            List<Student> result = model.Read(null, firstName, lastName, phone, grade, language, subscription, null, null, null);
             studentsTable.setItems(FXCollections.observableArrayList(result));
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

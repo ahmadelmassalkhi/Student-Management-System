@@ -13,6 +13,7 @@ import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.models.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
+import com.mycompany.mavenproject1.models.Subscription;
 import java.io.IOException;
 
 // imports from javafx
@@ -32,9 +33,11 @@ import javafx.stage.StageStyle;
 // other imports
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.control.DatePicker;
 
 /**
  *
@@ -62,9 +65,12 @@ public class UpdateStudentController implements Initializable {
     @FXML
     private ComboBox comboBox_CountryCode;
     
+    @FXML
+    private DatePicker datePicker_Date;
+    
     /*******************************************************************/
     
-    private static ObservableList<String> countryList;
+    private static ObservableList<String> countryCodesObservableList;
     private void initializeComboBoxes() {
         List<String> options;
         
@@ -84,14 +90,14 @@ public class UpdateStudentController implements Initializable {
         comboBox_Grade.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Code` ComboBox
-        countryList = FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_COUNTRYCODES);
-        comboBox_CountryCode.setItems(countryList);
+        countryCodesObservableList = ComboBoxesOptions.OPTIONS_COUNTRYCODES;
+        comboBox_CountryCode.setItems(countryCodesObservableList);
         
         // set ComboBox search on key-press feature
         comboBox_CountryCode.setOnKeyPressed(event -> {
             String filter = event.getText();
             ObservableList<String> filteredList = FXCollections.observableArrayList();
-            for (String country : countryList) {
+            for (String country : countryCodesObservableList) {
                 if (country.toLowerCase().startsWith(filter.toLowerCase())) {
                     filteredList.add(country);
                 }
@@ -112,7 +118,26 @@ public class UpdateStudentController implements Initializable {
                 }
             }
         });
-
+        
+        // Add a listener to the valueProperty of the ComboBox
+        comboBox_Subscription.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if(newValue.equals("InActive")) {
+                // disable and set to null
+                datePicker_Date.setDisable(true);
+                datePicker_Date.setValue(null);
+            } else {
+                datePicker_Date.setDisable(false);
+            }
+            
+            // if activated, set 1 month subscription by default
+            if(oldValue != null && oldValue.equals("InActive") && newValue.equals("Active")) {
+                // set date to 1 month in future (by default)
+                datePicker_Date.setValue(LocalDate.now().plusMonths(1));
+            }
+        });
+    }
+    
+    private void initializeTextFields() {
         // force the field `Phone` to be numeric only
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -126,6 +151,7 @@ public class UpdateStudentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeComboBoxes();
+        initializeTextFields();
         
         // initialize model
         try {
@@ -174,9 +200,10 @@ public class UpdateStudentController implements Initializable {
         tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
         
         comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
-        comboBox_Grade.setValue(student.getGrade()+"");
+        comboBox_Grade.setValue(student.getGrade() + "");
         comboBox_Language.setValue(student.getLanguage());
-        comboBox_Subscription.setValue(student.getSubscriptionStatus());
+        comboBox_Subscription.setValue(student.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING);
+        datePicker_Date.setValue(student.getSubscription().getDate());
     }
     
     // `Cancel` button handler (also used by `Ok` button handler)
@@ -190,27 +217,46 @@ public class UpdateStudentController implements Initializable {
         // extract data from input-fields
         String firstName = tf_FirstName.getText();
         String lastName = tf_LastName.getText();
-        String phone = tf_Phone.getText();
         String countryCode = (String) comboBox_CountryCode.getValue();
+        String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
-        String language = (String) comboBox_Language.getValue();
-        String subscription = (String) comboBox_Subscription.getValue();
-        
+        String language = (String) comboBox_Language.getValue();        
+
         try {
+            Subscription subscription = new Subscription();
+            subscription.setDate(datePicker_Date.getValue());
+            subscription.setStatus(comboBox_Subscription.getValue().equals(Subscription.ACTIVE_STRING));
+            
             // validate input (throws MissingInputFieldException)
-            InputValidatorForStudentFields.validateUpdateFields(firstName, lastName, phone, grade, language, subscription, countryCode);
+            InputValidatorForStudentFields.validateUpdateFields(
+                    firstName, // must not be Empty
+                    lastName, // must not be Empty
+                    phone, // must not be Empty
+                    countryCode, // must not be Empty (might be because of its filtering mechanism)
+                    subscription // must not be (active & null date)
+            );
+            
+            // create subscription
+            if(datePicker_Date.getValue() == null || datePicker_Date.getValue().compareTo(LocalDate.now()) <= 0) {
+                subscription.setStatus(Boolean.FALSE);
+                subscription.setDate(null);
+            } else {
+                subscription.setStatus(Boolean.TRUE);
+                subscription.setDate(datePicker_Date.getValue());
+            }
         
             // create updated student
             Student s = new Student();
             s.setFirstName(firstName);
             s.setLastName(lastName);
-            s.setPhone(countryCode + " " + phone);
+            s.setPhone(CountryCodesManager.getCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
-            s.setSubscriptionStatus(Student.getSubscriptionStatusInt(subscription));
+            s.setSubscription(subscription);
+            // s.setMark(Float.NaN); // by convension, UpdateStudentController should not update marks (UI doesn't allow it too)
 
             // update student in the database
-            model.updateStudent(student, s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
+            model.Update(student, s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
             
             // return back to parent (StudentsController) page
             closeStage();

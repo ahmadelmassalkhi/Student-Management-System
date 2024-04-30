@@ -44,9 +44,9 @@ public class CountryCodesManager {
         return phone.substring(lastSpace + 1); // Extract the substring from the last space to the end
     }
     
-    private static List<String> countryCodesList = null;
-    public static List<String> getCountryCodesList() {
-        if(countryCodesList != null) return countryCodesList;
+    public static final ObservableList<String> countryCodesObservableList = getCountryCodesObservableList();
+    public static ObservableList<String> getCountryCodesObservableList() {
+        if(countryCodesObservableList != null) return countryCodesObservableList;
         
         // get resource
         URL resourceURL = App.class.getResource("/txt/countryCodes.txt");
@@ -64,14 +64,14 @@ public class CountryCodesManager {
                 // extract data from file
                 while ((line = bufferedReader.readLine()) != null) countryCodes.add(line);
                 
-                // save extracted data
-                countryCodesList = countryCodes;
+                // return as observable list
+                return FXCollections.observableArrayList(countryCodes);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
                 System.exit(1);
             }
         }
         
-        return countryCodesList;
+        return FXCollections.observableArrayList();
     }
 }
