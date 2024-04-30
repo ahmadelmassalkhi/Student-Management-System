@@ -11,9 +11,9 @@ import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
 import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
-import com.mycompany.mavenproject1.models.Student;
+import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
-import com.mycompany.mavenproject1.models.Subscription;
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;

@@ -5,7 +5,7 @@
 package com.mycompany.mavenproject1.Common;
 
 // imports from same package
-import com.mycompany.mavenproject1.models.Student;
+import com.mycompany.mavenproject1.ModelObjects.Student;
 
 // imports from itextpdf
 import com.itextpdf.text.BaseColor;
@@ -18,7 +18,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mycompany.mavenproject1.models.Subscription;
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 
 // imports from javafx
 import javafx.collections.ObservableList;

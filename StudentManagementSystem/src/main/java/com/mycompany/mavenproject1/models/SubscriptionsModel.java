@@ -4,6 +4,7 @@
  */
 package com.mycompany.mavenproject1.models;
 
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;

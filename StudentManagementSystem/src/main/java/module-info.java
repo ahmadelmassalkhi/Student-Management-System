@@ -8,6 +8,7 @@ module com.mycompany.mavenproject1 {
     opens com.mycompany.mavenproject1.MarksPage to javafx.fxml;
     opens com.mycompany.mavenproject1 to javafx.fxml;
     opens com.mycompany.mavenproject1.models to javafx.base;
+    opens com.mycompany.mavenproject1.ModelObjects to javafx.base;
     exports com.mycompany.mavenproject1;
     requires itextpdf;
 }

@@ -7,9 +7,9 @@ package com.mycompany.mavenproject1.MarksPage;
 // imports from same package
 import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
-import com.mycompany.mavenproject1.models.Student;
+import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
-import com.mycompany.mavenproject1.models.Subscription;
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import java.io.IOException;
 
 // imports from javafx

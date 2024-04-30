@@ -5,6 +5,8 @@
 package com.mycompany.mavenproject1.models;
 
 // imports from same package
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
+import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import java.io.IOException;
 import java.sql.ResultSet;

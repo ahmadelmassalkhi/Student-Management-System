@@ -5,7 +5,7 @@
 package com.mycompany.mavenproject1.Common;
 
 import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
-import com.mycompany.mavenproject1.models.Subscription;
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import java.time.LocalDate;
 
 /**

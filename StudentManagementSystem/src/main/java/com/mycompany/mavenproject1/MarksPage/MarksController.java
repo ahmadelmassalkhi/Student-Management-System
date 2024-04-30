@@ -7,10 +7,10 @@ package com.mycompany.mavenproject1.MarksPage;
 // imports from same package
 import com.itextpdf.text.DocumentException;
 import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
-import com.mycompany.mavenproject1.models.Student;
+import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.Common.StudentsTablePDFExporter;
-import com.mycompany.mavenproject1.models.Subscription;
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
