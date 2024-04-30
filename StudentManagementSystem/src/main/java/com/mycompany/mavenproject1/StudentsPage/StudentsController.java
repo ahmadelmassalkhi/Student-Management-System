@@ -102,6 +102,10 @@ public class StudentsController implements Initializable {
     private TableColumn col_Language;
     @FXML
     private TableColumn col_Subscription;
+    @FXML
+    private TableColumn col_SubscriptionStatus;
+    @FXML
+    private TableColumn col_SubscriptionExpireDate;
     
     /*******************************************************************/
 
@@ -123,8 +127,9 @@ public class StudentsController implements Initializable {
         col_Grade.setCellValueFactory(new PropertyValueFactory<Student, String>("grade"));
         col_Language.setCellValueFactory(new PropertyValueFactory<Student, String>("language"));
         col_Phone.setCellValueFactory(new PropertyValueFactory<Student, String>("phone"));
-        col_Subscription.setCellValueFactory(new PropertyValueFactory<Student, String>("subscriptionStatus"));
-        
+        col_SubscriptionStatus.setCellValueFactory(new PropertyValueFactory<Student, String>("subscriptionStatus"));
+        col_SubscriptionExpireDate.setCellValueFactory(new PropertyValueFactory<Student, String>("subscriptionDate"));
+
         // hide ID column by default (made to be interacted with, programmatically)
         col_ID.setVisible(false);
         
@@ -138,20 +143,25 @@ public class StudentsController implements Initializable {
         
         ObservableList<TableColumn> allColumns = studentsTable.getColumns();
         for (TableColumn column : allColumns) {
-            column.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-                // get sum of all currently set widths (widths)
-                double widthSum = 0;
-                for(TableColumn col : allColumns) widthSum += col.getWidth();
-
-                // if exceeds totalWidth, set the max width to the oldWidth
-                if (widthSum > studentsTable.getWidth()) {
-                    column.setMaxWidth(oldWidth.doubleValue()); // Revert back to oldWidth 
-                                                                // (by setting maxWidth to oldWidth we enforce prefWidth = oldWidth without overlapping listener events resulting in errors)
-                } else {
-                    column.setMaxWidth(Double.MAX_VALUE); // reset max width
-                }
-            });
+            ObservableList<TableColumn> subColumns = column.getColumns();
+            for(TableColumn subCol : subColumns) setColumnResizeLimitListener(subCol, allColumns);
+            if(subColumns.isEmpty()) setColumnResizeLimitListener(column, allColumns);
         }
+    }
+    private void setColumnResizeLimitListener(TableColumn column, ObservableList<TableColumn> allColumns) {
+        column.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            // get sum of all currently set widths (widths)
+            double widthSum = 0;
+            for(TableColumn col : allColumns) {
+                ObservableList<TableColumn> subColumns = col.getColumns();
+                for(TableColumn subCol : subColumns) widthSum += subCol.getWidth();
+                if(subColumns.isEmpty()) widthSum += col.getWidth();
+            }
+
+            // if exceeds totalWidth, set the max width to the oldWidth
+            if (widthSum > studentsTable.getWidth()) column.setMaxWidth(oldWidth.doubleValue());
+            else column.setMaxWidth(Double.MAX_VALUE); // reset max width
+        });
     }
     
     private void initializeTextFields() {
@@ -170,7 +180,7 @@ public class StudentsController implements Initializable {
             Search();
         });
     }
-
+    
     private static ObservableList<String> countryCodesObservableList;
     private void initializeComboBoxes() {
         // Add items to the `Subscription` ComboBox

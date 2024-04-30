@@ -40,11 +40,11 @@ public class Subscription {
     // PUBLIC HELPERS
     public static LocalDate stringToLocalDate(String date) { 
         if(date == null || date.isEmpty()) return null;
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")); 
     }
     public static String localDateToString(LocalDate date) {
         if(date == null) return "";
-        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+        return date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")); 
     }
     
     @Override

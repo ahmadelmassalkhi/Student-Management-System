@@ -145,12 +145,17 @@
                 <TableView fx:id="studentsTable" layoutX="13.0" layoutY="186.0" prefHeight="390.0" prefWidth="768.0" stylesheets="@../css/Table.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="199.0">
                 <columns>
                     <TableColumn fx:id="col_FirstName" prefWidth="121.0" text="First Name" />
-                    <TableColumn fx:id="col_LastName" prefWidth="117.0" text="Last Name" />
-                    <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="175.0" text="Phone" />
-                    <TableColumn fx:id="col_Grade" prefWidth="105.0" text="Grade" />
-                    <TableColumn fx:id="col_Language" prefWidth="89.0" text="Language" />
-                    <TableColumn fx:id="col_Subscription" minWidth="0.0" prefWidth="159.0" text="Subscription" />
-                  <TableColumn fx:id="col_ID" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="ID" />
+                    <TableColumn fx:id="col_LastName" prefWidth="111.0" text="Last Name" />
+                    <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="144.0" text="Phone" />
+                    <TableColumn fx:id="col_Grade" prefWidth="88.0" text="Grade" />
+                    <TableColumn fx:id="col_Language" prefWidth="87.0" text="Language" />
+                  <TableColumn fx:id="col_Subscription" prefWidth="205.0" text="Subscription">
+                     <columns>
+                          <TableColumn fx:id="col_SubscriptionStatus" minWidth="0.0" prefWidth="63.0" text="Status" />
+                        <TableColumn fx:id="col_SubscriptionExpireDate" minWidth="0.0" prefWidth="152.0" text="Expire Date" />
+                     </columns>
+                  </TableColumn>
+                  <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />
                 </columns>
                 </TableView>
                 <Label layoutX="33.0" layoutY="21.0" text="Students" textFill="#322d2d">
