@@ -24,7 +24,7 @@ public class ConfigurationManager {
     private static final String DIR_NAME_CONFIG = "config";
     private static final String DIR_NAME_DATABASES = "databases";
     private static final String DIR_NAME_APP = "StudentManagementSystem";
-    private static final String FILE_NAME_PFP = "profile-picture.jpg";
+    private static final String FILE_NAME_PFP = "profile-picture";
     private static final String FILE_NAME_DBCONFIG = "DbConfig.txt";
     private static final String FILE_NAME_DEFAULTDB = "sqlite.db";
     
