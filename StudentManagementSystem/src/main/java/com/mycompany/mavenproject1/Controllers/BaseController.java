@@ -1,11 +1,11 @@
-package com.mycompany.mavenproject1;
+package com.mycompany.mavenproject1.Controllers;
 
 // imports from same package
 import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
 import com.mycompany.mavenproject1.Managers.ConfigurationManager;
 import com.mycompany.mavenproject1.Managers.FileManager;
-import com.mycompany.mavenproject1.MarksPage.MarksController;
-import com.mycompany.mavenproject1.StudentsPage.StudentsController;
+import com.mycompany.mavenproject1.Controllers.MarksController;
+import com.mycompany.mavenproject1.Controllers.StudentsController;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
