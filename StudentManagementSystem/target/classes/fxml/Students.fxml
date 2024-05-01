@@ -10,47 +10,61 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mavenproject1.StudentsPage.StudentsController">
+<AnchorPane prefHeight="590.0" prefWidth="785.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mavenproject1.StudentsPage.StudentsController">
     <children>
-        <Pane prefHeight="590.0" prefWidth="793.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <HBox layoutX="288.0" layoutY="6.0" prefHeight="100.0" prefWidth="218.0">
-                    <children>
-                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                        <children>
-                            <Label fx:id="label_TotalStudents" text="22000" textFill="#2a73ff">
+      <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                            <Label text="Students" textFill="#322d2d">
                                 <font>
-                                <Font name="System Bold" size="26.0" />
+                                <Font name="System Bold" size="24.0" />
                                 </font>
                             </Label>
-                            <Label text="Total Students" textFill="#e7e5e5">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Label>
-                        </children>
-                    </VBox>
-                    <VBox alignment="CENTER" prefHeight="92.0" prefWidth="112.0">
-                        <children>
-                            <Label fx:id="label_TotalSubscriptions" text="1500" textFill="#26bfbc">
-                                <font>
-                                <Font name="System Bold" size="26.0" />
-                                </font>
-                            </Label>
-                            <Label text="Total Subscriptions" textFill="#e7e5e5">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Label>
-                        </children>
-                    </VBox>
-                    </children>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" layoutX="17.0" layoutY="114.0" prefHeight="58.0" prefWidth="762.0" spacing="35.0">
+                     </children>
+                  </HBox>
+                      <HBox prefHeight="100.0" prefWidth="218.0">
+                          <children>
+                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                              <children>
+                                  <Label fx:id="label_TotalStudents" text="22000" textFill="#2a73ff">
+                                      <font>
+                                      <Font name="System Bold" size="26.0" />
+                                      </font>
+                                  </Label>
+                                  <Label text="Total Students" textFill="#e7e5e5">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              </children>
+                          </VBox>
+                          <VBox alignment="CENTER" prefHeight="92.0" prefWidth="112.0">
+                              <children>
+                                  <Label fx:id="label_TotalSubscriptions" text="1500" textFill="#26bfbc">
+                                      <font>
+                                      <Font name="System Bold" size="26.0" />
+                                      </font>
+                                  </Label>
+                                  <Label text="Total Subscriptions" textFill="#e7e5e5">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              </children>
+                          </VBox>
+                          </children>
+                      </HBox>
+               </children>
+            </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="762.0" spacing="35.0" VBox.vgrow="ALWAYS">
                     <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="253.0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="241.0" HBox.hgrow="ALWAYS">
                         <children>
                             <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="124.0">
                                 <children>
@@ -77,14 +91,14 @@
                             </VBox>
                         </children>
                     </HBox>
-                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="319.0" spacing="4.0">
+                    <HBox alignment="BOTTOM_CENTER" prefHeight="57.0" prefWidth="293.0" spacing="4.0" HBox.hgrow="ALWAYS">
                         <children>
                             <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="119.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
                             <ComboBox fx:id="comboBox_Language" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
                             <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="55.0" promptText="InActive" styleClass="subscription" stylesheets="@../css/ComboBox.css" />
                         </children>
                     </HBox>
-                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="121.0" spacing="4.0">
+                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="121.0" spacing="4.0" HBox.hgrow="ALWAYS">
                         <children>
                             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                                 <children>
@@ -125,27 +139,26 @@
                     </HBox>
                     </children>
                 </HBox>
-                <TableView fx:id="studentsTable" layoutX="13.0" layoutY="186.0" prefHeight="390.0" prefWidth="768.0" stylesheets="@../css/Table.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="199.0">
-                <columns>
-                    <TableColumn fx:id="col_FullName" prefWidth="175.0" text="Full Name" />
-                    <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="157.0" text="Phone" />
-                    <TableColumn fx:id="col_Grade" prefWidth="100.0" text="Grade" />
-                    <TableColumn fx:id="col_Language" prefWidth="117.0" text="Language" />
-                  <TableColumn fx:id="col_Subscription" prefWidth="168.0" text="Subscription">
-                     <columns>
-                          <TableColumn fx:id="col_SubscriptionStatus" minWidth="0.0" prefWidth="102.0" text="Status" />
-                        <TableColumn fx:id="col_SubscriptionExpireDate" minWidth="0.0" prefWidth="113.0" text="Expire Date" />
-                     </columns>
-                  </TableColumn>
-                  <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />
-                </columns>
-                </TableView>
-                <Label layoutX="33.0" layoutY="21.0" text="Students" textFill="#322d2d">
-                    <font>
-                    <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-            </children>
-        </Pane>
+            <HBox prefHeight="382.0" prefWidth="827.0" styleClass="container" stylesheets="@../css/TableView.css" VBox.vgrow="ALWAYS">
+               <children>
+                      <TableView fx:id="studentsTable" styleClass="container" stylesheets="@../css/TableView.css" HBox.hgrow="ALWAYS">
+                      <columns>
+                        <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />
+                          <TableColumn fx:id="col_FullName" prefWidth="175.0" text="Full Name" />
+                          <TableColumn fx:id="col_Phone" minWidth="0.0" prefWidth="157.0" text="Phone" />
+                          <TableColumn fx:id="col_Grade" prefWidth="100.0" text="Grade" />
+                          <TableColumn fx:id="col_Language" prefWidth="117.0" text="Language" />
+                        <TableColumn fx:id="col_Subscription" prefWidth="205.0" text="Subscription">
+                           <columns>
+                                <TableColumn fx:id="col_SubscriptionStatus" minWidth="0.0" prefWidth="102.0" text="Status" />
+                              <TableColumn fx:id="col_SubscriptionExpireDate" minWidth="0.0" prefWidth="103.0" text="Expire Date" />
+                           </columns>
+                        </TableColumn>
+                      </columns>
+                      </TableView>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>

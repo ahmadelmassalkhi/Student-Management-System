@@ -54,3 +54,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-padding: 10px; /* Adjust the padding to increase the header height */
     -fx-font-size: 14px; /* Adjust the font size to increase the header height */
 }
+
+
+.container {
+    -fx-pref-height: 400px;
+}
