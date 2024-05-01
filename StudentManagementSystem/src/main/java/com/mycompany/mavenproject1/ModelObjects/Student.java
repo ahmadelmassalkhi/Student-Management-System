@@ -4,8 +4,6 @@
  */
 package com.mycompany.mavenproject1.ModelObjects;
 
-import java.time.format.DateTimeFormatter;
-
 /**
  *
  * @author AHMAD
@@ -47,8 +45,8 @@ public class Student {
         return subscription.getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING;
     }
     public String getSubscriptionDate() {
-        if(subscription == null) return "NULL";
-        return subscription.getDateString();
+        if(subscription == null) return Subscription.NULL;
+        return subscription.getDateStringFormatted();
     }
 
     @Override

@@ -50,8 +50,24 @@ public final class SubscriptionsModel extends Model {
         // execute
         database.executeQuery(query, new Object[] {});
         
+        // deactive expired subscriptions
+        this.deActivateExpiredSubscriptions();
+        
         // print out a message
         System.out.println(TABLE + " table created successfully.");
+    }
+    
+    public static final String FORMAT_SQLITE_EXPIRATION_DATE = "%Y-%m-%d";
+    private void deActivateExpiredSubscriptions() throws SQLException {
+        String query = String.format(
+                "UPDATE %s SET %s=?, %s=? WHERE %s <= date('now')",
+                TABLE,
+                COL_STATUS,
+                COL_EXPIRATION_DATE,
+                COL_EXPIRATION_DATE
+        );
+        System.out.println(query);
+        database.executeQuery(query, new Object[] {Subscription.INACTIVE, Subscription.NULL});
     }
     
     public void Create(Subscription s) throws SQLException {
@@ -67,10 +83,6 @@ public final class SubscriptionsModel extends Model {
             s.getStatus() ? Subscription.ACTIVE : Subscription.INACTIVE, 
             s.getDateString()
         });
-    }
-    
-    private void deActivateExpiredSubscriptions() {
-//        String query = String.format("UPDATE %s SET %s = ? WHERE ")
     }
     
     /*******************************************************************/
