@@ -20,20 +20,20 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="img_Pfp" fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/amer-chehab.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="img_EditPfp" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/icons8-edit-24.png" />
-                                 </image>
-                              </ImageView>
+                              <StackPane fx:id="stackPane_Pfp" prefHeight="100.0" prefWidth="100.0">
+                                 <children>
+                                    <ImageView fx:id="img_Pfp" fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="img_EditPfp" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8-edit-24.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
                            </children>
-                        </StackPane>
+                        </HBox>
                         <Label text="Amer Chehab" textFill="#8d9a9a">
                            <VBox.margin>
                               <Insets bottom="20.0" />

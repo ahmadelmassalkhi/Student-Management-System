@@ -20,12 +20,16 @@ import javafx.scene.layout.AnchorPane;
 // other imports
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 public class BaseController implements Initializable {
     /*******************************************************************/
@@ -101,58 +105,49 @@ public class BaseController implements Initializable {
     @FXML
     private ImageView img_EditPfp;
     
-    private static final double PFP_SIZE = 100;
+    private static final double PFP_SIZE = 80;
     private void setProfilePicture() {
+        stackPane_Pfp.setMaxHeight(PFP_SIZE);
+        stackPane_Pfp.setMaxWidth(PFP_SIZE);
+        
         // Set image
         Image img = new Image(ConfigurationManager.getManager().getFilePath_ProfilePicture().toUri().toString());
         img_Pfp.setImage(img);
-        
+
         // Use the smaller dimension for the size of the ImageView and the radius of the circle
         img_Pfp.setFitHeight(PFP_SIZE);
         img_Pfp.setFitWidth(PFP_SIZE);
-        
-        double w = img.getWidth();
-        double h = img.getHeight();
-        double ratio = (PFP_SIZE / Math.max(w, h));
-        double x = (w/2) * ratio;
-        double y = (h/2) * ratio;
 
-        // Create and apply the circle clip to the ImageView
-        img_Pfp.setClip(new Circle(x, y, PFP_SIZE/2));
+        stackPane_Pfp.setClip(new Circle(PFP_SIZE / 2, PFP_SIZE / 2, PFP_SIZE / 2));
     }
+
+    
+    @FXML
+    private StackPane stackPane_Pfp;
     
     private void initializeImageViews() {
         setProfilePicture();
-        
+
         /* MODIFY ON MOUSE EVENTS */
-        img_Pfp.setOnMouseEntered((MouseEvent event) -> {
+        stackPane_Pfp.setOnMouseEntered((MouseEvent event) -> {
             img_Pfp.setOpacity(0.5); // Make the image grayish
             img_EditPfp.setOpacity(1);
         });
-        img_Pfp.setOnMouseExited((MouseEvent event) -> {
-            Point2D mouseLocation = new Point2D(event.getX(), event.getY());
-            // Check if the mouse exited (outside both of the image views)
-            if (!img_EditPfp.contains(mouseLocation) && !img_Pfp.contains(mouseLocation)) {
-                // Restore the original appearance
-                img_Pfp.setOpacity(1);
-                img_EditPfp.setOpacity(0);
-            } // this is required because both ImageViews are overlapping
+        stackPane_Pfp.setOnMouseExited((MouseEvent event) -> {
+            // Restore the original appearance
+            img_Pfp.setOpacity(1);
+            img_EditPfp.setOpacity(0);
         });
-        
-        img_Pfp.setOnMouseClicked((MouseEvent event) -> {
+
+        stackPane_Pfp.setOnMouseClicked((MouseEvent event) -> {
             chooseProfilePicture();
-            event.consume(); // prevent img_EditPfp listener from executing
-            // this is required because both ImageViews are overlapping
+            event.consume(); // prevent other listeners from executing
         });
-        img_EditPfp.setOnMouseClicked((MouseEvent event) -> {
-            chooseProfilePicture();
-            event.consume(); // prevent img_Pfp listener from executing
-            // this is required because both ImageViews are overlapping
-        });
-        
+
         // initially
         img_EditPfp.setOpacity(0);
     }
+
     
     public void chooseProfilePicture() {
         try {
