@@ -73,7 +73,14 @@ public final class StudentsModel extends Model {
         database.executeQuery(query, new Object[] {});
         
         // create trigger (to delete subscription when student is deleted)
-        query = String.format(
+        this.createDeleteTrigger();
+        
+        // print out a message
+        System.out.println(TABLE + " table created successfully.");
+    }
+    
+    private void createDeleteTrigger() throws SQLException {
+        String query = String.format(
                 "CREATE TRIGGER IF NOT EXISTS delete_subscription "
                         + "AFTER DELETE ON %s " // this table
                         + "FOR EACH ROW "
@@ -86,10 +93,6 @@ public final class StudentsModel extends Model {
                 COL_SUBSCRIPTION_ID
         );
         database.executeQuery(query, new Object[] {});
-
-        
-        // print out a message
-        System.out.println(TABLE + " table created successfully.");
     }
 
     /*******************************************************************/
@@ -171,7 +174,7 @@ public final class StudentsModel extends Model {
             if(subscription.getDate() != null) {
                 if(first) query += this.whereEqual(SubscriptionsModel.COL_EXPIRATION_DATE);
                 else query += this.andEqual(SubscriptionsModel.COL_EXPIRATION_DATE);
-                params.add(Subscription.localDateToString(subscription.getDate()));
+                params.add(subscription.getDate().toString());
                 first = false;
             }
             first = false;
@@ -367,7 +370,7 @@ public final class StudentsModel extends Model {
             if(subscription.getDate() != null) {
                 if(first) query += this.whereEqual(SubscriptionsModel.COL_EXPIRATION_DATE);
                 else query += this.andEqual(SubscriptionsModel.COL_EXPIRATION_DATE);
-                params.add(Subscription.localDateToString(subscription.getDate()));
+                params.add(subscription.getDate().toString());
                 first = false;
             }
             first = false;

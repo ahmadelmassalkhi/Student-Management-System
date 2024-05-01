@@ -36,15 +36,11 @@ public class Subscription {
     public Long getId() { return id; }
     public Boolean getStatus() { return status; }
     public LocalDate getDate() { return date; }
-    
-    // PUBLIC HELPERS
-    public static LocalDate stringToLocalDate(String date) { 
-        if(date == null || date.isEmpty()) return null;
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")); 
-    }
-    public static String localDateToString(LocalDate date) {
-        if(date == null) return "";
-        return date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")); 
+
+    // string getter for date (to insert date into database)
+    public String getDateString() {
+        if(date == null) return null; // leave null for nullable column
+        return date.toString(); 
     }
     
     @Override

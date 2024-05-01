@@ -65,8 +65,12 @@ public final class SubscriptionsModel extends Model {
         // execute
         database.executeQuery(query, new Object[] {
             s.getStatus() ? Subscription.ACTIVE : Subscription.INACTIVE, 
-            Subscription.localDateToString(s.getDate())
+            s.getDateString()
         });
+    }
+    
+    private void deActivateExpiredSubscriptions() {
+//        String query = String.format("UPDATE %s SET %s = ? WHERE ")
     }
     
     /*******************************************************************/
@@ -101,7 +105,7 @@ public final class SubscriptionsModel extends Model {
         if(expirationDate != null) {
             if(first) query += this.whereEqual(COL_EXPIRATION_DATE);
             else query += this.andEqual(COL_EXPIRATION_DATE);
-            params.add(Subscription.localDateToString(expirationDate));
+            params.add(expirationDate.toString());
             first = false;
         }
         
@@ -113,7 +117,7 @@ public final class SubscriptionsModel extends Model {
         while(result.next()) {
             Subscription s = new Subscription();
             s.setId(result.getLong(COL_ID));
-            s.setDate(Subscription.stringToLocalDate(result.getString(COL_EXPIRATION_DATE)));
+            s.setDate(LocalDate.parse(result.getString(COL_EXPIRATION_DATE)));
             s.setStatus(result.getInt(COL_STATUS) == Subscription.ACTIVE);
             subscriptions.add(s);
         }
@@ -147,7 +151,7 @@ public final class SubscriptionsModel extends Model {
         
         database.executeQuery(query, new Object[] {
             newS.getStatus() ? Subscription.ACTIVE : Subscription.INACTIVE , 
-            Subscription.localDateToString(newS.getDate()), 
+            newS.getDateString(), 
             oldS.getId()
         });
     }
@@ -184,7 +188,7 @@ public final class SubscriptionsModel extends Model {
         if(expirationDate != null) {
             if(first) query += this.whereEqual(COL_EXPIRATION_DATE);
             else query += this.andEqual(COL_EXPIRATION_DATE);
-            params.add(Subscription.localDateToString(expirationDate));
+            params.add(expirationDate.toString());
             first = false;
         }
         

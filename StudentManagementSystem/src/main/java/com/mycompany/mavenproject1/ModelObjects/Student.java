@@ -4,6 +4,8 @@
  */
 package com.mycompany.mavenproject1.ModelObjects;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author AHMAD
@@ -39,13 +41,14 @@ public class Student {
     public Float getMark() { return mark; }
     public Subscription getSubscription() { return subscription; }
     
+    // GETTERS USED FOR TableColumns
     public String getSubscriptionStatus() {
         if(subscription == null || subscription.getStatus() == null) return Subscription.INACTIVE_STRING;
         return subscription.getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING;
     }
     public String getSubscriptionDate() {
         if(subscription == null || subscription.getDate() == null) return "NULL";
-        return Subscription.localDateToString(subscription.getDate());
+        return subscription.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
     }
 
     @Override
