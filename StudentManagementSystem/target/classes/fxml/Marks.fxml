@@ -16,7 +16,7 @@
     <children>
       <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
-            <HBox VBox.vgrow="ALWAYS">
+            <HBox prefHeight="5.0" prefWidth="755.0" VBox.vgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -55,7 +55,7 @@
                   </HBox>
                </children>
             </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="35.0" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" prefHeight="9.0" prefWidth="755.0" spacing="35.0" VBox.vgrow="ALWAYS">
                     <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="255.0" HBox.hgrow="ALWAYS">
                         <children>
@@ -149,7 +149,7 @@
                   </HBox>
                     </children>
                 </HBox>
-            <HBox styleClass="container" stylesheets="@../css/TableView.css" VBox.vgrow="ALWAYS">
+            <HBox prefHeight="334.0" prefWidth="755.0" styleClass="container" stylesheets="@../css/TableView.css" VBox.vgrow="ALWAYS">
                <children>
                       <TableView fx:id="studentsTable" stylesheets="@../css/TableView.css" HBox.hgrow="ALWAYS">
                       <columns>
