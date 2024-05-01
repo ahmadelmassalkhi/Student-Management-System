@@ -19,6 +19,9 @@ import javafx.scene.layout.AnchorPane;
 
 // other imports
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -62,10 +65,86 @@ public class BaseController implements Initializable {
         anchorPane_Students.toFront();
 
         // initialize properties
-        initializeImageViews();
+        initializeProfilePicture();
         Platform.runLater(() -> {
             stage = (Stage) button_Exit.getScene().getWindow();
         });
+    }
+    
+    /*******************************************************************/
+
+    /* PROFILE PICTURE VIEWS */
+    @FXML
+    private StackPane stackPane_Pfp;
+    @FXML
+    private ImageView img_Pfp;
+    @FXML
+    private ImageView img_EditPfp;
+    
+    private Path getImagePath() {
+        return ConfigurationManager.getManager().getFilePath_ProfilePicture();
+    }
+    private static final double PFP_SIZE = 80;
+    
+    /*******************************************************************/
+    
+    private void initializeProfilePicture() {
+        /* INITIALIZE DIMENSIONS */
+        stackPane_Pfp.setMaxHeight(PFP_SIZE);
+        stackPane_Pfp.setMaxWidth(PFP_SIZE);
+        img_Pfp.setFitHeight(PFP_SIZE);
+        img_Pfp.setFitWidth(PFP_SIZE);
+
+        /* MODIFY ON MOUSE EVENTS */
+        stackPane_Pfp.setOnMouseEntered((MouseEvent event) -> {
+            showEditIcon();
+        });
+        stackPane_Pfp.setOnMouseExited((MouseEvent event) -> {
+            if(Files.exists(getImagePath())) hideEditIcon();
+            else showEditIcon();
+        });
+        stackPane_Pfp.setOnMouseClicked((MouseEvent event) -> {
+            chooseProfilePicture();
+            event.consume();
+        });
+        
+        /* SET */
+        setProfilePicture();
+    }
+    private void showEditIcon() {
+        img_Pfp.setOpacity(0.5); // Make the image grayish
+        img_EditPfp.setOpacity(1); // show edit icon
+    }
+    private void hideEditIcon() {
+        // Restore the original appearance
+        img_Pfp.setOpacity(1); // back to normal
+        img_EditPfp.setOpacity(0); // hide edit icon
+    }
+    private void setProfilePicture() {
+        // Set image
+        img_Pfp.setImage(new Image(getImagePath().toUri().toString()));
+        stackPane_Pfp.setClip(new Circle(PFP_SIZE / 2, PFP_SIZE / 2, PFP_SIZE / 2));
+    }
+    
+    public void chooseProfilePicture() {
+        try {
+            // get and store new picture
+            ConfigurationManager.getManager().updateProfilePicture(
+                    FileManager.chooseOpenPathOf_Image(stage)
+            );
+            
+            // update pfp
+            setProfilePicture();
+        } catch (UserCancelledFileChooserException ex) {
+            // user cancelled (image file was not found/chosen)
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        } finally {
+            // reset original appearance
+            img_Pfp.setOpacity(1);
+            img_EditPfp.setOpacity(0);
+        }
     }
     
     /*******************************************************************/
@@ -97,78 +176,5 @@ public class BaseController implements Initializable {
         }
     }
     
-    /*******************************************************************/
-
-    /* PROFILE PICTURE */
-    @FXML
-    private ImageView img_Pfp;
-    @FXML
-    private ImageView img_EditPfp;
-    
-    private static final double PFP_SIZE = 80;
-    private void setProfilePicture() {
-        stackPane_Pfp.setMaxHeight(PFP_SIZE);
-        stackPane_Pfp.setMaxWidth(PFP_SIZE);
-        
-        // Set image
-        Image img = new Image(ConfigurationManager.getManager().getFilePath_ProfilePicture().toUri().toString());
-        img_Pfp.setImage(img);
-
-        // Use the smaller dimension for the size of the ImageView and the radius of the circle
-        img_Pfp.setFitHeight(PFP_SIZE);
-        img_Pfp.setFitWidth(PFP_SIZE);
-
-        stackPane_Pfp.setClip(new Circle(PFP_SIZE / 2, PFP_SIZE / 2, PFP_SIZE / 2));
-    }
-
-    
-    @FXML
-    private StackPane stackPane_Pfp;
-    
-    private void initializeImageViews() {
-        setProfilePicture();
-
-        /* MODIFY ON MOUSE EVENTS */
-        stackPane_Pfp.setOnMouseEntered((MouseEvent event) -> {
-            img_Pfp.setOpacity(0.5); // Make the image grayish
-            img_EditPfp.setOpacity(1);
-        });
-        stackPane_Pfp.setOnMouseExited((MouseEvent event) -> {
-            // Restore the original appearance
-            img_Pfp.setOpacity(1);
-            img_EditPfp.setOpacity(0);
-        });
-
-        stackPane_Pfp.setOnMouseClicked((MouseEvent event) -> {
-            chooseProfilePicture();
-            event.consume(); // prevent other listeners from executing
-        });
-
-        // initially
-        img_EditPfp.setOpacity(0);
-    }
-
-    
-    public void chooseProfilePicture() {
-        try {
-            // get and store new picture
-            ConfigurationManager.getManager().updateProfilePicture(
-                    FileManager.chooseOpenPathOf_Image(stage)
-            );
-            
-            // update pfp
-            setProfilePicture();
-        } catch (UserCancelledFileChooserException ex) {
-            // user cancelled (image file was not found/chosen)
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        } finally {
-            // reset original appearance
-            img_Pfp.setOpacity(1);
-            img_EditPfp.setOpacity(0);
-        }
-    }
-      
     /*******************************************************************/
 }
