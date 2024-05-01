@@ -10,6 +10,7 @@ import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.Common.StudentsTablePDFExporter;
+import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
 
 // imports from javafx
@@ -378,6 +379,8 @@ public class MarksController implements Initializable {
             
             // export
             exporter.Export();
+        } catch (UserCancelledFileChooserException ex) {
+          // do nothing
         } catch (DocumentException | FileNotFoundException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);

@@ -50,38 +50,37 @@
                 </HBox>
                 <HBox alignment="CENTER_LEFT" layoutX="17.0" layoutY="114.0" prefHeight="58.0" prefWidth="762.0" spacing="35.0">
                     <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="205.0" spacing="4.0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="253.0">
                         <children>
-                            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                            <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="124.0">
                                 <children>
-                              <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="BOTTOM_CENTER" prefHeight="27.0" prefWidth="223.0">
                                  <children>
-                                      <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="100.0" promptText="Full Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                      <TextField fx:id="tf_FullName" promptText="Full Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
                                  </children>
                               </HBox>
                                 </children>
                             </VBox>
-                            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                            <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="127.0" spacing="3.0">
                                 <children>
-                                <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                                <HBox alignment="TOP_CENTER">
                                     <children>
-                                        <ComboBox fx:id="comboBox_CountryCode" prefHeight="27.0" prefWidth="193.0" promptText="Code" styleClass="countryCode" stylesheets="@../css/ComboBox.css" />
+                                        <ComboBox fx:id="comboBox_CountryCode" prefHeight="27.0" prefWidth="178.0" promptText="Code" styleClass="countryCode" stylesheets="@../css/ComboBox.css" />
                                     </children>
                                 </HBox>
-                                <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                                <HBox alignment="BOTTOM_CENTER">
                                     <children>
-                                        <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="100.0" promptText="Phone" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                        <TextField fx:id="tf_Phone" promptText="Phone" styleClass="text-field" stylesheets="@../css/TextField.css" />
                                     </children>
                                 </HBox>
                                 </children>
                             </VBox>
                         </children>
                     </HBox>
-                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="368.0" spacing="4.0">
+                    <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="319.0" spacing="4.0">
                         <children>
                             <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="119.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
-                            <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
+                            <ComboBox fx:id="comboBox_Language" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
                             <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="55.0" promptText="InActive" styleClass="subscription" stylesheets="@../css/ComboBox.css" />
                         </children>
                     </HBox>

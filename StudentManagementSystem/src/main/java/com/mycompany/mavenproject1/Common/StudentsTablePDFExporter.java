@@ -18,16 +18,15 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mycompany.mavenproject1.ModelObjects.Subscription;
+import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
+import com.mycompany.mavenproject1.Managers.FileManager;
 
 // imports from javafx
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.FileChooser;
 
 // other imports
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ public class StudentsTablePDFExporter {
     private TableColumn col_Phone = null;
     private TableColumn col_Grade = null;
     private TableColumn col_Language = null;
-    private TableColumn col_Subscription = null;
     private TableColumn col_Mark = null;
     
     private TableView studentsTable;
@@ -64,49 +62,27 @@ public class StudentsTablePDFExporter {
     public void setColGrade(TableColumn col_Grade) { this.col_Grade = col_Grade; }
     public void setColLanguage(TableColumn col_Language) { this.col_Language = col_Language; }
     public void setColMark(TableColumn col_Mark) { this.col_Mark = col_Mark; }
-    public void setColSubscription(TableColumn col_Subscription) { this.col_Subscription = col_Subscription; }
     
     /*******************************************************************/
 
-    public void Export() throws FileNotFoundException, DocumentException {
-        try {
-            Document document = new Document();
+    public void Export() throws FileNotFoundException, DocumentException, UserCancelledFileChooserException {
+        Document document = new Document();
 
-            // create the pdf (empty) at the saveLocation
-            PdfWriter.getInstance(document, new FileOutputStream(chooseSaveLocation())); // (throws NullPointerException)
+        // create the pdf (empty) at the saveLocation
+        PdfWriter.getInstance(document, new FileOutputStream(
+                FileManager.chooseSavePathOf_PDF(stage).toFile() // throws UserCancelledFileChooserException
+        )); // throws FileNotFoundException, DocumentException
 
-            // open the document for writing
-            document.open();
+        // open the document for writing
+        document.open();
 
-            // convert TableView to PdfPTable
-            PdfPTable pdfTable = this.createPDFTable();
-            this.addRows(pdfTable, studentsTable.getItems());
+        // convert TableView to PdfPTable
+        PdfPTable pdfTable = this.createPDFTable();
+        this.addRows(pdfTable, studentsTable.getItems());
 
-            // add the PDF table to the document
-            document.add(pdfTable);
-            document.close();
-        } catch (NullPointerException ex) {
-            /*
-             * if user clicked `Cancel` on FileChooser
-             * => no SaveLocation was chosen 
-             * => FileChooser finished and closed 
-             * => FileOutputStream throws NullPointerException
-             * => execution stopped due exception
-             */
-            // do nothing
-        }
-    }
-
-    // Prompts the user to choose a save location for the PDF file
-    private File chooseSaveLocation() {
-        FileChooser fileChooser = new FileChooser();
-
-        // Set the extension filter to only show PDF files
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        // Show the save file dialog and return the selected file
-        return fileChooser.showSaveDialog(stage);
+        // add the PDF table to the document
+        document.add(pdfTable);
+        document.close();
     }
     
     /*******************************************************************/
@@ -124,7 +100,6 @@ public class StudentsTablePDFExporter {
             if(column == col_Grade) widths.add(2f);
             if(column == col_Language) widths.add(1.5f);
             if(column == col_Mark) widths.add(1.5f);
-            if(column == col_Subscription) widths.add(1.5f);
         }
         
         // create the table with its columns
@@ -160,7 +135,6 @@ public class StudentsTablePDFExporter {
             if(col_Phone != null && col_Phone.isVisible()) table.addCell(createPdfPCell(s.getPhone()));
             if(col_Grade != null && col_Grade.isVisible()) table.addCell(createPdfPCell(s.getGrade() + ""));
             if(col_Language != null && col_Language.isVisible()) table.addCell(createPdfPCell(s.getLanguage()));
-            if(col_Subscription != null && col_Subscription.isVisible()) table.addCell(createPdfPCell(s.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING));
             if(col_Mark != null && col_Mark.isVisible()) table.addCell(createPdfPCell(s.getMark() + ""));
         }
     }

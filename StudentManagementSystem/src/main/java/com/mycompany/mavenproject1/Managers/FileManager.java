@@ -46,7 +46,8 @@ public class FileManager {
         return chooseSavePath(
                 stage, 
                 FILE_EXTENSION_PDF, 
-                new String[]{"*" + FILE_EXTENSION_PDF});
+                new String[]{"*" + FILE_EXTENSION_PDF},
+                new File(System.getProperty("user.home") + File.separator + "Documents"));
     }
     
     /*******************************************************************/
@@ -60,7 +61,8 @@ public class FileManager {
                 stage, 
                 FILE_DESCRIPTION_IMAGE, 
                 // Convert the key set of FILE_EXTENSION_IMAGE to a String array
-                FILE_EXTENSION_FORMAT_IMAGE.values().toArray(new String[0]));
+                FILE_EXTENSION_FORMAT_IMAGE.values().toArray(new String[0]),
+                new File(System.getProperty("user.home") + File.separator + "Pictures"));
     }
     
     /*******************************************************************/
