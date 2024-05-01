@@ -162,14 +162,15 @@ public class StudentsController implements Initializable {
     private void initializeTextFields() {
         // set interactive filtering feature
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            Search();
+            if (!newValue.matches("[a-zA-Z]*")) {
+                tf_FullName.setText(oldValue);
+            } else Search();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
             if (!newValue.matches("\\d*")) {
                 tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-            Search();
+            } else Search();
         });
     }
     

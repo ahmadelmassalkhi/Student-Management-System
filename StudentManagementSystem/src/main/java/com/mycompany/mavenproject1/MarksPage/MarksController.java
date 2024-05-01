@@ -198,28 +198,27 @@ public class MarksController implements Initializable {
         
         // set interactive filtering feature
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            Search();
+            if (!newValue.matches("[a-zA-Z]*")) {
+                tf_FullName.setText(oldValue);
+            } else Search();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
             if (!newValue.matches("\\d*")) {
                 tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-            Search();
+            } else Search();
         });
 
         // force the field `Mark` to be numeric only (can contain up to 1 decimal point too)
         tf_MinimumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 tf_MinimumMark.setText(oldValue); // Revert to the old value if not matching
-            }
-            Search();
+            } else Search();
         });
         tf_MaximumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 tf_MaximumMark.setText(oldValue); // Revert to the old value if not matching
-            }
-            Search();
+            } else Search();
         });
     }
     private void initializeComboBoxes() {

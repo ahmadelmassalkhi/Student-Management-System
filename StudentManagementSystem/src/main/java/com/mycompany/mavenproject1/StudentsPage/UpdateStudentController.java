@@ -142,6 +142,12 @@ public class UpdateStudentController implements Initializable {
                 tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+        // set interactive filtering feature
+        tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("[a-zA-Z]*")) {
+                tf_FullName.setText(oldValue);
+            }
+        });
     }
     
     private StudentsModel model;
