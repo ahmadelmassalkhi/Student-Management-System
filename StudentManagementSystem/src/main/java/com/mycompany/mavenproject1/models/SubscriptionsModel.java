@@ -117,7 +117,7 @@ public final class SubscriptionsModel extends Model {
         while(result.next()) {
             Subscription s = new Subscription();
             s.setId(result.getLong(COL_ID));
-            s.setDate(LocalDate.parse(result.getString(COL_EXPIRATION_DATE)));
+            s.setDate(result.getString(COL_EXPIRATION_DATE));
             s.setStatus(result.getInt(COL_STATUS) == Subscription.ACTIVE);
             subscriptions.add(s);
         }

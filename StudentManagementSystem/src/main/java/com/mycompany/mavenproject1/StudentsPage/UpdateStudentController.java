@@ -126,9 +126,9 @@ public class UpdateStudentController implements Initializable {
             } else {
                 datePicker_Date.setDisable(false);
             }
-            
+
             // if activated, set 1 month subscription by default
-            if(oldValue != null && oldValue.equals("InActive") && newValue.equals("Active")) {
+            if(oldValue != null && oldValue.equals(Subscription.INACTIVE_STRING) && newValue.equals(Subscription.ACTIVE_STRING)) {
                 // set date to 1 month in future (by default)
                 datePicker_Date.setValue(LocalDate.now().plusMonths(1));
             }
@@ -225,6 +225,7 @@ public class UpdateStudentController implements Initializable {
         String language = (String) comboBox_Language.getValue();        
 
         try {
+            // create subscription of user's input (to contain user's input, used in validation)
             Subscription subscription = new Subscription();
             subscription.setDate(datePicker_Date.getValue());
             subscription.setStatus(comboBox_Subscription.getValue().equals(Subscription.ACTIVE_STRING));
@@ -237,15 +238,14 @@ public class UpdateStudentController implements Initializable {
                     subscription // must not be (active & null date)
             );
             
-            // create subscription
             if(datePicker_Date.getValue() == null || datePicker_Date.getValue().compareTo(LocalDate.now()) <= 0) {
                 subscription.setStatus(Boolean.FALSE);
-                subscription.setDate(null);
+                subscription.setDate((LocalDate) null);
             } else {
                 subscription.setStatus(Boolean.TRUE);
                 subscription.setDate(datePicker_Date.getValue());
             }
-        
+            
             // create updated student
             Student s = new Student();
             s.setFullName(fullName);

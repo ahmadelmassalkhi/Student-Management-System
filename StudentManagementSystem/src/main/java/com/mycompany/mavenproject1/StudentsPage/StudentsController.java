@@ -284,7 +284,7 @@ public class StudentsController implements Initializable {
                 subscription.setStatus(true);
             } else {
                 // inactive subscription
-                subscription.setDate(null);
+                subscription.setDate((LocalDate) null);
                 subscription.setStatus(false);
             }
 

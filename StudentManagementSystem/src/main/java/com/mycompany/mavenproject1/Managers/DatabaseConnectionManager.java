@@ -12,9 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Blob;
-import java.sql.Date;
 import java.sql.Statement;
-import java.time.LocalDate;
 
 /**
  *
@@ -61,7 +59,6 @@ public class DatabaseConnectionManager {
     private String processParameters(Object[] params) throws IllegalArgumentException {
         StringBuilder types = new StringBuilder();
         for (Object param : params) {
-            if(param == null) continue; // for nullable columns
             if (param instanceof Integer) {
                 types.append("i"); // Integer
             } else if(param instanceof Float) {
@@ -74,8 +71,6 @@ public class DatabaseConnectionManager {
                 types.append("l"); // Long
             } else if (param instanceof Blob) {
                 types.append("b"); // Blob
-            } else if (param instanceof LocalDate) {
-                types.append("t"); // Local Date (time)
             } else throw new IllegalArgumentException("Unknown or invalid type encountered while processing query parameters: " + param.getClass().getName());
         }
         return types.toString();
@@ -90,7 +85,6 @@ public class DatabaseConnectionManager {
         if (params != null && params.length > 0) {
             String types = processParameters(params);
             for (int i = 0; i < types.length(); i++) {
-                if(params[i] == null) continue;
                 switch (types.charAt(i)) {
                     case 'i' -> preparedStatement.setInt(i+1, (int) params[i]);
                     case 'f' -> preparedStatement.setFloat(i+1, (float) params[i]);
@@ -98,7 +92,6 @@ public class DatabaseConnectionManager {
                     case 's' -> preparedStatement.setString(i+1, (String) params[i]);
                     case 'l' -> preparedStatement.setLong(i+1, (long) params[i]);
                     case 'b' -> preparedStatement.setBlob(i+1, (Blob) params[i]);
-                    case 't' -> preparedStatement.setDate(i+1, Date.valueOf((LocalDate) params[i])); // (LocalDate is newer version of Date, not subclass)
                     default -> throw new IllegalArgumentException(String.format("Unknown or invalid type encountered while processing query parameters: `%s`", types.charAt(i)));
                 }
             }

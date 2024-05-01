@@ -47,8 +47,8 @@ public class Student {
         return subscription.getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING;
     }
     public String getSubscriptionDate() {
-        if(subscription == null || subscription.getDate() == null) return "NULL";
-        return subscription.getDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        if(subscription == null) return "NULL";
+        return subscription.getDateString();
     }
 
     @Override

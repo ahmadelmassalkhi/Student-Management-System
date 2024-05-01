@@ -6,6 +6,7 @@ package com.mycompany.mavenproject1.ModelObjects;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -18,7 +19,8 @@ public class Subscription {
     public static final int INACTIVE = 0;
     public static final String ACTIVE_STRING = "Active";
     public static final String INACTIVE_STRING = "InActive";
-    
+    public static final String NULL = "NULL";
+
     // ATTRIBUTES
     private Long id;
     private Boolean status;
@@ -31,6 +33,10 @@ public class Subscription {
     public void setId(Long id) { this.id = id; }
     public void setStatus(Boolean status) { this.status = status; }
     public void setDate(LocalDate date) { this.date = date; }
+    public void setDate(String date) throws DateTimeParseException {
+        if(date == null || date.equalsIgnoreCase(NULL)) this.date = null;
+        else this.date = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+    }
 
     // GETTERS
     public Long getId() { return id; }
@@ -39,8 +45,8 @@ public class Subscription {
 
     // string getter for date (to insert date into database)
     public String getDateString() {
-        if(date == null) return null; // leave null for nullable column
-        return date.toString(); 
+        if(date == null) return "NULL"; // null for nullable column
+        return date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")); 
     }
     
     @Override
@@ -48,7 +54,7 @@ public class Subscription {
         return "Subscription{" +
                 "id=" + id +
                 ", status=" + (status ? ACTIVE_STRING : INACTIVE_STRING) +
-                ", date=" + date.format(DateTimeFormatter.ISO_DATE) +
+                ", date=" + getDateString() +
                 '}';
     }
 }
