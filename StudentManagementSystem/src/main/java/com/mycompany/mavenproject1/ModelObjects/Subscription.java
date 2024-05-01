@@ -46,6 +46,8 @@ public class Subscription {
     public Long getId() { return id; }
     public Boolean getStatus() { return status; }
     public LocalDate getDate() { return date; }
+    
+    public String getStatusString() { return status ? ACTIVE_STRING : INACTIVE_STRING; }
 
     // string getter for date (to insert date into database)
     public String getDateString() {
@@ -62,8 +64,8 @@ public class Subscription {
     public String toString() {
         return "Subscription{" +
                 "id=" + id +
-                ", status=" + (status ? ACTIVE_STRING : INACTIVE_STRING) +
-                ", date=" + getDateString() +
+                ", status=" + this.getStatusString() +
+                ", date=" + this.getDateString() +
                 '}';
     }
 }

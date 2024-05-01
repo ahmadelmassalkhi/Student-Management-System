@@ -4,7 +4,7 @@
  */
 package com.mycompany.mavenproject1.Controllers;
 
-// imports from same package
+// imports from same project
 import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
 import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
@@ -14,7 +14,6 @@ import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
-import java.io.IOException;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -29,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.scene.control.DatePicker;
 
 // other imports
 import java.net.URL;
@@ -37,7 +37,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.scene.control.DatePicker;
+import java.io.IOException;
 
 /**
  *
@@ -116,23 +116,6 @@ public class UpdateStudentController implements Initializable {
                 }
             }
         });
-        
-        // Add a listener to the valueProperty of the ComboBox
-        comboBox_Subscription.valueProperty().addListener((obs, oldValue, newValue) -> {
-            if(newValue.equals("InActive")) {
-                // disable and set to null
-                datePicker_Date.setDisable(true);
-                datePicker_Date.setValue(null);
-            } else {
-                datePicker_Date.setDisable(false);
-            }
-
-            // if activated, set 1 month subscription by default
-            if(oldValue != null && oldValue.equals(Subscription.INACTIVE_STRING) && newValue.equals(Subscription.ACTIVE_STRING)) {
-                // set date to 1 month in future (by default)
-                datePicker_Date.setValue(LocalDate.now().plusMonths(1));
-            }
-        });
     }
     
     private void initializeTextFields() {
@@ -150,13 +133,36 @@ public class UpdateStudentController implements Initializable {
         });
     }
     
+    private void initializeSubscription() {
+        // Add a listener to the valueProperty of the ComboBox
+        comboBox_Subscription.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if(newValue.equals(Subscription.INACTIVE_STRING)) {
+                // disable and set to null
+                datePicker_Date.setDisable(true);
+                datePicker_Date.setValue(null);
+            } else if(oldValue != null && oldValue.equals(Subscription.INACTIVE_STRING)) {
+                datePicker_Date.setValue(LocalDate.now().plusMonths(1));
+                datePicker_Date.setDisable(false);
+            }
+        });
+        
+        // Create a listener to trigger when the value of the DatePicker changes
+        datePicker_Date.setOnAction(event -> {
+            if(datePicker_Date.getValue() != null && datePicker_Date.getValue().compareTo(LocalDate.now()) <= 0) {
+                datePicker_Date.setValue(null);
+                datePicker_Date.setDisable(true);
+                comboBox_Subscription.setValue(Subscription.INACTIVE_STRING);
+            }
+        });
+    }
+    
     private StudentsModel model;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeComboBoxes();
         initializeTextFields();
-        
+        initializeSubscription();
+
         // initialize model
         try {
             model = StudentsModel.getModel();
@@ -188,14 +194,14 @@ public class UpdateStudentController implements Initializable {
             stage.setY(event.getScreenY() - this.y);
         });
     }
-    
+
+    /*******************************************************************/
+
     private Student student;
     public void setStudent(Student s) {
         this.student = s;
         displayStudent();
     }
-    
-    /*******************************************************************/
     
     // helper
     private void displayStudent() {
@@ -205,7 +211,7 @@ public class UpdateStudentController implements Initializable {
         comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade() + "");
         comboBox_Language.setValue(student.getLanguage());
-        comboBox_Subscription.setValue(student.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING);
+        comboBox_Subscription.setValue(student.getSubscription().getStatusString());
         datePicker_Date.setValue(student.getSubscription().getDate());
     }
     
@@ -213,6 +219,8 @@ public class UpdateStudentController implements Initializable {
     public void closeStage() {
         stage.close();
     }
+    
+    /*******************************************************************/
     
     // `Ok` button handler
     public void updateStudent() {
@@ -237,14 +245,6 @@ public class UpdateStudentController implements Initializable {
                     countryCode, // must not be Empty (might be because of its filtering mechanism)
                     subscription // must not be (active & null date)
             );
-            
-            if(datePicker_Date.getValue() == null || datePicker_Date.getValue().compareTo(LocalDate.now()) <= 0) {
-                subscription.setStatus(Boolean.FALSE);
-                subscription.setDate((LocalDate) null);
-            } else {
-                subscription.setStatus(Boolean.TRUE);
-                subscription.setDate(datePicker_Date.getValue());
-            }
             
             // create updated student
             Student s = new Student();

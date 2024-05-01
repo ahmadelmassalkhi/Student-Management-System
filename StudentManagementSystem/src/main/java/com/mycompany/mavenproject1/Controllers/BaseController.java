@@ -1,13 +1,9 @@
 package com.mycompany.mavenproject1.Controllers;
 
-// imports from same package
+// imports from same project
 import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
 import com.mycompany.mavenproject1.Managers.ConfigurationManager;
 import com.mycompany.mavenproject1.Managers.FileManager;
-import com.mycompany.mavenproject1.Controllers.MarksController;
-import com.mycompany.mavenproject1.Controllers.StudentsController;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 // imports from javafx
 import javafx.event.ActionEvent;
@@ -16,23 +12,19 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
-
-// other imports
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ResourceBundle;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.util.Duration;
+
+// other imports
+import java.net.URL;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ResourceBundle;
 
 public class BaseController implements Initializable {
     /*******************************************************************/
@@ -121,8 +113,15 @@ public class BaseController implements Initializable {
         img_EditPfp.setOpacity(0); // hide edit icon
     }
     private void setProfilePicture() {
+        // get image path
+        Path path = getImagePath();
+        
+        // set appearance
+        if(Files.exists(path)) hideEditIcon();
+        else showEditIcon();
+        
         // Set image
-        img_Pfp.setImage(new Image(getImagePath().toUri().toString()));
+        img_Pfp.setImage(new Image(path.toUri().toString()));
         stackPane_Pfp.setClip(new Circle(PFP_SIZE / 2, PFP_SIZE / 2, PFP_SIZE / 2));
     }
     
