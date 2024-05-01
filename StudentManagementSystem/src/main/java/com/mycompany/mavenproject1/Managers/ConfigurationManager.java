@@ -88,7 +88,7 @@ public class ConfigurationManager {
         return (currentDatabasePath = Paths.get(reader.readLine().trim()));
     }
     
-    public void updateDbConfigFile(Path backupDbPath) throws IOException, FileNotFoundException, InvalidFileExtensionException {
+    public void updateDbConfigFile(Path backupDbPath) throws IOException, FileNotFoundException, InvalidFileExtensionException, IllegalArgumentException {
         // check if file exists
         if(!Files.exists(backupDbPath)) throw new FileNotFoundException();
         // validate file extension
@@ -112,7 +112,7 @@ public class ConfigurationManager {
         currentDatabasePath = backupDbPath;
     }
     
-    public void updateProfilePicture(Path picture) throws FileNotFoundException, IOException {
+    public void updateProfilePicture(Path picture) throws FileNotFoundException, IOException, IllegalArgumentException {
         // check if file exists
         if(picture == null || !Files.exists(picture)) throw new FileNotFoundException(
                 String.format("File at `%s` was not found", picture)

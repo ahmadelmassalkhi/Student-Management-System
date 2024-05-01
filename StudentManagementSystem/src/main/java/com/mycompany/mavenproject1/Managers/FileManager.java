@@ -39,7 +39,7 @@ public class FileManager {
     /*******************************************************************/
     
     /* OPERATIONS FOR PDF FILES */
-    public static boolean isPath_PDF(Path path) throws NoFileExtensionException {
+    public static boolean isPath_PDF(Path path) throws NoFileExtensionException, IllegalArgumentException {
         return FILE_EXTENSION_PDF.equals(getFileExtension(path));
     }
     public static Path chooseSavePathOf_PDF(Stage stage) throws UserCancelledFileChooserException {
@@ -53,7 +53,7 @@ public class FileManager {
     /*******************************************************************/
     
     /* OPERATIONS FOR IMAGE FILES */
-    public static boolean isPath_AnImage(Path path) throws NoFileExtensionException {
+    public static boolean isPath_AnImage(Path path) throws NoFileExtensionException, IllegalArgumentException {
         return FILE_EXTENSION_FORMAT_IMAGE.containsValue("*" + getFileExtension(path));
     }
     public static Path chooseOpenPathOf_Image(Stage stage) throws UserCancelledFileChooserException {
@@ -68,7 +68,7 @@ public class FileManager {
     /*******************************************************************/
     
     /* OPERATIONS FOR DB FILES */
-    public static boolean isPath_Db(Path path) throws NoFileExtensionException {
+    public static boolean isPath_Db(Path path) throws NoFileExtensionException, IllegalArgumentException {
         return FILE_EXTENSION_DB.equals(getFileExtension(path));
     }
     public static Path chooseOpenPathOf_Db(Stage stage) throws UserCancelledFileChooserException {
@@ -93,7 +93,8 @@ public class FileManager {
         Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
     }
     
-    public static String getFileExtension(Path path) throws NoFileExtensionException {
+    public static String getFileExtension(Path path) throws NoFileExtensionException, IllegalArgumentException {
+        if(path == null) throw new IllegalArgumentException("Expected `Path` got `null` ! Cannot work with that !");
         // extract file extension
         String fileName = path.getFileName().toString();
         int dotIndex = fileName.lastIndexOf('.');
@@ -106,20 +107,6 @@ public class FileManager {
     }
     
     /*******************************************************************/
-    
-    // OVERLOADS
-    private static Path chooseSavePath(
-            Stage stage,
-            String description,
-            String[] extensionFormat) throws UserCancelledFileChooserException {
-        return chooseSavePath(stage, description, extensionFormat, null);
-    }
-    private static Path chooseOpenPath(
-            Stage stage,
-            String description,
-            String[] extensionFormat) throws UserCancelledFileChooserException {
-        return chooseOpenPath(stage, description, extensionFormat, null);
-    }
     
     private static Path chooseOpenPath(
             Stage stage, 

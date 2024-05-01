@@ -131,12 +131,11 @@ public class BaseController implements Initializable {
             ConfigurationManager.getManager().updateProfilePicture(
                     FileManager.chooseOpenPathOf_Image(stage)
             );
-            
             // update pfp
             setProfilePicture();
         } catch (UserCancelledFileChooserException ex) {
             // user cancelled (image file was not found/chosen)
-        } catch (IOException ex) {
+        } catch (IOException | IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         } finally {
