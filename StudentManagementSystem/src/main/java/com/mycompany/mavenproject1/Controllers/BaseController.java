@@ -25,6 +25,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Screen;
 
 public class BaseController implements Initializable {
     /*******************************************************************/
@@ -58,6 +64,7 @@ public class BaseController implements Initializable {
 
         // initialize properties
         initializeProfilePicture();
+        initializeOwnerName();
         Platform.runLater(() -> {
             stage = (Stage) button_Exit.getScene().getWindow();
         });
@@ -175,4 +182,66 @@ public class BaseController implements Initializable {
     }
     
     /*******************************************************************/
+    
+    @FXML
+    private StackPane stackPane_OwnerName;
+    @FXML
+    private Label label_OwnerName;
+    @FXML
+    private ImageView img_EditOwnerName;
+    
+    private void initializeOwnerName() {
+        img_EditOwnerName.setOpacity(0);
+        
+        /* MODIFY ON MOUSE EVENTS */
+        stackPane_OwnerName.setOnMouseEntered((MouseEvent event) -> {
+            img_EditOwnerName.setOpacity(1);
+        });
+        stackPane_OwnerName.setOnMouseExited((MouseEvent event) -> {
+            img_EditOwnerName.setOpacity(0);
+        });
+        stackPane_OwnerName.setOnMouseClicked((MouseEvent event) -> {
+            updateOwnerName();
+            event.consume();
+        });
+        
+        // set
+        try {
+            label_OwnerName.setText(ConfigurationManager.getManager().getOwnerName());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    // UPDATE
+    private void updateOwnerName() {
+        try {
+            // load resource
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateOwnerName.fxml"));
+            Parent root = loader.load();
+            
+            // create window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
+
+            // Center stage on screen
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX((screenBounds.getWidth() - root.prefWidth(-1)) / 2);
+            stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
+
+            // Access the controller and set the data
+            UpdateOwnerNameController controller = loader.getController();
+            controller.setLabel(label_OwnerName);
+            controller.setWindowInformation(stage, root);
+            
+            // wait until owner's name is successfully updated or cancelled
+            stage.showAndWait();
+            
+            img_EditOwnerName.setOpacity(0);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
 }
