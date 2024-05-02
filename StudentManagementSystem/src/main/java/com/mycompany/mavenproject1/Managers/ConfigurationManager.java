@@ -27,6 +27,8 @@ public class ConfigurationManager {
     private static final String FILE_NAME_PFP = "profile-picture";
     private static final String FILE_NAME_DBCONFIG = "DbConfig.txt";
     private static final String FILE_NAME_DEFAULTDB = "sqlite.db";
+    private static final String FILE_NAME_OWNER = "OwnerName.txt";
+    private static final String DEFAULT_NAME_OWNER = "Owner";
     
     private ConfigurationManager() {
         this.repairConfiguration();
@@ -45,10 +47,12 @@ public class ConfigurationManager {
             if(!Files.exists(this.getDirPath_Databases())) Files.createDirectory(this.getDirPath_Databases());
             if(!Files.exists(this.getFilePath_DbConfig())) {
                 Files.createFile(this.getFilePath_DbConfig());
-                
-                // Write the default database-path to DbConfig file
                 Path defaultDbPath = getDirPath_Databases().resolve(FILE_NAME_DEFAULTDB);
                 Files.write(this.getFilePath_DbConfig(), defaultDbPath.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+            }
+            if(!Files.exists(this.getFilePath_OwnerName())) {
+                Files.createFile(this.getFilePath_OwnerName());
+                Files.write(this.getFilePath_OwnerName(), DEFAULT_NAME_OWNER.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
             }
         } catch (IOException ex) {
             System.err.print("Failed to create/repair configuration files: " + ex.getMessage());
@@ -63,9 +67,10 @@ public class ConfigurationManager {
     public Path getDirPath_Config() { return getDirPath_Root().resolve(DIR_NAME_CONFIG); }
     public Path getDirPath_Databases() { return getDirPath_Root().resolve(DIR_NAME_DATABASES); }
 
-    public Path getFilePath_DbConfig() { return getDirPath_Config().resolve(FILE_NAME_DBCONFIG); }
     public Path getFilePath_ProfilePicture() { return getDirPath_Root().resolve(FILE_NAME_PFP); }
-    
+    public Path getFilePath_DbConfig() { return getDirPath_Config().resolve(FILE_NAME_DBCONFIG); }
+    public Path getFilePath_OwnerName() { return getDirPath_Config().resolve(FILE_NAME_OWNER); }
+
     /*******************************************************************/
     // CONFIGURATION RELATED-OPERATIONS
     
@@ -83,7 +88,7 @@ public class ConfigurationManager {
             // proceed
             reader = Files.newBufferedReader(getFilePath_DbConfig());
         }
-   
+        
         // read and return first line
         return (currentDatabasePath = Paths.get(reader.readLine().trim()));
     }
@@ -107,7 +112,8 @@ public class ConfigurationManager {
         // Write the backupDb Path to the file
         writer.write(backupDbPath.toString());
         writer.flush();
-
+        writer.close();
+        
         // set new path
         currentDatabasePath = backupDbPath;
     }
@@ -123,6 +129,58 @@ public class ConfigurationManager {
         
         // copy picture into profile-picture path
         FileManager.copyFile(picture, getFilePath_ProfilePicture());
+    }
+    
+    /*******************************************************************/
+    
+    private String ownerName = null;
+    public String getOwnerName() throws IOException {
+        if(ownerName != null) return ownerName;
+        
+        BufferedReader reader;
+        try {
+            // Open file for reading
+            reader = Files.newBufferedReader(getFilePath_OwnerName());
+        } catch (IOException ex) {
+            // parent directory doesn't exist
+            // repair
+            this.repairConfiguration();
+            // proceed
+            reader = Files.newBufferedReader(getFilePath_OwnerName());
+        }
+        
+        // extract and validate
+        String extractedName = reader.readLine();
+        if(extractedName == null || extractedName.trim().isEmpty()) {
+            this.updateOwnerName(DEFAULT_NAME_OWNER);
+            this.ownerName = DEFAULT_NAME_OWNER;
+        }
+   
+        return (ownerName = extractedName);
+    }
+    
+    public void updateOwnerName(String OwnerName) throws IOException, IllegalArgumentException {
+        if(OwnerName == null || OwnerName.isEmpty()) throw new IllegalArgumentException("Owner name must not be null or empty !");
+
+        BufferedWriter writer;
+        try {
+            // Initialize BufferedWriter
+            writer = Files.newBufferedWriter(getFilePath_OwnerName());
+        } catch (IOException ex) {
+            // parent directory doesn't exist
+            // repair
+            this.repairConfiguration();
+            // proceed
+            writer = Files.newBufferedWriter(getFilePath_OwnerName());
+        }
+        
+        // Write the new owner name to the file
+        writer.write(OwnerName);
+        writer.flush();
+        writer.close();
+        
+        // set it to cache
+        ownerName = OwnerName;
     }
     
     /*******************************************************************/

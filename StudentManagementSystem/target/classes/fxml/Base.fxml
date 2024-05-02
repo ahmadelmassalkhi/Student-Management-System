@@ -34,14 +34,24 @@
                               </StackPane>
                            </children>
                         </HBox>
-                        <Label text="Amer Chehab" textFill="#8d9a9a">
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="11.0" />
-                           </font>
-                        </Label>
+                        <HBox alignment="CENTER" prefHeight="16.0" prefWidth="160.0">
+                           <children>
+                              <StackPane fx:id="stackPane_OwnerName" prefHeight="16.0" prefWidth="124.0">
+                                 <children>
+                                    <Label fx:id="label_OwnerName" text="Amer Chehab" textFill="#8d9a9a">
+                                       <font>
+                                          <Font name="System Bold" size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <ImageView fx:id="img_EditOwnerName" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8-edit-24.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox prefHeight="415.0" prefWidth="265.0" VBox.vgrow="ALWAYS">

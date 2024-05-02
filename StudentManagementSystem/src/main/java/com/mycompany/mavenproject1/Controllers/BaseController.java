@@ -25,6 +25,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Screen;
 
 public class BaseController implements Initializable {
     /*******************************************************************/
@@ -58,9 +64,39 @@ public class BaseController implements Initializable {
 
         // initialize properties
         initializeProfilePicture();
+        initializeOwnerName();
         Platform.runLater(() -> {
             stage = (Stage) button_Exit.getScene().getWindow();
         });
+    }
+    
+    /*******************************************************************/
+
+    public void handleSidebarClicks(ActionEvent actionEvent) {
+        
+        // handle clicks from `Students` button
+        if (actionEvent.getSource() == button_Students) {
+            StudentsController.getController().refresh(); // update data incase other pages made changes to the database
+            anchorPane_Students.toFront();
+        }
+
+        // handle clicks from `Marks` button
+        if(actionEvent.getSource() == button_Marks) {
+            MarksController.getController().refresh(); // update data incase other pages made changes to the database
+            anchorPane_Marks.toFront();
+        }
+        
+        // handle clicks from `Settings` button
+        if(actionEvent.getSource() == button_Settings) {
+            SettingsController.setStage(stage);
+            anchorPane_Settings.toFront();
+        }
+        
+        // handle clicks from `Signout` button
+        if(actionEvent.getSource() == button_Exit) {
+            System.out.println("Closing the application !");
+            stage.close();
+        }
     }
     
     /*******************************************************************/
@@ -146,33 +182,71 @@ public class BaseController implements Initializable {
     }
     
     /*******************************************************************/
-
-    public void handleSidebarClicks(ActionEvent actionEvent) {
+    
+    @FXML
+    private Label label_OwnerName;
+    @FXML
+    private ImageView img_EditOwnerName;
+    @FXML
+    private StackPane stackPane_OwnerName;
+    
+    private void initializeOwnerName() {
         
-        // handle clicks from `Students` button
-        if (actionEvent.getSource() == button_Students) {
-            StudentsController.getController().refresh(); // update data incase other pages made changes to the database
-            anchorPane_Students.toFront();
-        }
-
-        // handle clicks from `Marks` button
-        if(actionEvent.getSource() == button_Marks) {
-            MarksController.getController().refresh(); // update data incase other pages made changes to the database
-            anchorPane_Marks.toFront();
-        }
+        // hidden initially
+        img_EditOwnerName.setVisible(false);
         
-        // handle clicks from `Settings` button
-        if(actionEvent.getSource() == button_Settings) {
-            SettingsController.setStage(stage);
-            anchorPane_Settings.toFront();
-        }
+        /* MODIFY ON MOUSE EVENTS */
+        stackPane_OwnerName.setOnMouseEntered((MouseEvent event) -> {
+            img_EditOwnerName.setVisible(true);
+        });
+        stackPane_OwnerName.setOnMouseExited((MouseEvent event) -> {
+            img_EditOwnerName.setVisible(false);
+        });
+        stackPane_OwnerName.setOnMouseClicked((MouseEvent event) -> {
+            UpdateOwnerName();
+        });
         
-        // handle clicks from `Signout` button
-        if(actionEvent.getSource() == button_Exit) {
-            System.out.println("Closing the application !");
-            stage.close();
+        // set
+        setOwnerName();
+    }
+    private void setOwnerName() {
+        // set stored owner name
+        try {
+            this.label_OwnerName.setText(ConfigurationManager.getManager().getOwnerName());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
         }
     }
     
-    /*******************************************************************/
+    private void UpdateOwnerName() {
+        try {
+            // load resource
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateOwnerName.fxml"));
+            Parent root = loader.load();
+            
+            // create window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
+            
+            // Center stage on screen
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX((screenBounds.getWidth() - root.prefWidth(-1)) / 2);
+            stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
+
+            // Access the controller and set the data
+            UpdateOwnerNameController controller = loader.getController();
+            controller.setOwnerName(this.label_OwnerName.getText());
+            controller.setWindowInformation(stage, root);
+            
+            // wait until student is successfully updated or cancelled
+            stage.showAndWait();
+            
+            // set new owner name
+            setOwnerName();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
 }
