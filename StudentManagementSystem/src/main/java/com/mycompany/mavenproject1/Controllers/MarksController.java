@@ -6,12 +6,13 @@ package com.mycompany.mavenproject1.Controllers;
 
 // imports from same package
 import com.itextpdf.text.DocumentException;
-import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
+import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.Common.StudentsTablePDFExporter;
 import com.mycompany.mavenproject1.Exceptions.UserCancelledFileChooserException;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
+import com.mycompany.mavenproject1.ViewsInitializers.TableViewInitializer;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -24,7 +25,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -39,7 +39,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.io.FileNotFoundException;
-import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
@@ -115,6 +114,40 @@ public class MarksController implements Initializable {
     
     /*******************************************************************/
     
+    private void initializeTable() {
+        TableViewInitializer.Initialize_ID(studentsTable, col_ID);
+        TableViewInitializer.Initialize_FullName(studentsTable, col_FullName);
+        TableViewInitializer.Initialize_Grade(studentsTable, col_Grade);
+        TableViewInitializer.Initialize_Language(studentsTable, col_Language);
+        TableViewInitializer.Initialize_Phone(studentsTable, col_Phone);
+        TableViewInitializer.Initialize_Mark(studentsTable, col_Mark);
+        
+        // add functionality on row double clicks
+        studentsTable.setOnMouseClicked(event -> {
+            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                Student s = (Student) studentsTable.getSelectionModel().getSelectedItem();
+                if (s != null) updateStudentMark(s);
+            }
+        });
+    }
+    
+    private void initializeComboBoxes() {
+        ComboBoxInitializer.Initialize_Languages(comboBox_Language);
+        ComboBoxInitializer.Initialize_Grades(comboBox_Grade);
+        ComboBoxInitializer.Initialize_MarksOrder(comboBox_MarksOrder);
+        
+        // set interactive filtering feature
+        comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
+            Search();
+        });
+        comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
+            Search();
+        });
+        comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> {
+            Search();
+        });
+    }
+    
     private void initializeCheckBoxes() {
         
         // initially check all checkboxes
@@ -153,47 +186,7 @@ public class MarksController implements Initializable {
             }
         });
     }
-    private void initializeTable() {
-        // allow multiple selections
-        studentsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        
-        // associate data to columns
-        col_ID.setCellValueFactory(new PropertyValueFactory<Student, String>("id"));
-        col_FullName.setCellValueFactory(new PropertyValueFactory<Student, String>("fullName"));
-        col_Grade.setCellValueFactory(new PropertyValueFactory<Student, String>("grade"));
-        col_Language.setCellValueFactory(new PropertyValueFactory<Student, String>("language"));
-        col_Phone.setCellValueFactory(new PropertyValueFactory<Student, String>("phone"));
-        col_Mark.setCellValueFactory(new PropertyValueFactory<Student, String>("mark"));
-        
-        // hide ID column by default (made to be interacted with, programmatically)
-        col_ID.setVisible(false);
-        
-        // add functionality on row double clicks
-        studentsTable.setOnMouseClicked(event -> {
-            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-                Student s = (Student) studentsTable.getSelectionModel().getSelectedItem();
-                if (s != null) updateStudentMark(s);
-            }
-        });
-        
-        // restrict columns totalWidth = tableWidth
-        ObservableList<TableColumn> allColumns = studentsTable.getColumns();
-        for (TableColumn column : allColumns) {
-            column.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-                // get sum of all currently set widths (widths)
-                double widthSum = 0;
-                for(TableColumn col : allColumns) widthSum += col.getWidth();
-
-                // if exceeds totalWidth, set the max width to the oldWidth
-                if (widthSum > studentsTable.getWidth()) {
-                    column.setMaxWidth(oldWidth.doubleValue()); // Revert back to oldWidth 
-                                                                // (by setting maxWidth to oldWidth we enforce prefWidth = oldWidth without overlapping listener events resulting in errors)
-                } else {
-                    column.setMaxWidth(Double.MAX_VALUE); // reset max width
-                }
-            });
-        }
-    }
+    
     private void initializeTextFields() {
         
         // set interactive filtering feature
@@ -221,31 +214,6 @@ public class MarksController implements Initializable {
             } else Search();
         });
     }
-    private void initializeComboBoxes() {
-                
-        // Add items to the `Language` ComboBox
-        comboBox_Language.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_LANGUAGE));
-        comboBox_Language.setValue(ComboBoxesOptions.OPTION_DEFAULT_LANGUAGE);
-
-        // Add items to the `Grade` ComboBox
-        comboBox_Grade.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_GRADE));
-        comboBox_Grade.setValue(ComboBoxesOptions.OPTION_DEFAULT_GRADE);
-        
-        // Add items to the `MarksOrder` ComboBox
-        comboBox_MarksOrder.setItems(FXCollections.observableArrayList(ComboBoxesOptions.OPTIONS_MARKSORDER));
-        comboBox_MarksOrder.setValue(ComboBoxesOptions.OPTION_DEFAULT_MARKORDER);
-        
-        // set interactive filtering feature
-        comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
-        });
-        comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
-        });
-        comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
-        });
-    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -264,6 +232,8 @@ public class MarksController implements Initializable {
 
         this.refresh();
     }
+    
+    /*******************************************************************/
     
     private void updateStudentMark(Student s) {
         try {

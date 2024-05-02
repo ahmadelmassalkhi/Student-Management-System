@@ -5,11 +5,11 @@
 package com.mycompany.mavenproject1.Controllers;
 
 // imports from same package
-import com.mycompany.mavenproject1.Common.CountryCodesManager;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
+import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
 import java.io.IOException;
 
 // imports from javafx
@@ -46,7 +46,7 @@ public class UpdateStudentMarkController implements Initializable {
     
     /* COMBO BOXES */
     @FXML
-    private ComboBox comboBox_Subscription;
+    private ComboBox comboBox_SubscriptionStatus;
     @FXML
     private ComboBox comboBox_Language;
     @FXML
@@ -109,13 +109,13 @@ public class UpdateStudentMarkController implements Initializable {
     // helper
     private void displayStudent() {
         tf_FullName.setText(student.getFullName());
-        tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
+        tf_Phone.setText(ComboBoxInitializer.getNumber(student.getPhone()));
         tf_Mark.setText(student.getMark() + "");
         
-        comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
+        comboBox_CountryCode.setValue(ComboBoxInitializer.getCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade() + "");
         comboBox_Language.setValue(student.getLanguage());
-        comboBox_Subscription.setValue(student.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING);
+        comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING);
     }
     
     /*******************************************************************/

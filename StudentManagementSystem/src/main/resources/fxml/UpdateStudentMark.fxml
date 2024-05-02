@@ -154,7 +154,7 @@
                                                       <Font name="System Bold Italic" size="10.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="comboBox_Subscription" disable="true" prefHeight="27.0" prefWidth="135.0" promptText="InActive" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                                <ComboBox fx:id="comboBox_SubscriptionStatus" disable="true" prefHeight="27.0" prefWidth="135.0" promptText="InActive" styleClass="grade" stylesheets="@../css/ComboBox.css" />
                                              </children>
                                           </VBox>
                                        </children>

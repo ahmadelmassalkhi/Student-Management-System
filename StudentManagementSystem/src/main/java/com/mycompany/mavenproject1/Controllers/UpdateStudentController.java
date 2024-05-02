@@ -5,8 +5,7 @@
 package com.mycompany.mavenproject1.Controllers;
 
 // imports from same project
-import com.mycompany.mavenproject1.Common.ComboBoxesOptions;
-import com.mycompany.mavenproject1.Common.CountryCodesManager;
+import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
 import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
@@ -18,12 +17,10 @@ import com.mycompany.mavenproject1.ModelObjects.Subscription;
 // imports from javafx
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -55,7 +52,7 @@ public class UpdateStudentController implements Initializable {
     
     /* COMBO BOXES */
     @FXML
-    private ComboBox comboBox_Subscription;
+    private ComboBox comboBox_SubscriptionStatus;
     @FXML
     private ComboBox comboBox_Language;
     @FXML
@@ -68,54 +65,26 @@ public class UpdateStudentController implements Initializable {
     
     /*******************************************************************/
     
-    private static ObservableList<String> countryCodesObservableList;
     private void initializeComboBoxes() {
         List<String> options;
         
         // Add items to the `Subscription` ComboBox
-        options = new ArrayList<>(ComboBoxesOptions.OPTIONS_SUBSCRIPTION);
+        options = new ArrayList<>(ComboBoxInitializer.OPTIONS_SUBSCRIPTION);
         options.remove("Any");
-        comboBox_Subscription.setItems(FXCollections.observableArrayList(options));
+        comboBox_SubscriptionStatus.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Language` ComboBox
-        options = new ArrayList<>(ComboBoxesOptions.OPTIONS_LANGUAGE);
+        options = new ArrayList<>(ComboBoxInitializer.OPTIONS_LANGUAGE);
         options.remove("Any");
         comboBox_Language.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Grade` ComboBox
-        options = new ArrayList<>(ComboBoxesOptions.OPTIONS_GRADE);
+        options = new ArrayList<>(ComboBoxInitializer.OPTIONS_GRADE);
         options.remove("Any");
         comboBox_Grade.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Code` ComboBox
-        countryCodesObservableList = ComboBoxesOptions.OPTIONS_COUNTRYCODES;
-        comboBox_CountryCode.setItems(countryCodesObservableList);
-        
-        // set ComboBox search on key-press feature
-        comboBox_CountryCode.setOnKeyPressed(event -> {
-            String filter = event.getText();
-            ObservableList<String> filteredList = FXCollections.observableArrayList();
-            for (String country : countryCodesObservableList) {
-                if (country.toLowerCase().startsWith(filter.toLowerCase())) {
-                    filteredList.add(country);
-                }
-            }
-            comboBox_CountryCode.setItems(filteredList);
-        });
-        
-        // show on selected => country-code of country-string
-        comboBox_CountryCode.setButtonCell(new ListCell<String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    // set country-code
-                    setText(CountryCodesManager.getCountryCode(item));
-                }
-            }
-        });
+        ComboBoxInitializer.Initialize_CountryCodes(comboBox_CountryCode);
     }
     
     private void initializeTextFields() {
@@ -135,7 +104,7 @@ public class UpdateStudentController implements Initializable {
     
     private void initializeSubscription() {
         // Add a listener to the valueProperty of the ComboBox
-        comboBox_Subscription.valueProperty().addListener((obs, oldValue, newValue) -> {
+        comboBox_SubscriptionStatus.valueProperty().addListener((obs, oldValue, newValue) -> {
             if(newValue.equals(Subscription.INACTIVE_STRING)) {
                 // disable and set to null
                 datePicker_Date.setDisable(true);
@@ -151,7 +120,7 @@ public class UpdateStudentController implements Initializable {
             if(datePicker_Date.getValue() != null && datePicker_Date.getValue().compareTo(LocalDate.now()) <= 0) {
                 datePicker_Date.setValue(null);
                 datePicker_Date.setDisable(true);
-                comboBox_Subscription.setValue(Subscription.INACTIVE_STRING);
+                comboBox_SubscriptionStatus.setValue(Subscription.INACTIVE_STRING);
             }
         });
     }
@@ -171,6 +140,8 @@ public class UpdateStudentController implements Initializable {
             System.exit(1);
         }
     }
+    
+    /*******************************************************************/
     
     // DRAGGABLE WINDOW FEATURE
     private Stage stage;
@@ -195,8 +166,6 @@ public class UpdateStudentController implements Initializable {
         });
     }
 
-    /*******************************************************************/
-
     private Student student;
     public void setStudent(Student s) {
         this.student = s;
@@ -206,12 +175,12 @@ public class UpdateStudentController implements Initializable {
     // helper
     private void displayStudent() {
         tf_FullName.setText(student.getFullName());
-        tf_Phone.setText(CountryCodesManager.getNumber(student.getPhone()));
+        tf_Phone.setText(ComboBoxInitializer.getNumber(student.getPhone()));
         
-        comboBox_CountryCode.setValue(CountryCodesManager.getCountryCode(student.getPhone()));
+        comboBox_CountryCode.setValue(ComboBoxInitializer.getCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade() + "");
         comboBox_Language.setValue(student.getLanguage());
-        comboBox_Subscription.setValue(student.getSubscription().getStatusString());
+        comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatusString());
         datePicker_Date.setValue(student.getSubscription().getDate());
     }
     
@@ -236,7 +205,7 @@ public class UpdateStudentController implements Initializable {
             // create subscription of user's input (to contain user's input, used in validation)
             Subscription subscription = new Subscription();
             subscription.setDate(datePicker_Date.getValue());
-            subscription.setStatus(comboBox_Subscription.getValue().equals(Subscription.ACTIVE_STRING));
+            subscription.setStatus(comboBox_SubscriptionStatus.getValue().equals(Subscription.ACTIVE_STRING));
             
             // validate input (throws MissingInputFieldException)
             InputValidatorForStudentFields.validateUpdateFields(
@@ -249,7 +218,7 @@ public class UpdateStudentController implements Initializable {
             // create updated student
             Student s = new Student();
             s.setFullName(fullName);
-            s.setPhone(CountryCodesManager.getCountryCode(countryCode) + " " + phone);
+            s.setPhone(ComboBoxInitializer.getCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
             s.setSubscription(subscription);

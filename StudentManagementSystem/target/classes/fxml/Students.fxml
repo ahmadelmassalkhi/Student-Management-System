@@ -95,7 +95,7 @@
                         <children>
                             <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="119.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
                             <ComboBox fx:id="comboBox_Language" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
-                            <ComboBox fx:id="comboBox_Subscription" prefHeight="27.0" prefWidth="55.0" promptText="InActive" styleClass="subscription" stylesheets="@../css/ComboBox.css" />
+                            <ComboBox fx:id="comboBox_SubscriptionStatus" prefHeight="27.0" prefWidth="55.0" promptText="InActive" styleClass="subscription" stylesheets="@../css/ComboBox.css" />
                         </children>
                     </HBox>
                     <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="121.0" spacing="4.0" HBox.hgrow="ALWAYS">
