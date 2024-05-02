@@ -187,7 +187,7 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#updateMark" prefHeight="25.0" prefWidth="174.0" stylesheets="@../css/Button.css" text="Ok">
+                              <Button mnemonicParsing="false" onAction="#Update" prefHeight="25.0" prefWidth="174.0" stylesheets="@../css/Button.css" text="Ok">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -196,7 +196,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#closeStage" prefHeight="25.0" prefWidth="121.0" stylesheets="@../css/Button.css" text="Cancel">
+                              <Button mnemonicParsing="false" onAction="#Cancel" prefHeight="25.0" prefWidth="121.0" stylesheets="@../css/Button.css" text="Cancel">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>

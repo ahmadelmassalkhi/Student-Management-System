@@ -99,7 +99,7 @@ public final class StudentsModel extends Model {
     // CRUD OPERATIONS
     
     // CREATE
-    public void addStudent(Student s) throws PhoneAlreadyExistsException, SQLException {
+    public void Create(Student s) throws PhoneAlreadyExistsException, SQLException {
         // check if student already exists
         if(this.existsStudent(s)) throw new PhoneAlreadyExistsException();
 
@@ -278,7 +278,7 @@ public final class StudentsModel extends Model {
     
     public void Update(Student oldS, Student updatedS) throws SQLException, PhoneAlreadyExistsException {
         
-        // check if updated phone number
+        // check if updated phone number (UNIQUE attribute)
         if(oldS.getPhone().equals(updatedS.getPhone()) == false) {
             // check if the updated phone number already exists in the database
             if(this.existsStudent(updatedS)) {
@@ -335,11 +335,7 @@ public final class StudentsModel extends Model {
         database.executeQuery(query, IDs.toArray());
     }
     
-    public void deleteAllStudents() throws SQLException {
-        String query = "DELETE FROM " + TABLE;
-        database.executeQuery(query, new Object[] {});
-    }
-    
+    public void Delete() throws SQLException { Delete(null, null, null, null, null, null, null); }
     public void Delete(
             Long id,
             String fullName,

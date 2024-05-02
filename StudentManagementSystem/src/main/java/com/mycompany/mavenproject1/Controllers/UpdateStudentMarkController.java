@@ -55,6 +55,7 @@ public class UpdateStudentMarkController implements Initializable {
     private ComboBox comboBox_CountryCode;
     
     /*******************************************************************/
+    /* INITIALIZING UI */
     
     private StudentsModel model;
 
@@ -76,6 +77,9 @@ public class UpdateStudentMarkController implements Initializable {
             }
         });
     }
+    
+    /*******************************************************************/
+    /* WINDOW PROPERTIES INITIALIZATION METHODS */
     
     // DRAGGABLE WINDOW FEATURE
     private Stage stage;
@@ -119,19 +123,20 @@ public class UpdateStudentMarkController implements Initializable {
     }
     
     /*******************************************************************/
-    
+    /* METHODS CALLED BY UI */
+
     // `Cancel` button handler (also used by `Ok` button handler)
-    public void closeStage() {
+    public void Cancel() {
         stage.close();
     }
     
     // `Ok` button handler
-    public void updateMark() {
+    public void Update() {
 
         Float mark;
         try {
             // get mark
-            mark = Float.valueOf((String) tf_Mark.getText());
+            mark = Float.valueOf((String) tf_Mark.getText()); // throws `NumberFormatException` when empty ""
         } catch (NumberFormatException ex) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", "Please enter a Mark !");
             alert.showAndWait();
@@ -148,7 +153,7 @@ public class UpdateStudentMarkController implements Initializable {
         // update mark in the database
         try {
             model.UpdateMark(student.getId(), mark);
-            this.closeStage();
+            this.Cancel();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);

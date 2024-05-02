@@ -4,8 +4,7 @@
  */
 package com.mycompany.mavenproject1.Controllers;
 
-// imports from same package
-import com.itextpdf.text.DocumentException;
+// imports from same project
 import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
@@ -28,9 +27,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
+import javafx.geometry.Rectangle2D;
 
 // other imports
 import java.io.IOException;
@@ -39,8 +39,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.io.FileNotFoundException;
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
+import com.itextpdf.text.DocumentException;
 
 /**
  *
@@ -126,7 +125,7 @@ public class MarksController implements Initializable {
         studentsTable.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 Student s = (Student) studentsTable.getSelectionModel().getSelectedItem();
-                if (s != null) updateStudentMark(s);
+                if (s != null) Update(s);
             }
         });
     }
@@ -138,13 +137,13 @@ public class MarksController implements Initializable {
         
         // set interactive filtering feature
         comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
         comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
         comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
     }
     
@@ -193,25 +192,25 @@ public class MarksController implements Initializable {
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("[a-zA-Z]*")) {
                 tf_FullName.setText(oldValue);
-            } else Search();
+            } else Read();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
             if (!newValue.matches("\\d*")) {
                 tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
-            } else Search();
+            } else Read();
         });
 
         // force the field `Mark` to be numeric only (can contain up to 1 decimal point too)
         tf_MinimumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 tf_MinimumMark.setText(oldValue); // Revert to the old value if not matching
-            } else Search();
+            } else Read();
         });
         tf_MaximumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 tf_MaximumMark.setText(oldValue); // Revert to the old value if not matching
-            } else Search();
+            } else Read();
         });
     }
     
@@ -235,58 +234,7 @@ public class MarksController implements Initializable {
     
     /*******************************************************************/
     
-    private void updateStudentMark(Student s) {
-        try {
-            // load resource
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudentMark.fxml"));
-            Parent root = loader.load();
-
-            // create window
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
-            
-            // Center stage on screen
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            stage.setX((screenBounds.getWidth() - root.prefWidth(-1)) / 2);
-            stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
-            
-            // Access the controller and set the data
-            UpdateStudentMarkController controller = loader.getController();
-            controller.setWindowInformation(stage, root);
-            controller.setStudent(s);
-            
-            // wait until student is successfully updated or cancelled
-            stage.showAndWait();
-            
-            // adopt to data changes
-            this.refresh();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
-        }
-    }
-        
-    /*******************************************************************/
-    
-    /*
-     * refresh data (stats, and table based on inputs)
-     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
-     */
-    public void refresh() {
-        this.setStats();
-        this.Search();
-    }
-    
-    private void setStats() {
-        try {
-            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    private void Search() {
+    private void Read() {
         // extract data from input-fields
         String fullName = tf_FullName.getText();
         String phone = tf_Phone.getText();
@@ -330,7 +278,55 @@ public class MarksController implements Initializable {
         }
     }
     
+    private void Update(Student s) {
+        try {
+            // load resource
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudentMark.fxml"));
+            Parent root = loader.load();
+
+            // create window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
+            
+            // Center stage on screen
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX((screenBounds.getWidth() - root.prefWidth(-1)) / 2);
+            stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
+            
+            // Access the controller and set the data
+            UpdateStudentMarkController controller = loader.getController();
+            controller.setWindowInformation(stage, root);
+            controller.setStudent(s);
+            
+            // wait until student is successfully updated or cancelled
+            stage.showAndWait();
+            
+            // adopt to data changes
+            this.refresh();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+    }
+        
     /*******************************************************************/
+    
+    /*
+     * refresh data (stats, and table based on inputs)
+     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
+     */
+    public void refresh() {
+        // refresh statistical data
+        try {
+            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+        
+        // refresh table data
+        this.Read();
+    }
     
     public void export() {
         try {

@@ -64,6 +64,7 @@ public class UpdateStudentController implements Initializable {
     private DatePicker datePicker_Date;
     
     /*******************************************************************/
+    /* UI INITIALIZATION METHODS */
     
     private void initializeComboBoxes() {
         List<String> options;
@@ -118,8 +119,8 @@ public class UpdateStudentController implements Initializable {
         // Create a listener to trigger when the value of the DatePicker changes
         datePicker_Date.setOnAction(event -> {
             if(datePicker_Date.getValue() != null && datePicker_Date.getValue().compareTo(LocalDate.now()) <= 0) {
-                datePicker_Date.setValue(null);
                 datePicker_Date.setDisable(true);
+                datePicker_Date.setValue(null);
                 comboBox_SubscriptionStatus.setValue(Subscription.INACTIVE_STRING);
             }
         });
@@ -142,6 +143,7 @@ public class UpdateStudentController implements Initializable {
     }
     
     /*******************************************************************/
+    /* WINDOW PROPERTIES INITIALIZATION METHODS */
     
     // DRAGGABLE WINDOW FEATURE
     private Stage stage;
@@ -184,15 +186,16 @@ public class UpdateStudentController implements Initializable {
         datePicker_Date.setValue(student.getSubscription().getDate());
     }
     
+    /*******************************************************************/
+    /* METHODS CALLED BY UI */
+    
     // `Cancel` button handler (also used by `Ok` button handler)
-    public void closeStage() {
+    public void Cancel() {
         stage.close();
     }
     
-    /*******************************************************************/
-    
     // `Ok` button handler
-    public void updateStudent() {
+    public void Update() {
         
         // extract data from input-fields
         String fullName = tf_FullName.getText();
@@ -228,7 +231,7 @@ public class UpdateStudentController implements Initializable {
             model.Update(student, s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
             
             // return back to parent (StudentsController) page
-            closeStage();
+            this.Cancel();
         } catch (NullPointerException | IllegalArgumentException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);

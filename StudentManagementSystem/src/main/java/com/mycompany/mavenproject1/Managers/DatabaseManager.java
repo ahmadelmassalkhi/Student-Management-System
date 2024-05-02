@@ -36,7 +36,7 @@ public class DatabaseManager {
     
     public void DeleteAllData() throws SQLException, IOException {
         // delete data from all tables
-        StudentsModel.getModel().deleteAllStudents();
+        StudentsModel.getModel().Delete();
     }
     
     /*******************************************************************/

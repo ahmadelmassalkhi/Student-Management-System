@@ -40,8 +40,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
@@ -122,7 +120,7 @@ public class StudentsController implements Initializable {
         studentsTable.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 Student s = (Student) studentsTable.getSelectionModel().getSelectedItem();
-                if (s != null) updateStudent(s);
+                if (s != null) Update(s);
             }
         });
     }
@@ -135,16 +133,16 @@ public class StudentsController implements Initializable {
         
         // set interactive filtering feature
         comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
         comboBox_CountryCode.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
         comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
         comboBox_SubscriptionStatus.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Search();
+            Read();
         });
     }
     
@@ -153,13 +151,13 @@ public class StudentsController implements Initializable {
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("[a-zA-Z]*")) {
                 tf_FullName.setText(oldValue);
-            } else Search();
+            } else Read();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
             if (!newValue.matches("\\d*")) {
                 tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
-            } else Search();
+            } else Read();
         });
     }
     
@@ -185,15 +183,15 @@ public class StudentsController implements Initializable {
     // CRUD OPERATIONS (FROM UI)
     
     // CREATE
-    public void AddStudent() {
+    public void Create() {
         
         // extract data from input-fields
         String fullName = tf_FullName.getText();
+        String countryCode = (String) comboBox_CountryCode.getValue();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String subscriptionStatus = (String) comboBox_SubscriptionStatus.getValue();
-        String countryCode = (String) comboBox_CountryCode.getValue();
         
         try {
             // validate input (throws MissingInputFieldException)
@@ -209,13 +207,13 @@ public class StudentsController implements Initializable {
             // fill subscription information
             Subscription subscription = new Subscription();
             if(subscriptionStatus.equalsIgnoreCase(Subscription.ACTIVE_STRING)) {
-                // default for 1 month subscription
-                subscription.setDate(LocalDate.now().plusMonths(1));
+                // active subscription
                 subscription.setStatus(true);
+                subscription.setDate(LocalDate.now().plusMonths(1)); // default for 1 month subscription
             } else {
                 // inactive subscription
-                subscription.setDate((LocalDate) null);
                 subscription.setStatus(false);
+                subscription.setDate((LocalDate) null);
             }
 
             // fill student information
@@ -228,7 +226,7 @@ public class StudentsController implements Initializable {
 //            s.setMark(mark); // by convension, Students page should not allow adding/searching mark
 
             // add student to database
-            model.addStudent(s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
+            model.Create(s); // (throws PhoneAlreadyExistsException if found matching phone number in the database)
             
             // adopt to data changes
             this.clearTextFields(); // make adding another new student easier
@@ -243,7 +241,7 @@ public class StudentsController implements Initializable {
     }
     
     // READ
-    private void Search() {
+    private void Read() {
         // extract data from input-fields
         String fullName = tf_FullName.getText();
         String phone = tf_Phone.getText();
@@ -264,7 +262,16 @@ public class StudentsController implements Initializable {
         // perform search
         try {
             // get & display filtered students
-            List<Student> result = model.Read(null, fullName, phone, grade, language, subscription, null, null, null);
+            List<Student> result = model.Read(
+                    null, // id
+                    fullName, 
+                    phone, 
+                    grade, 
+                    language, 
+                    subscription, 
+                    null, // minimum mark
+                    null, // maximum mark
+                    null); // marks order
             studentsTable.setItems(FXCollections.observableArrayList(result));
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -273,7 +280,7 @@ public class StudentsController implements Initializable {
     }
     
     // UPDATE
-    private void updateStudent(Student s) {
+    private void Update(Student s) {
         try {
             // load resource
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateStudent.fxml"));
@@ -299,14 +306,13 @@ public class StudentsController implements Initializable {
             // adopt to data changes
             this.refresh();
         } catch (IOException e) {
-            System.out.println("HEREEEEEEEEEEEEEEE");
             System.out.println(e.getMessage());
             System.exit(1);
         }
     }
     
     // DELETE
-    public void deleteSelectedStudents() {
+    public void Delete() {
         // get all selected students
         ObservableList<Student> selectedStudents = studentsTable.getSelectionModel().getSelectedItems();
         if(selectedStudents.isEmpty()) return; // nothing was selected
@@ -330,7 +336,26 @@ public class StudentsController implements Initializable {
     /*******************************************************************/
     // HELPER METHODS
     
-    public void clearButton() {
+    /*
+     * refresh data (stats, and table based on inputs)
+     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
+     */
+    public void refresh() {
+        // set statistical data
+        try {
+            label_TotalStudents.setText(model.getNumberOfStudents() + "");
+            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+        
+        // refresh table data
+        this.Read();
+    }
+    
+    // called by `Clear` button
+    public void Clear() {
         // clear all inputs
         this.clearTextFields();
         this.clearComboBoxes();
@@ -338,32 +363,11 @@ public class StudentsController implements Initializable {
         // refresh data
         this.refresh();
     }
-    
-    /*
-     * refresh data (stats, and table based on inputs)
-     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
-     */
-    public void refresh() {
-        this.refreshStats();
-        this.Search();
-    }
-    
-    private void refreshStats() {
-        // set statistical data
-        try {
-            label_TotalStudents.setText(model.getNumberOfStudents() + "");
-            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
-        } catch (SQLException ex) {
-            Logger.getLogger(StudentsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     private void clearTextFields() {
         // clear inputs
         tf_FullName.clear();
         tf_Phone.clear();
     }
-    
     private void clearComboBoxes() {
         // clear drop-down menus
         comboBox_Language.setValue("Any");
