@@ -385,6 +385,10 @@ public class MarksController implements Initializable {
         this.tf_Phone.clear();
         this.tf_MaximumMark.clear();
         this.tf_MinimumMark.clear();
+
+        this.comboBox_Grade.setValue(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
+        this.comboBox_Language.setValue(ComboBoxInitializer.OPTION_DEFAULT_LANGUAGE);
+        this.comboBox_MarksOrder.setValue(ComboBoxInitializer.OPTION_DEFAULT_MARKORDER);
     }
 
     /*******************************************************************/
