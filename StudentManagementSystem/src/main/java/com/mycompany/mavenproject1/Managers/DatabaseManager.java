@@ -72,4 +72,8 @@ public class DatabaseManager {
     }
     
     /*******************************************************************/
+    
+    public String getCurrentDatabaseName() throws IOException {
+        return ConfigurationManager.getManager().getCurrentDatabasePath().toString();
+    }
 }
