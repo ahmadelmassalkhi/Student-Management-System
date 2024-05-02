@@ -138,13 +138,11 @@ public class UpdateStudentMarkController implements Initializable {
             // get mark
             mark = Float.valueOf((String) tf_Mark.getText()); // throws `NumberFormatException` when empty ""
         } catch (NumberFormatException ex) {
-            ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", "Please enter a Mark !");
-            alert.showAndWait();
-            return;
+            mark = null;
         }
         
         // validate mark
-        if(mark > 20 || mark < 0) {
+        if(mark != null && (mark > 20 || mark < 0)) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", "Mark should be between 0 and 20 !");
             alert.showAndWait();
             return;
