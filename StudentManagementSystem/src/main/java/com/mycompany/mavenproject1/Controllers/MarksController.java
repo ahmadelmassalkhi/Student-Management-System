@@ -250,7 +250,7 @@ public class MarksController implements Initializable {
     
     private void Read() {
         // extract data from input-fields
-        String fullName = tf_FullName.getText();
+        String fullName = (tf_FullName.getText()).trim();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();

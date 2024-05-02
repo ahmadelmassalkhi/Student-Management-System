@@ -187,7 +187,7 @@ public class StudentsController implements Initializable {
     public void Create() {
         
         // extract data from input-fields
-        String fullName = tf_FullName.getText();
+        String fullName = (tf_FullName.getText()).trim();
         String countryCode = (String) comboBox_CountryCode.getValue();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();

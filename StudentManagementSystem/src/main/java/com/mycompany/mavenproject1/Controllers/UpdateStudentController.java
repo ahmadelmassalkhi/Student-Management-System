@@ -199,7 +199,7 @@ public class UpdateStudentController implements Initializable {
     public void Update() {
         
         // extract data from input-fields
-        String fullName = tf_FullName.getText();
+        String fullName = (tf_FullName.getText()).trim();
         String countryCode = (String) comboBox_CountryCode.getValue();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
