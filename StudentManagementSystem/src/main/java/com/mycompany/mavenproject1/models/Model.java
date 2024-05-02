@@ -24,6 +24,7 @@ public abstract class Model {
         database.connect();
     }
     
+    public static final String NULL = "NULL";
     protected abstract void CreateTable() throws SQLException;
     
     /*******************************************************************/

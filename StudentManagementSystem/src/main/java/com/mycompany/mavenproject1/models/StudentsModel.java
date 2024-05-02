@@ -254,7 +254,7 @@ public final class StudentsModel extends Model {
             s.setPhone(result.getString(COL_PHONE));
             s.setGrade(result.getString(COL_GRADE));
             s.setLanguage(result.getString(COL_LANGUAGE));
-            s.setMark(result.getFloat(COL_MARK));
+            s.setMark(result.getString(COL_MARK));
             s.setSubscription(subscriptionsModel.Read(result.getLong(COL_SUBSCRIPTION_ID)).get(0));
             
             // add student to results

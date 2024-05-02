@@ -66,8 +66,7 @@ public final class SubscriptionsModel extends Model {
                 COL_EXPIRATION_DATE,
                 COL_EXPIRATION_DATE
         );
-        System.out.println(query);
-        database.executeQuery(query, new Object[] {Subscription.INACTIVE, Subscription.NULL});
+        database.executeQuery(query, new Object[] {Subscription.INACTIVE, NULL});
     }
     
     public void Create(Subscription s) throws SQLException {

@@ -4,6 +4,8 @@
  */
 package com.mycompany.mavenproject1.ModelObjects;
 
+import com.mycompany.mavenproject1.models.Model;
+
 /**
  *
  * @author AHMAD
@@ -29,6 +31,10 @@ public class Student {
     public void setLanguage(String language) { this.language = language; }
     public void setMark(Float mark) { this.mark = mark; }
     public void setSubscription(Subscription subscription) { this.subscription = subscription; }
+    public void setMark(String mark) {
+        if(mark == null) this.mark = null;
+        else this.mark = Float.valueOf(mark);
+    }
     
     // GETTERS
     public Long getId() { return id; }
@@ -36,16 +42,19 @@ public class Student {
     public String getPhone() { return phone; }
     public String getGrade() { return grade; }
     public String getLanguage() { return language; }
-    public Float getMark() { return mark; }
     public Subscription getSubscription() { return subscription; }
+    public String getMark() {
+        if(mark == null) return Model.NULL;
+        return String.valueOf(mark);
+    }
     
     // GETTERS USED FOR TableColumns
     public String getSubscriptionStatus() {
         if(subscription == null || subscription.getStatus() == null) return Subscription.INACTIVE_STRING;
-        return subscription.getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING;
+        return subscription.getStatusString();
     }
     public String getSubscriptionDate() {
-        if(subscription == null) return Subscription.NULL;
+        if(subscription == null) return Model.NULL;
         return subscription.getDateStringFormatted();
     }
 
