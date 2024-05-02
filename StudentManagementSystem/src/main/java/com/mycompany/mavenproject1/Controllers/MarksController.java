@@ -104,6 +104,8 @@ public class MarksController implements Initializable {
     private CheckBox checkbox_Grade;
     @FXML
     private CheckBox checkbox_Language;
+    @FXML
+    private CheckBox checkbox_All;
 
     /*******************************************************************/
     
@@ -147,44 +149,55 @@ public class MarksController implements Initializable {
             Read();
         });
     }
+
+    /*******************************************************************/
     
     private void initializeCheckBoxes() {
-        
-        // initially check all checkboxes
-        checkbox_FullName.setSelected(true);
-        checkbox_Phone.setSelected(true);
-        checkbox_Grade.setSelected(true);
-        checkbox_Language.setSelected(true);
         
         // add checkbox functionality to hide its corresponding column
         checkbox_FullName.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 col_FullName.setVisible(true);
+                if(isAllChecked()) checkbox_All.setSelected(true);
             } else {
                 col_FullName.setVisible(false);
+                checkbox_All.setSelected(false);
             }
         });
         checkbox_Phone.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 col_Phone.setVisible(true);
+                if(isAllChecked()) checkbox_All.setSelected(true);
             } else {
                 col_Phone.setVisible(false);
+                checkbox_All.setSelected(false);
             }
         });
         checkbox_Grade.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 col_Grade.setVisible(true);
+                if(isAllChecked()) checkbox_All.setSelected(true);
             } else {
                 col_Grade.setVisible(false);
+                checkbox_All.setSelected(false);
             }
         });
         checkbox_Language.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 col_Language.setVisible(true);
+                if(isAllChecked()) checkbox_All.setSelected(true);
             } else {
                 col_Language.setVisible(false);
+                checkbox_All.setSelected(false);
             }
         });
+        
+        checkbox_All.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) CheckAll();
+        });
+        
+        // select all initially
+        checkbox_All.setSelected(true);
     }
     
     private void initializeTextFields() {
@@ -261,7 +274,7 @@ public class MarksController implements Initializable {
             
             // get & display filtered students
             List<Student> result = model.Read(
-                    null, 
+                    null, // id
                     fullName, 
                     phone, 
                     grade, 
@@ -353,5 +366,26 @@ public class MarksController implements Initializable {
         }
     }
     
+    /*******************************************************************/
+    
+    private void CheckAll() {
+        this.checkbox_FullName.setSelected(true);
+        this.checkbox_Phone.setSelected(true);
+        this.checkbox_Grade.setSelected(true);
+        this.checkbox_Language.setSelected(true);
+    }
+    public boolean isAllChecked() {
+        return checkbox_FullName.isSelected()
+                && checkbox_Phone.isSelected()
+                && checkbox_Grade.isSelected()
+                && checkbox_Language.isSelected();
+    }
+    public void Clear() {
+        this.tf_FullName.clear();
+        this.tf_Phone.clear();
+        this.tf_MaximumMark.clear();
+        this.tf_MinimumMark.clear();
+    }
+
     /*******************************************************************/
 }

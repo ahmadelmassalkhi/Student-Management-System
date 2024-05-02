@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -96,7 +98,7 @@
                             </VBox>
                         </children>
                     </HBox>
-                    <HBox alignment="CENTER" prefHeight="54.0" prefWidth="168.0" spacing="4.0" HBox.hgrow="ALWAYS">
+                    <HBox alignment="CENTER" prefHeight="58.0" prefWidth="213.0" spacing="4.0" HBox.hgrow="ALWAYS">
                         <children>
                         <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="111.0" HBox.hgrow="NEVER">
                            <children>
@@ -143,6 +145,32 @@
                                     <TextField fx:id="tf_MaximumMark" layoutX="10.0" layoutY="11.0" prefHeight="27.0" prefWidth="100.0" promptText="Maximum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
                                  </children>
                               </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="8.0" prefWidth="66.0">
+                     <children>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <CheckBox fx:id="checkbox_All" mnemonicParsing="false" text="All" textFill="#d7d7d7">
+                                       <font>
+                                          <Font name="System Bold" size="10.0" />
+                                       </font>
+                                    </CheckBox>
+                                 </children>
+                              </HBox>
+                              <Button mnemonicParsing="false" onAction="#Clear" prefWidth="81.0" stylesheets="@../css/Button.css">
+                                 <graphic>
+                                    <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8-clear-24.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                            </children>
                         </VBox>
                      </children>
