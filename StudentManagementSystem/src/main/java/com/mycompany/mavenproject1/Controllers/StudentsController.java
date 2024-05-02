@@ -14,6 +14,7 @@ import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
+import com.mycompany.mavenproject1.ViewsInitializers.TextFieldInitializer;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -149,14 +150,14 @@ public class StudentsController implements Initializable {
     private void initializeTextFields() {
         // set interactive filtering feature
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("[a-zA-Z]*")) {
+            if (!newValue.matches(TextFieldInitializer.REGEX_FULLNAME)) {
                 tf_FullName.setText(oldValue);
             } else Read();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
-            if (!newValue.matches("\\d*")) {
-                tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
+            if (!newValue.matches(TextFieldInitializer.REGEX_PHONE)) {
+                tf_Phone.setText(oldValue);
             } else Read();
         });
     }

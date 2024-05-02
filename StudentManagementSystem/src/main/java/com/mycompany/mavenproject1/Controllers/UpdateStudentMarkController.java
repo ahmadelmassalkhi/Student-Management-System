@@ -10,6 +10,7 @@ import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
+import com.mycompany.mavenproject1.ViewsInitializers.TextFieldInitializer;
 import java.io.IOException;
 
 // imports from javafx
@@ -72,7 +73,7 @@ public class UpdateStudentMarkController implements Initializable {
         
         // force the field `Mark` to be numeric only (can contain up to 1 decimal point too)
         tf_Mark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+            if (!newValue.matches(TextFieldInitializer.REGEX_MARK)) {
                 tf_Mark.setText(oldValue); // Revert to the old value if not matching
             }
         });

@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.io.FileNotFoundException;
 import com.itextpdf.text.DocumentException;
+import com.mycompany.mavenproject1.ViewsInitializers.TextFieldInitializer;
 
 /**
  *
@@ -190,25 +191,25 @@ public class MarksController implements Initializable {
         
         // set interactive filtering feature
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("[a-zA-Z]*")) {
+            if (!newValue.matches(TextFieldInitializer.REGEX_FULLNAME)) {
                 tf_FullName.setText(oldValue);
             } else Read();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
-            if (!newValue.matches("\\d*")) {
-                tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
+            if (!newValue.matches(TextFieldInitializer.REGEX_PHONE)) {
+                tf_Phone.setText(oldValue);
             } else Read();
         });
 
         // force the field `Mark` to be numeric only (can contain up to 1 decimal point too)
         tf_MinimumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+            if (!newValue.matches(TextFieldInitializer.REGEX_MARK)) {
                 tf_MinimumMark.setText(oldValue); // Revert to the old value if not matching
             } else Read();
         });
         tf_MaximumMark.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+            if (!newValue.matches(TextFieldInitializer.REGEX_MARK)) {
                 tf_MaximumMark.setText(oldValue); // Revert to the old value if not matching
             } else Read();
         });

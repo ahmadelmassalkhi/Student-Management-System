@@ -13,6 +13,7 @@ import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
+import com.mycompany.mavenproject1.ViewsInitializers.TextFieldInitializer;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -71,19 +72,19 @@ public class UpdateStudentController implements Initializable {
         
         // Add items to the `Subscription` ComboBox
         options = new ArrayList<>(ComboBoxInitializer.OPTIONS_SUBSCRIPTION);
-        options.remove("Any");
+        options.remove(ComboBoxInitializer.OPTION_DEFAULT_SUBSCRIPTION);
         comboBox_SubscriptionStatus.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Language` ComboBox
         options = new ArrayList<>(ComboBoxInitializer.OPTIONS_LANGUAGE);
-        options.remove("Any");
+        options.remove(ComboBoxInitializer.OPTION_DEFAULT_LANGUAGE);
         comboBox_Language.setItems(FXCollections.observableArrayList(options));
         
         // Add items to the `Grade` ComboBox
         options = new ArrayList<>(ComboBoxInitializer.OPTIONS_GRADE);
-        options.remove("Any");
+        options.remove(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
         comboBox_Grade.setItems(FXCollections.observableArrayList(options));
-        
+
         // Add items to the `Code` ComboBox
         ComboBoxInitializer.Initialize_CountryCodes(comboBox_CountryCode);
     }
@@ -91,13 +92,13 @@ public class UpdateStudentController implements Initializable {
     private void initializeTextFields() {
         // force the field `Phone` to be numeric only
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                tf_Phone.setText(newValue.replaceAll("[^\\d]", ""));
+            if (!newValue.matches(TextFieldInitializer.REGEX_PHONE)) {
+                tf_Phone.setText(oldValue);
             }
         });
         // set interactive filtering feature
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!newValue.matches("[a-zA-Z]*")) {
+            if (!newValue.matches(TextFieldInitializer.REGEX_FULLNAME)) {
                 tf_FullName.setText(oldValue);
             }
         });

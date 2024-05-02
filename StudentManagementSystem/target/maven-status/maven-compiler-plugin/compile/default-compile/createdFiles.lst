@@ -16,6 +16,7 @@ com\mycompany\mavenproject1\App.class
 com\mycompany\mavenproject1\Exceptions\MissingInputFieldException.class
 com\mycompany\mavenproject1\models\SubscriptionsModel.class
 com\mycompany\mavenproject1\Controllers\SettingsController.class
+com\mycompany\mavenproject1\ViewsInitializers\TextFieldInitializer.class
 com\mycompany\mavenproject1\ModelObjects\Student.class
 module-info.class
 com\mycompany\mavenproject1\models\StudentsModel.class
