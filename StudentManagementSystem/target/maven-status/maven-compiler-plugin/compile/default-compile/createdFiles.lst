@@ -21,7 +21,6 @@ module-info.class
 com\mycompany\mavenproject1\models\StudentsModel.class
 com\mycompany\mavenproject1\Managers\DatabaseManager.class
 com\mycompany\mavenproject1\ViewsInitializers\ComboBoxInitializer.class
-com\mycompany\mavenproject1\Controllers\UpdateOwnerNameController.class
 com\mycompany\mavenproject1\Common\InputValidatorForStudentFields.class
 com\mycompany\mavenproject1\ViewsInitializers\TableViewInitializer.class
 com\mycompany\mavenproject1\Managers\DatabaseConnectionManager.class
