@@ -18,7 +18,12 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -45,9 +50,29 @@ public class SettingsController implements Initializable {
     
     public void CleanDatabase() {
         try {
-            DatabaseManager.getManager().DeleteAllData();
-        } catch (IOException | SQLException ex) {
-            System.out.println(ex.getMessage());
+            // load resource
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CleanDatabaseWarning.fxml"));
+            Parent root = loader.load();
+            
+            // create window
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, root.prefWidth(-1), root.prefHeight(-1)));
+
+            // Center stage on screen
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX((screenBounds.getWidth() - root.prefWidth(-1)) / 2);
+            stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
+
+            // Access the controller and set the data
+            CleanDatabaseWarningController controller = loader.getController();
+            controller.setWindowInformation(stage, root);
+            
+            // wait until student is successfully updated or cancelled
+            stage.showAndWait();
+            
+            if(controller.clean) DatabaseManager.getManager().DeleteAllData();
+        } catch (IOException | SQLException e) {
+            System.out.println(e.getMessage());
             System.exit(1);
         }
     }
