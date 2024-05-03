@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="590.0" prefWidth="785.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mavenproject1.Controllers.SettingsController">
+    <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                      <Label text="Settings" textFill="#322d2d">
+                         <font>
+                         <Font name="System Bold" size="24.0" />
+                         </font>
+                      </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                      <VBox prefHeight="67.0" prefWidth="720.0">
+                          <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="183.0" spacing="5.0">
+                           <children>
+                                   <Label text="Database:" textFill="#aeaeae">
+                                      <font>
+                                         <Font name="System Bold" size="14.0" />
+                                      </font>
+                                   </Label>
+                              <Label fx:id="label_DatabaseName" text="name" textFill="#3337ab">
+                                 <font>
+                                    <Font name="System Bold Italic" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                             <HBox prefHeight="40.0" prefWidth="624.0" spacing="4.0">
+                                <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                         <Button mnemonicParsing="false" onAction="#CleanDatabase" prefHeight="32.0" prefWidth="209.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="CLEAN">
+                                            <graphic>
+                                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                  <image>
+                                                     <Image url="@../images/icons8-clean-24.png" />
+                                                  </image>
+                                               </ImageView>
+                                            </graphic>
+                                            <font>
+                                               <Font name="System Bold" size="12.0" />
+                                            </font>
+                                         </Button>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                         <Button mnemonicParsing="false" onAction="#BackupDatabase" prefHeight="32.0" prefWidth="130.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="BACKUP">
+                                            <font>
+                                               <Font name="System Bold" size="12.0" />
+                                            </font>
+                                            <graphic>
+                                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                  <image>
+                                                     <Image url="@../images/icons8-database-backup-24.png" />
+                                                  </image>
+                                               </ImageView>
+                                            </graphic>
+                                         </Button>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                         <Button mnemonicParsing="false" onAction="#RestoreDatabase" prefHeight="32.0" prefWidth="209.0" styleClass="database-operation" stylesheets="@../css/Button.css" text="RESTORE">
+                                            <font>
+                                               <Font name="System Bold" size="12.0" />
+                                            </font>
+                                            <graphic>
+                                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                  <image>
+                                                     <Image url="@../images/icons8-database-restore-24.png" />
+                                                  </image>
+                                               </ImageView>
+                                            </graphic>
+                                         </Button>
+                                 </children>
+                              </VBox>
+                                </children>
+                             </HBox>
+                          </children>
+                      </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+    </children>
+</AnchorPane>

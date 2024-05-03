@@ -1,0 +1,12 @@
+
+.text-field {
+    /*-fx-background-color: #fff;*/
+    -fx-border-color:  #B7C3D7;
+    -fx-border-radius: 2em;
+    -fx-pref-width: 120px;
+    -fx-background-color: #fff;
+}
+
+.mark {
+    -fx-border-width: 0;
+}
