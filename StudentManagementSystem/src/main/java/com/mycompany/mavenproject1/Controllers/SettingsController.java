@@ -32,17 +32,54 @@ import javafx.stage.Stage;
  */
 public class SettingsController implements Initializable {
     
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        showCurrentDatabase();
-    }
-    
     private static Stage stage = null;
     public static void setStage(Stage primaryStage) {
         stage = primaryStage;
         try {
             DatabaseManager.getManager().setStage(stage);
         } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        showCurrentDatabase();
+    }
+    
+    @FXML
+    private Label label_DatabaseName;
+    private void showCurrentDatabase() {
+        try {
+            label_DatabaseName.setText(DatabaseManager.getManager().getCurrentDatabaseName());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    /*******************************************************************/
+    // OPERATIONS
+    
+    public void BackupDatabase() {
+        try {
+            DatabaseManager.getManager().Backup();
+        } catch (UserCancelledFileChooserException ex) {
+            // do nothing
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
+    public void RestoreDatabase() {
+        try {
+            DatabaseManager.getManager().Restore();
+            this.showCurrentDatabase();
+        } catch (UserCancelledFileChooserException ex) {
+            // do nothing
+        } catch (InvalidDatabaseSchemaException | IOException | SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -71,41 +108,6 @@ public class SettingsController implements Initializable {
             stage.showAndWait();
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    public void BackupDatabase() {
-        try {
-            DatabaseManager.getManager().Backup();
-            this.showCurrentDatabase();
-        } catch (UserCancelledFileChooserException ex) {
-            // do nothing
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    public void RestoreDatabase() {
-        try {
-            DatabaseManager.getManager().Restore();
-            this.showCurrentDatabase();
-        } catch (UserCancelledFileChooserException ex) {
-            // do nothing
-        } catch (InvalidDatabaseSchemaException | IOException | SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    @FXML
-    private Label label_DatabaseName;
-    private void showCurrentDatabase() {
-        try {
-            label_DatabaseName.setText(DatabaseManager.getManager().getCurrentDatabaseName());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
             System.exit(1);
         }
     }

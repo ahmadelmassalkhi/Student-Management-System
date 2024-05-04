@@ -4,15 +4,20 @@
  */
 package com.mycompany.mavenproject1.Controllers;
 
+// imports from same project
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.Managers.ConfigurationManager;
-import java.io.IOException;
+
+// imports from javafx
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+// other imports
+import java.io.IOException;
 
 /**
  *
