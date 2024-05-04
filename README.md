@@ -22,7 +22,6 @@ The Student Management System is a Java application designed to provide CRUD (Cr
 ## Usage
 1. Clone the repository to your local machine.
 2. Open the project in NetBeans IDE.
-3. Ensure all dependencies (Java, JavaFX, SceneBuilder, SQLite JDBC driver) are correctly configured in your project.
 4. Build and run the project from NetBeans IDE.
 
 ## Contributors
