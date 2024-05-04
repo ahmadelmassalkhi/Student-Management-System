@@ -139,79 +139,62 @@ public class MarksController implements Initializable {
         ComboBoxInitializer.Initialize_MarksOrder(comboBox_MarksOrder);
         
         // set interactive filtering feature
-        comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
-        comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
-        comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
+        comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> Read());
+        comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> Read());
+        comboBox_MarksOrder.valueProperty().addListener((obs, oldValue, newValue) -> Read());
     }
 
     /*******************************************************************/
     
+    private void CheckboxHidesColumn(Boolean newValue, TableColumn col) {
+        if (newValue) {
+            col.setVisible(true);
+            if(checkbox_FullName.isSelected()
+                && checkbox_Phone.isSelected()
+                && checkbox_Grade.isSelected()
+                && checkbox_Language.isSelected()) checkbox_All.setSelected(true);
+        } else {
+            col.setVisible(false);
+            checkbox_All.setSelected(false);
+        }
+    }
+    
     private void initializeCheckBoxes() {
         
         // add checkbox functionality to hide its corresponding column
-        checkbox_FullName.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                col_FullName.setVisible(true);
-                if(isAllChecked()) checkbox_All.setSelected(true);
-            } else {
-                col_FullName.setVisible(false);
-                checkbox_All.setSelected(false);
-            }
-        });
-        checkbox_Phone.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                col_Phone.setVisible(true);
-                if(isAllChecked()) checkbox_All.setSelected(true);
-            } else {
-                col_Phone.setVisible(false);
-                checkbox_All.setSelected(false);
-            }
-        });
-        checkbox_Grade.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                col_Grade.setVisible(true);
-                if(isAllChecked()) checkbox_All.setSelected(true);
-            } else {
-                col_Grade.setVisible(false);
-                checkbox_All.setSelected(false);
-            }
-        });
-        checkbox_Language.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                col_Language.setVisible(true);
-                if(isAllChecked()) checkbox_All.setSelected(true);
-            } else {
-                col_Language.setVisible(false);
-                checkbox_All.setSelected(false);
-            }
-        });
+        checkbox_FullName.selectedProperty().addListener((observable, oldValue, newValue) -> { CheckboxHidesColumn(newValue, col_FullName); });
+        checkbox_Phone.selectedProperty().addListener((observable, oldValue, newValue) -> { CheckboxHidesColumn(newValue, col_Phone); });
+        checkbox_Grade.selectedProperty().addListener((observable, oldValue, newValue) -> { CheckboxHidesColumn(newValue, col_Grade); });
+        checkbox_Language.selectedProperty().addListener((observable, oldValue, newValue) -> { CheckboxHidesColumn(newValue, col_Language); });
         
         checkbox_All.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) CheckAll();
+            if (newValue) {
+                // check all checkboxes
+                this.checkbox_FullName.setSelected(true);
+                this.checkbox_Phone.setSelected(true);
+                this.checkbox_Grade.setSelected(true);
+                this.checkbox_Language.setSelected(true);
+            }
         });
         
         // select all initially
         checkbox_All.setSelected(true);
     }
     
+    /*******************************************************************/
+    
     private void initializeTextFields() {
         
         // set interactive filtering feature
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches(TextFieldInitializer.REGEX_FULLNAME)) {
-                tf_FullName.setText(oldValue);
+                tf_FullName.setText(oldValue); // Revert to the old value if not matching
             } else Read();
         });
         tf_Phone.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             // force the field `Phone` to be numeric only
             if (!newValue.matches(TextFieldInitializer.REGEX_PHONE)) {
-                tf_Phone.setText(oldValue);
+                tf_Phone.setText(oldValue); // Revert to the old value if not matching
             } else Read();
         });
 
@@ -250,29 +233,28 @@ public class MarksController implements Initializable {
     
     private void Read() {
         // extract data from input-fields
-        String fullName = (tf_FullName.getText()).trim();
+        String fullName = (tf_FullName.getText()).trim(); // trim to remove last space (if exists) because it is allowed by the regex
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
         String language = (String) comboBox_Language.getValue();
         String MarksOrder = (String) comboBox_MarksOrder.getValue();
         
-        // set to active (by convension, Marks page should contain students with active subscriptions)
+        // fix format of input-data
+        if(fullName.isEmpty()) fullName = null;
+        if(phone.isEmpty()) phone = null;
+        if(grade.equals("Any")) grade = null;
+        if(language.equals("Any")) language = null;
+        if(MarksOrder.equals("Any")) MarksOrder = null;
+        
+        Float MinimumMark = (tf_MinimumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MinimumMark.getText());
+        Float MaximumMark = (tf_MaximumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MaximumMark.getText());
+        
+        // set subscription (active by convension, Marks page should contain students with active subscriptions)
         Subscription subscription = new Subscription();
         subscription.setStatus(Boolean.TRUE);
         
-        // fix input-data format
-        if(fullName.isEmpty()) fullName = null;
-        if(phone.isEmpty()) phone = null;
-        if(grade.isEmpty() || grade.equals("Any")) grade = null;
-        if(language.isEmpty() || language.equals("Any")) language = null;
-        
-        // the new letter added might be a `.` => `19.` is not a number !!
-        Float MinimumMark, MaximumMark;
         try {
-            MinimumMark = (tf_MinimumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MinimumMark.getText());
-            MaximumMark = (tf_MaximumMark.getText().isEmpty()) ? null : Float.valueOf(tf_MaximumMark.getText());
-            
-            // get & display filtered students
+            // get filtered students
             List<Student> result = model.Read(
                     null, // id
                     fullName, 
@@ -284,8 +266,8 @@ public class MarksController implements Initializable {
                     MaximumMark, 
                     MarksOrder
             );
+            // display
             studentsTable.setItems(FXCollections.observableArrayList(result));
-        } catch (NumberFormatException ex) {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -325,6 +307,16 @@ public class MarksController implements Initializable {
         
     /*******************************************************************/
     
+    public void Clear() {
+        this.tf_FullName.clear();
+        this.tf_Phone.clear();
+        this.tf_MaximumMark.clear();
+        this.tf_MinimumMark.clear();
+        this.comboBox_Grade.setValue(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
+        this.comboBox_Language.setValue(ComboBoxInitializer.OPTION_DEFAULT_LANGUAGE);
+        this.comboBox_MarksOrder.setValue(ComboBoxInitializer.OPTION_DEFAULT_MARKORDER);
+    }
+    
     /*
      * refresh data (stats, and table based on inputs)
      * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
@@ -333,13 +325,11 @@ public class MarksController implements Initializable {
         // refresh statistical data
         try {
             label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+            this.Read();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
-        
-        // refresh table data
-        this.Read();
     }
     
     public void export() {
@@ -364,31 +354,6 @@ public class MarksController implements Initializable {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
-    }
-    
-    /*******************************************************************/
-    
-    private void CheckAll() {
-        this.checkbox_FullName.setSelected(true);
-        this.checkbox_Phone.setSelected(true);
-        this.checkbox_Grade.setSelected(true);
-        this.checkbox_Language.setSelected(true);
-    }
-    public boolean isAllChecked() {
-        return checkbox_FullName.isSelected()
-                && checkbox_Phone.isSelected()
-                && checkbox_Grade.isSelected()
-                && checkbox_Language.isSelected();
-    }
-    public void Clear() {
-        this.tf_FullName.clear();
-        this.tf_Phone.clear();
-        this.tf_MaximumMark.clear();
-        this.tf_MinimumMark.clear();
-
-        this.comboBox_Grade.setValue(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
-        this.comboBox_Language.setValue(ComboBoxInitializer.OPTION_DEFAULT_LANGUAGE);
-        this.comboBox_MarksOrder.setValue(ComboBoxInitializer.OPTION_DEFAULT_MARKORDER);
     }
 
     /*******************************************************************/
