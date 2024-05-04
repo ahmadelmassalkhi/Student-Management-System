@@ -8,10 +8,8 @@ package com.mycompany.mavenproject1.Controllers;
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
-import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
 import com.mycompany.mavenproject1.ViewsInitializers.TextFieldInitializer;
-import java.io.IOException;
 
 // imports from javafx
 import javafx.beans.value.ObservableValue;
@@ -26,8 +24,10 @@ import javafx.stage.StageStyle;
 
 // other imports
 import java.net.URL;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.scene.control.DatePicker;
 
 /**
  *
@@ -54,6 +54,10 @@ public class UpdateStudentMarkController implements Initializable {
     private ComboBox comboBox_Grade;
     @FXML
     private ComboBox comboBox_CountryCode;
+    
+    /* DATE */
+    @FXML
+    private DatePicker datePicker_Date;
     
     /*******************************************************************/
     /* INITIALIZING UI */
@@ -107,20 +111,17 @@ public class UpdateStudentMarkController implements Initializable {
     
     private Student student;
     public void setStudent(Student s) {
-        this.student = s;
-        displayStudent();
-    }
-    
-    // helper
-    private void displayStudent() {
+        this.student = s;        
+        
+        // display student information
         tf_FullName.setText(student.getFullName());
         tf_Phone.setText(ComboBoxInitializer.getNumber(student.getPhone()));
-        tf_Mark.setText(student.getMark() + "");
-        
+        tf_Mark.setText(student.getMark());
         comboBox_CountryCode.setValue(ComboBoxInitializer.getCountryCode(student.getPhone()));
-        comboBox_Grade.setValue(student.getGrade() + "");
+        comboBox_Grade.setValue(student.getGrade());
         comboBox_Language.setValue(student.getLanguage());
-        comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatus() ? Subscription.ACTIVE_STRING : Subscription.INACTIVE_STRING);
+        comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatusString());
+        datePicker_Date.setValue(student.getSubscription().getDate());
     }
     
     /*******************************************************************/
