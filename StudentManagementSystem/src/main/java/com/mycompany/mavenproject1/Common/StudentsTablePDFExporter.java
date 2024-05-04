@@ -95,7 +95,7 @@ public class StudentsTablePDFExporter {
         for (TableColumn column : (ObservableList<TableColumn>)studentsTable.getColumns()) {
             if(column.isVisible()) columns.add(column.getText());
             if(column == col_ID) widths.add(2f);
-            if(column == col_FullName) widths.add(2f);
+            if(column == col_FullName) widths.add(4f);
             if(column == col_Phone) widths.add(3f);
             if(column == col_Grade) widths.add(2f);
             if(column == col_Language) widths.add(1.5f);
