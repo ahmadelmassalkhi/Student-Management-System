@@ -115,9 +115,9 @@ public class UpdateStudentMarkController implements Initializable {
         
         // display student information
         tf_FullName.setText(student.getFullName());
-        tf_Phone.setText(ComboBoxInitializer.getNumber(student.getPhone()));
+        tf_Phone.setText(ComboBoxInitializer.extractNumber(student.getPhone()));
         tf_Mark.setText(student.getMark());
-        comboBox_CountryCode.setValue(ComboBoxInitializer.getCountryCode(student.getPhone()));
+        comboBox_CountryCode.setValue(ComboBoxInitializer.extractCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade());
         comboBox_Language.setValue(student.getLanguage());
         comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatusString());

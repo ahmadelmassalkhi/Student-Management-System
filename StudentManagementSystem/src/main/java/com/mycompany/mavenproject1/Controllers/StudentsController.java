@@ -196,7 +196,7 @@ public class StudentsController implements Initializable {
             // fill student information
             Student s = new Student();
             s.setFullName(fullName);
-            s.setPhone(ComboBoxInitializer.getCountryCode(countryCode) + " " + phone);
+            s.setPhone(ComboBoxInitializer.extractCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
             s.setSubscription(subscription);

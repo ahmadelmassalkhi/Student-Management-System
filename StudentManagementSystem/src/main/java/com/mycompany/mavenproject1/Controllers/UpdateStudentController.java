@@ -171,8 +171,8 @@ public class UpdateStudentController implements Initializable {
         
         // display student information
         tf_FullName.setText(student.getFullName());
-        tf_Phone.setText(ComboBoxInitializer.getNumber(student.getPhone()));
-        comboBox_CountryCode.setValue(ComboBoxInitializer.getCountryCode(student.getPhone()));
+        tf_Phone.setText(ComboBoxInitializer.extractNumber(student.getPhone()));
+        comboBox_CountryCode.setValue(ComboBoxInitializer.extractCountryCode(student.getPhone()));
         comboBox_Grade.setValue(student.getGrade());
         comboBox_Language.setValue(student.getLanguage());
         comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatusString());
@@ -214,7 +214,7 @@ public class UpdateStudentController implements Initializable {
             // create updated student
             Student s = new Student();
             s.setFullName(fullName);
-            s.setPhone(ComboBoxInitializer.getCountryCode(countryCode) + " " + phone);
+            s.setPhone(ComboBoxInitializer.extractCountryCode(countryCode) + " " + phone);
             s.setGrade(grade);
             s.setLanguage(language);
             s.setSubscription(subscription);

@@ -110,7 +110,7 @@ public class ComboBoxInitializer {
                     if (empty || item == null) {
                         setText(null);
                     } else {
-                        setText(getCountryCode(item));
+                        setText(extractCountryCode(item));
                     }
                 }
             });
@@ -146,7 +146,7 @@ public class ComboBoxInitializer {
         return new ArrayList<>();
     }
     
-    public static String getCountryCode(String phone) throws NullPointerException {
+    public static String extractCountryCode(String phone) throws NullPointerException {
         if(phone == null) throw new NullPointerException();
         int indexOfPlus = phone.indexOf("+");
         if(indexOfPlus == -1) throw new IllegalArgumentException(); // "+" doesn't exist in the string
@@ -157,7 +157,7 @@ public class ComboBoxInitializer {
         return phone.substring(indexOfPlus, indexOfSpace); // Extract the substring from "+" to the space
     }
     
-    public static String getNumber(String phone) throws NullPointerException, IllegalArgumentException {
+    public static String extractNumber(String phone) throws NullPointerException, IllegalArgumentException {
         if(phone == null) throw new NullPointerException();
         int lastSpace = phone.lastIndexOf(" ");
         if(lastSpace == -1) throw new IllegalArgumentException();
