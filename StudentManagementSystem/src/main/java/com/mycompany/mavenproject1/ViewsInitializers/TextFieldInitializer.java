@@ -9,8 +9,9 @@ package com.mycompany.mavenproject1.ViewsInitializers;
  * @author AHMAD
  */
 public class TextFieldInitializer {
-    
-    public static final String REGEX_FULLNAME = "([a-zA-Z]+( )?)*";
+
+    // public static final String REGEX_FULLNAME = "([a-zA-Z]+( )?)*";
+    public static final String REGEX_FULLNAME = "([\\p{L}\\p{Mn}]+( )?)*";
     public static final String REGEX_PHONE = "\\d*";
     public static final String REGEX_MARK = "\\d*(\\.\\d*)?";
     
