@@ -4,7 +4,7 @@
  */
 package com.mycompany.mavenproject1.Controllers;
 
-// imports from same package
+// imports from same project
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.Common.InputValidatorForStudentFields;
 import com.mycompany.mavenproject1.ViewsInitializers.TableViewInitializer;
@@ -32,6 +32,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 
 // other imports
 import java.io.IOException;
@@ -41,8 +43,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
 
 /**
  *
@@ -50,54 +50,35 @@ import javafx.stage.Screen;
  */
 public class StudentsController implements Initializable {
     
-    /*******************************************************************/
-
-    private StudentsModel model;
-    
-    @FXML
-    private Label label_TotalStudents;
-    @FXML
-    private Label label_TotalSubscriptions;
     
     /*******************************************************************/
+    
+    /* LABELS */
+    @FXML private Label label_TotalStudents;
+    @FXML private Label label_TotalSubscriptions;
     
     /* TEXT FIELDS */
-    @FXML
-    private TextField tf_FullName;
-    @FXML
-    private TextField tf_Phone;
+    @FXML private TextField tf_FullName;
+    @FXML private TextField tf_Phone;
     
     /* COMBO BOXES */
-    @FXML
-    private ComboBox comboBox_SubscriptionStatus;
-    @FXML
-    private ComboBox comboBox_Language;
-    @FXML
-    private ComboBox comboBox_Grade;
-    @FXML
-    private ComboBox comboBox_CountryCode;
-
-    /*******************************************************************/
+    @FXML private ComboBox comboBox_SubscriptionStatus;
+    @FXML private ComboBox comboBox_Language;
+    @FXML private ComboBox comboBox_Grade;
+    @FXML private ComboBox comboBox_CountryCode;
     
     /* TABLE */
     @FXML
     private TableView studentsTable;
     
-    /* COLUMNS */
-    @FXML
-    private TableColumn col_ID;
-    @FXML
-    private TableColumn col_FullName;
-    @FXML
-    private TableColumn col_Phone;
-    @FXML
-    private TableColumn col_Grade;
-    @FXML
-    private TableColumn col_Language;
-    @FXML
-    private TableColumn col_SubscriptionStatus;
-    @FXML
-    private TableColumn col_SubscriptionExpireDate;
+    /* TABLE COLUMNS */
+    @FXML private TableColumn col_ID;
+    @FXML private TableColumn col_FullName;
+    @FXML private TableColumn col_Phone;
+    @FXML private TableColumn col_Grade;
+    @FXML private TableColumn col_Language;
+    @FXML private TableColumn col_SubscriptionStatus;
+    @FXML private TableColumn col_SubscriptionExpireDate;
     
     /*******************************************************************/
 
@@ -133,22 +114,14 @@ public class StudentsController implements Initializable {
         ComboBoxInitializer.Initialize_SubscriptionStatus(comboBox_SubscriptionStatus);
         
         // set interactive filtering feature
-        comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
-        comboBox_CountryCode.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
-        comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
-        comboBox_SubscriptionStatus.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Read();
-        });
+        comboBox_Language.valueProperty().addListener((obs, oldValue, newValue) -> Read());
+        comboBox_CountryCode.valueProperty().addListener((obs, oldValue, newValue) -> Read());
+        comboBox_Grade.valueProperty().addListener((obs, oldValue, newValue) -> Read());
+        comboBox_SubscriptionStatus.valueProperty().addListener((obs, oldValue, newValue) -> Read());
     }
     
     private void initializeTextFields() {
-        // set interactive filtering feature
+        /* set interactive filtering feature */
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches(TextFieldInitializer.REGEX_FULLNAME)) {
                 tf_FullName.setText(oldValue);
@@ -162,8 +135,11 @@ public class StudentsController implements Initializable {
         });
     }
     
+    private StudentsModel model;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        // initialize views
         initializeTable();
         initializeTextFields();
         initializeComboBoxes();
@@ -253,16 +229,18 @@ public class StudentsController implements Initializable {
         // fix input-data format
         if(fullName.isEmpty()) fullName = null;
         if(phone.isEmpty()) phone = null;
-        if(grade.isEmpty() || grade.equals("Any")) grade = null;
-        if(language.isEmpty() || language.equals("Any")) language = null;
+        if(grade.equals("Any")) grade = null;
+        if(language.equals("Any")) language = null;
+        
+        // extract subscription status (if not set to any)
         Subscription subscription = new Subscription();
-        if(!(subscriptionStatus.isEmpty() || subscriptionStatus.equals("Any"))) {
+        if(!subscriptionStatus.equals("Any")) {
             subscription.setStatus(subscriptionStatus.equalsIgnoreCase(Subscription.ACTIVE_STRING));
         } // else, its attributes default to null (because we defined them as objects not primitive types)
         
         // perform search
         try {
-            // get & display filtered students
+            // get filtered students
             List<Student> result = model.Read(
                     null, // id
                     fullName, 
@@ -273,6 +251,7 @@ public class StudentsController implements Initializable {
                     null, // minimum mark
                     null, // maximum mark
                     null); // marks order
+            // display them
             studentsTable.setItems(FXCollections.observableArrayList(result));
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -346,34 +325,33 @@ public class StudentsController implements Initializable {
         try {
             label_TotalStudents.setText(model.getNumberOfStudents() + "");
             label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
+
+            // refresh table data
+            this.Read();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
-        
-        // refresh table data
-        this.Read();
     }
     
     // called by `Clear` button
     public void Clear() {
         // clear all inputs
         this.clearTextFields();
-        this.clearComboBoxes();
+        
+        // clear combo-boxes
+        comboBox_Language.setValue("Any");
+        comboBox_SubscriptionStatus.setValue("Any");
+        comboBox_Grade.setValue("Any");
         
         // refresh data
         this.refresh();
     }
+    
     private void clearTextFields() {
         // clear inputs
         tf_FullName.clear();
         tf_Phone.clear();
-    }
-    private void clearComboBoxes() {
-        // clear drop-down menus
-        comboBox_Language.setValue("Any");
-        comboBox_SubscriptionStatus.setValue("Any");
-        comboBox_Grade.setValue("Any");
     }
     
     /*******************************************************************/
