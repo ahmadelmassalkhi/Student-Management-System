@@ -151,7 +151,7 @@ public class ConfigurationManager {
         
         // extract and validate
         String extractedName = reader.readLine();
-        if(extractedName == null || extractedName.trim().isEmpty()) {
+        if(extractedName == null || extractedName.trim().isEmpty()) { // null for EOF & empty for spaces/tabs/\n/etc
             this.updateOwnerName(DEFAULT_NAME_OWNER);
             this.ownerName = DEFAULT_NAME_OWNER;
         }

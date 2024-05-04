@@ -45,7 +45,7 @@ public class DatabaseManager {
     // creates a copy of the current database, and saves at user-choice's location
     public void Backup() throws IOException, UserCancelledFileChooserException {
         // copy the original .db file to the selected location (of user's choice)
-        Path source = ConfigurationManager.getManager().getCurrentDatabasePath(); // exists because we are using it (sqlite would have created it)
+        Path source = ConfigurationManager.getManager().getCurrentDatabasePath(); // exists because we are using it (sqlite would have created it if it didn't, and it can't be deleted during the application's runtime)
         Path destination = FileManager.chooseSavePathOf_Db(stage); // throws UserCancelledFileChooserException
         FileManager.copyFile(source, destination);
     }
@@ -54,11 +54,14 @@ public class DatabaseManager {
     
     // allows user to choose a new .db file, and validates it for schema-requirements
     public void Restore() throws IOException, SQLException, InvalidDatabaseSchemaException, UserCancelledFileChooserException {
+        // demand the user to choose a .db file
         Path restoredDbPath = FileManager.chooseOpenPathOf_Db(stage);
-        ConfigurationManager.getManager().updateDbConfigFile(restoredDbPath);
 
-        // validate new database compatibility with our database schema
+        // validate its compatibility with our database schema
         this.ValidateSchema(restoredDbPath);
+
+        // set new database (after being successfully validated)
+        ConfigurationManager.getManager().updateDbConfigFile(restoredDbPath);
 
         // update connection
         StudentsModel.getModel().reconnect();

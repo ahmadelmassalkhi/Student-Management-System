@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author AHMAD
  */
-public class DatabaseConnectionManager {
+public final class DatabaseConnectionManager {
     
     private static DatabaseConnectionManager manager = null;
     public static DatabaseConnectionManager getManager() throws SQLException, IOException {
@@ -28,8 +28,7 @@ public class DatabaseConnectionManager {
         return manager;
     }
     
-    // so that classes in same package/directory can create more objects (for connection testing)
-    protected DatabaseConnectionManager() throws SQLException, IOException {
+    private DatabaseConnectionManager() throws SQLException, IOException {
         connection = this.connect();
     }
     
@@ -44,15 +43,11 @@ public class DatabaseConnectionManager {
     }
     
     public void disconnect() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-            connection = null;
-        }
+        if (connection != null && !connection.isClosed()) connection.close();
+        connection = null;
     }
     
-    public ResultSet getSchemaInfo() throws SQLException {
-        return getSchemaInfo(connection);
-    }
+    public ResultSet getSchemaInfo() throws SQLException { return getSchemaInfo(connection); }
     
     /*******************************************************/
     // QUERY EXECUTION

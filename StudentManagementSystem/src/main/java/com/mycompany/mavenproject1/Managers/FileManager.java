@@ -95,6 +95,7 @@ public class FileManager {
     
     public static String getFileExtension(Path path) throws NoFileExtensionException, IllegalArgumentException {
         if(path == null) throw new IllegalArgumentException("Expected `Path` got `null` ! Cannot work with that !");
+        
         // extract file extension
         String fileName = path.getFileName().toString();
         int dotIndex = fileName.lastIndexOf('.');
