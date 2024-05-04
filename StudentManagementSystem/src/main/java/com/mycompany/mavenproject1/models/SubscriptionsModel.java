@@ -79,7 +79,7 @@ public final class SubscriptionsModel extends Model {
         
         // execute
         database.executeQuery(query, new Object[] {
-            s.getStatus() ? Subscription.ACTIVE : Subscription.INACTIVE, 
+            s.getStatusInt(), 
             s.getDateString()
         });
     }
@@ -129,7 +129,7 @@ public final class SubscriptionsModel extends Model {
             Subscription s = new Subscription();
             s.setId(result.getLong(COL_ID));
             s.setDate(result.getString(COL_EXPIRATION_DATE));
-            s.setStatus(result.getInt(COL_STATUS) == Subscription.ACTIVE);
+            s.setStatus(result.getInt(COL_STATUS));
             subscriptions.add(s);
         }
         
@@ -161,7 +161,7 @@ public final class SubscriptionsModel extends Model {
         );
         
         database.executeQuery(query, new Object[] {
-            newS.getStatus() ? Subscription.ACTIVE : Subscription.INACTIVE , 
+            newS.getStatusInt(), 
             newS.getDateString(), 
             oldS.getId()
         });

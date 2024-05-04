@@ -31,7 +31,6 @@ public final class StudentsModel extends Model {
     public static final String COL_SUBSCRIPTION_ID = "subscription_id";
     public static final String COL_MARK = "mark";
     
-    // restrict to one object (no need of more)
     private static StudentsModel model = null;
     public static StudentsModel getModel() throws SQLException, IOException {
         if(model == null) model = new StudentsModel();
@@ -281,9 +280,7 @@ public final class StudentsModel extends Model {
         // check if updated phone number (UNIQUE attribute)
         if(oldS.getPhone().equals(updatedS.getPhone()) == false) {
             // check if the updated phone number already exists in the database
-            if(this.existsStudent(updatedS)) {
-                throw new PhoneAlreadyExistsException(); // (phone is the only unique attribute besides ID)
-            }
+            if(this.existsStudent(updatedS)) throw new PhoneAlreadyExistsException();
         }
         
         /* update student information */

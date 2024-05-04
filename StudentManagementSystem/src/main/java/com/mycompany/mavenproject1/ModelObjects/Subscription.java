@@ -33,6 +33,7 @@ public class Subscription {
     // SETTERS
     public void setId(Long id) { this.id = id; }
     public void setStatus(Boolean status) { this.status = status; }
+    public void setStatus(Integer status) { this.status = status != 0; }
     public void setDate(LocalDate date) { this.date = date; }
     public void setDate(String date) throws DateTimeParseException {
         if(date == null || date.equalsIgnoreCase(Model.NULL)) this.date = null;
@@ -47,14 +48,17 @@ public class Subscription {
     public Boolean getStatus() { return status; }
     public LocalDate getDate() { return date; }
     
+    // used by `Update` controllers to get student's data as text to display on the UI
+    // used by `Student` to display status on TableColumn
     public String getStatusString() { return status ? ACTIVE_STRING : INACTIVE_STRING; }
 
     // string getter for date (to insert date into database)
+    public int getStatusInt() { return status ? ACTIVE : INACTIVE; }
     public String getDateString() {
         if(date == null) return Model.NULL; // null for nullable column
         return date.toString();
     }
-    // string getter to format date into application's UI requirements
+    // used in `Student` for TableColumn display
     public String getDateStringFormatted() throws DateTimeParseException {
         if(date == null) return Model.NULL; // null for nullable column
         return date.format(DateTimeFormatter.ofPattern(FORMAT_EXPIRATION_DATE));
