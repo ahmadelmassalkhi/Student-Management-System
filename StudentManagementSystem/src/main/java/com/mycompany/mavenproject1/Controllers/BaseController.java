@@ -18,13 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
-
-// other imports
-import java.net.URL;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -32,27 +25,27 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Screen;
 
+// other imports
+import java.net.URL;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ResourceBundle;
+
 public class BaseController implements Initializable {
     /*******************************************************************/
     // PANE NAVIGATION
     
     /* BUTTONS */
-    @FXML
-    private Button button_Students;
-    @FXML
-    private Button button_Marks;
-    @FXML
-    private Button button_Settings;
-    @FXML
-    private Button button_Exit;
+    @FXML private Button button_Students;
+    @FXML private Button button_Marks;
+    @FXML private Button button_Settings;
+    @FXML private Button button_Exit;
     
     /* PANES */
-    @FXML
-    private AnchorPane anchorPane_Students;
-    @FXML
-    private AnchorPane anchorPane_Settings;
-    @FXML
-    private AnchorPane anchorPane_Marks;
+    @FXML private AnchorPane anchorPane_Students;
+    @FXML private AnchorPane anchorPane_Settings;
+    @FXML private AnchorPane anchorPane_Marks;
     
     /*******************************************************************/
     
@@ -65,6 +58,8 @@ public class BaseController implements Initializable {
         // initialize properties
         initializeProfilePicture();
         initializeOwnerName();
+        
+        // set stage
         Platform.runLater(() -> {
             stage = (Stage) button_Exit.getScene().getWindow();
         });
@@ -102,20 +97,11 @@ public class BaseController implements Initializable {
     /*******************************************************************/
 
     /* PROFILE PICTURE VIEWS */
-    @FXML
-    private StackPane stackPane_Pfp;
-    @FXML
-    private ImageView img_Pfp;
-    @FXML
-    private ImageView img_EditPfp;
+    @FXML private ImageView img_Pfp;
+    @FXML private ImageView img_EditPfp;
+    @FXML private StackPane stackPane_Pfp;
     
-    private Path getImagePath() {
-        return ConfigurationManager.getManager().getFilePath_ProfilePicture();
-    }
     private static final double PFP_SIZE = 80;
-    
-    /*******************************************************************/
-    
     private void initializeProfilePicture() {
         /* INITIALIZE DIMENSIONS */
         stackPane_Pfp.setMaxHeight(PFP_SIZE);
@@ -133,7 +119,6 @@ public class BaseController implements Initializable {
         });
         stackPane_Pfp.setOnMouseClicked((MouseEvent event) -> {
             chooseProfilePicture();
-            event.consume();
         });
         
         /* SET */
@@ -148,17 +133,20 @@ public class BaseController implements Initializable {
         img_Pfp.setOpacity(1); // back to normal
         img_EditPfp.setOpacity(0); // hide edit icon
     }
+    
+    private Path getImagePath() { return ConfigurationManager.getManager().getFilePath_ProfilePicture(); }
+    
     private void setProfilePicture() {
         // get image path
         Path path = getImagePath();
         
-        // set appearance
-        if(Files.exists(path)) hideEditIcon();
-        else showEditIcon();
-        
         // Set image
         img_Pfp.setImage(new Image(path.toUri().toString()));
         stackPane_Pfp.setClip(new Circle(PFP_SIZE / 2, PFP_SIZE / 2, PFP_SIZE / 2));
+        
+        // set appearance
+        if(Files.exists(path)) hideEditIcon();
+        else showEditIcon();
     }
     
     public void chooseProfilePicture() {
@@ -183,12 +171,9 @@ public class BaseController implements Initializable {
     
     /*******************************************************************/
     
-    @FXML
-    private Label label_OwnerName;
-    @FXML
-    private ImageView img_EditOwnerName;
-    @FXML
-    private StackPane stackPane_OwnerName;
+    @FXML private Label label_OwnerName;
+    @FXML private ImageView img_EditOwnerName;
+    @FXML private StackPane stackPane_OwnerName;
     
     private void initializeOwnerName() {
         
@@ -209,6 +194,7 @@ public class BaseController implements Initializable {
         // set
         setOwnerName();
     }
+    
     private void setOwnerName() {
         // set stored owner name
         try {
