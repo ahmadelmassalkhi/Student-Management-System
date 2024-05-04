@@ -46,23 +46,17 @@ public class UpdateStudentController implements Initializable {
     /*******************************************************************/
     
     /* TEXT FIELDS */
-    @FXML
-    private TextField tf_FullName;
-    @FXML
-    private TextField tf_Phone;
+    @FXML private TextField tf_FullName;
+    @FXML private TextField tf_Phone;
     
     /* COMBO BOXES */
-    @FXML
-    private ComboBox comboBox_SubscriptionStatus;
-    @FXML
-    private ComboBox comboBox_Language;
-    @FXML
-    private ComboBox comboBox_Grade;
-    @FXML
-    private ComboBox comboBox_CountryCode;
+    @FXML private ComboBox comboBox_SubscriptionStatus;
+    @FXML private ComboBox comboBox_Language;
+    @FXML private ComboBox comboBox_Grade;
+    @FXML private ComboBox comboBox_CountryCode;
     
-    @FXML
-    private DatePicker datePicker_Date;
+    /* DATE PICKER */
+    @FXML private DatePicker datePicker_Date;
     
     /*******************************************************************/
     /* UI INITIALIZATION METHODS */
@@ -96,7 +90,7 @@ public class UpdateStudentController implements Initializable {
                 tf_Phone.setText(oldValue);
             }
         });
-        // set interactive filtering feature
+        // force the field `Full Name` to only accept letters (and one space between words)
         tf_FullName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches(TextFieldInitializer.REGEX_FULLNAME)) {
                 tf_FullName.setText(oldValue);
@@ -130,6 +124,8 @@ public class UpdateStudentController implements Initializable {
     private StudentsModel model;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        // initialize views
         initializeComboBoxes();
         initializeTextFields();
         initializeSubscription();
@@ -172,16 +168,12 @@ public class UpdateStudentController implements Initializable {
     private Student student;
     public void setStudent(Student s) {
         this.student = s;
-        displayStudent();
-    }
-    
-    // helper
-    private void displayStudent() {
+        
+        // display student information
         tf_FullName.setText(student.getFullName());
         tf_Phone.setText(ComboBoxInitializer.getNumber(student.getPhone()));
-        
         comboBox_CountryCode.setValue(ComboBoxInitializer.getCountryCode(student.getPhone()));
-        comboBox_Grade.setValue(student.getGrade() + "");
+        comboBox_Grade.setValue(student.getGrade());
         comboBox_Language.setValue(student.getLanguage());
         comboBox_SubscriptionStatus.setValue(student.getSubscription().getStatusString());
         datePicker_Date.setValue(student.getSubscription().getDate());
@@ -203,21 +195,21 @@ public class UpdateStudentController implements Initializable {
         String countryCode = (String) comboBox_CountryCode.getValue();
         String phone = tf_Phone.getText();
         String grade =  (String) comboBox_Grade.getValue();
-        String language = (String) comboBox_Language.getValue();        
+        String language = (String) comboBox_Language.getValue();
+        
+        // extract subscription information
+        Subscription subscription = new Subscription();
+        subscription.setDate(datePicker_Date.getValue());
+        subscription.setStatus(comboBox_SubscriptionStatus.getValue().equals(Subscription.ACTIVE_STRING));
 
         try {
-            // create subscription of user's input (to contain user's input, used in validation)
-            Subscription subscription = new Subscription();
-            subscription.setDate(datePicker_Date.getValue());
-            subscription.setStatus(comboBox_SubscriptionStatus.getValue().equals(Subscription.ACTIVE_STRING));
-            
-            // validate input (throws MissingInputFieldException)
+            // validate input
             InputValidatorForStudentFields.validateUpdateFields(
                     fullName, // must not be Empty
                     phone, // must not be Empty
                     countryCode, // must not be Empty (might be because of its filtering mechanism)
                     subscription // must not be (active & null date)
-            );
+            ); // (throws MissingInputFieldException)
             
             // create updated student
             Student s = new Student();
@@ -233,12 +225,12 @@ public class UpdateStudentController implements Initializable {
             
             // return back to parent (StudentsController) page
             this.Cancel();
-        } catch (NullPointerException | IllegalArgumentException | SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
         } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", ex.getMessage());
             alert.showAndWait();
+        } catch (NullPointerException | SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
         }
     }
 
