@@ -51,7 +51,7 @@ public class SettingsController implements Initializable {
     public void CleanDatabase() {
         try {
             // load resource
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CleanDatabaseWarning.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CleanDatabase.fxml"));
             Parent root = loader.load();
             
             // create window
@@ -64,14 +64,12 @@ public class SettingsController implements Initializable {
             stage.setY((screenBounds.getHeight() - root.prefHeight(-1)) / 2);
 
             // Access the controller and set the data
-            CleanDatabaseWarningController controller = loader.getController();
+            CleanDatabaseController controller = loader.getController();
             controller.setWindowInformation(stage, root);
             
             // wait until student is successfully updated or cancelled
             stage.showAndWait();
-            
-            if(controller.clean) DatabaseManager.getManager().DeleteAllData();
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
         }

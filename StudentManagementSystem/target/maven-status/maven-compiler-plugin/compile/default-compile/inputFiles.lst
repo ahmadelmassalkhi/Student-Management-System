@@ -2,7 +2,6 @@ C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\myco
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Exceptions\MissingInputFieldException.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Common\ErrorAlert.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Controllers\BaseController.java
-C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Controllers\CleanDatabaseWarningController.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Managers\ConfigurationManager.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\module-info.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Controllers\MarksController.java
@@ -10,6 +9,7 @@ C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\myco
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Exceptions\PhoneAlreadyExistsException.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Managers\FileManager.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Common\InputValidatorForStudentFields.java
+C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Controllers\CleanDatabaseController.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Exceptions\UserCancelledFileChooserException.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\Controllers\SettingsController.java
 C:\Users\AHMAD\Desktop\New folder\StudentManagementSystem\src\main\java\com\mycompany\mavenproject1\ModelObjects\Subscription.java

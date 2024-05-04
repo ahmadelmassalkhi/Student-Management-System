@@ -4,16 +4,24 @@
  */
 package com.mycompany.mavenproject1.Controllers;
 
+// imports from same project
+import com.mycompany.mavenproject1.Managers.DatabaseManager;
+
+// imports from javafx
 import javafx.scene.Parent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+// other imports
+import java.io.IOException;
+import java.sql.SQLException;
+
 /**
  *
  * @author AHMAD
  */
-public class CleanDatabaseWarningController {
+public class CleanDatabaseController {
     
     /*******************************************************************/
     /* WINDOW PROPERTIES INITIALIZATION METHODS */
@@ -47,10 +55,14 @@ public class CleanDatabaseWarningController {
         stage.close();
     }
     
-    public boolean clean = false;
     public void Proceed() {
-        clean = true;
-        Cancel();
+        try {
+            DatabaseManager.getManager().DeleteAllData();
+            Cancel();
+        } catch (IOException | SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
     }
     
     /*******************************************************************/

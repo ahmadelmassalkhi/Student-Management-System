@@ -4,7 +4,7 @@
  */
 package com.mycompany.mavenproject1.Controllers;
 
-// imports from same package
+// imports from same project
 import com.mycompany.mavenproject1.Common.ErrorAlert;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.models.StudentsModel;
