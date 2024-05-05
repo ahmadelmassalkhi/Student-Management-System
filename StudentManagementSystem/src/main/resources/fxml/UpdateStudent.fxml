@@ -29,7 +29,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="224.0" prefWidth="516.0" spacing="100.0">
                <children>
-                  <VBox alignment="CENTER" fillWidth="false" prefHeight="216.0" prefWidth="217.0" spacing="10.0">
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="216.0" prefWidth="249.0" spacing="10.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="3.0" prefWidth="217.0">
                            <children>
@@ -56,7 +56,7 @@
                               </Label>
                            </children>
                         </HBox>
-                        <VBox prefHeight="159.0" prefWidth="219.0" spacing="15.0">
+                        <VBox prefHeight="159.0" prefWidth="259.0" spacing="15.0">
                            <children>
                               <HBox alignment="BOTTOM_CENTER" prefHeight="57.0" prefWidth="203.0" spacing="4.0">
                                  <children>
@@ -70,17 +70,17 @@
                                           <ComboBox fx:id="comboBox_CountryCode" prefHeight="27.0" prefWidth="90.0" promptText="Code" styleClass="countryCode" stylesheets="@../css/ComboBox.css" />
                                        </children>
                                     </VBox>
-                                    <VBox alignment="CENTER_RIGHT" fillWidth="false" prefHeight="57.0" prefWidth="123.0" spacing="3.0">
+                                    <VBox alignment="CENTER_RIGHT" fillWidth="false" prefHeight="57.0" prefWidth="147.0" spacing="3.0">
                                        <children>
                                           <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="145.0" promptText="Full Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                          <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                          <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" style="-fx-pref-width: 120px;" />
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
                               <VBox alignment="BOTTOM_RIGHT" fillWidth="false" layoutX="10.0" layoutY="82.0" prefHeight="67.0" prefWidth="175.0" spacing="3.0" styleClass="grade" stylesheets="@../css/ComboBox.css">
                                  <children>
-                                    <VBox alignment="CENTER" prefHeight="57.0" prefWidth="121.0" spacing="3.0" styleClass="grade" stylesheets="@../css/ComboBox.css">
+                                    <VBox alignment="CENTER" prefHeight="87.0" prefWidth="119.0" spacing="3.0" styleClass="width" stylesheets="@../css/TextField.css">
                                        <children>
                                           <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                                              <children>
@@ -89,7 +89,7 @@
                                                       <Font name="System Bold Italic" size="10.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="175.0" promptText="Terminal GS" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                                <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="175.0" promptText="Terminal GS" stylesheets="@../css/ComboBox.css" />
                                              </children>
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="70.0" prefHeight="200.0" prefWidth="100.0">
@@ -99,7 +99,7 @@
                                                       <Font name="System Bold Italic" size="10.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="138.0" promptText="English" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                                <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="138.0" promptText="English" stylesheets="@../css/ComboBox.css" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -167,7 +167,7 @@
                                                       <Font name="System Bold Italic" size="10.0" />
                                                    </font>
                                                 </Label>
-                                                <DatePicker fx:id="datePicker_Date" prefHeight="25.0" prefWidth="108.0" promptText="Expire Date" />
+                                                <DatePicker fx:id="datePicker_Date" editable="false" prefHeight="25.0" prefWidth="108.0" promptText="Expire Date" />
                                              </children>
                                           </VBox>
                                        </children>
