@@ -53,6 +53,8 @@ public class MarksController implements Initializable {
     private StudentsModel model;
 
     @FXML
+    private Label label_TotalStudents;
+    @FXML
     private Label label_TotalSubscriptions;
     
     /*******************************************************************/
@@ -228,12 +230,12 @@ public class MarksController implements Initializable {
             System.exit(1);
         }
 
-        this.refresh();
+        this.Read();
     }
     
     /*******************************************************************/
     
-    private void Read() {
+    public void Read() {
         // extract data from input-fields
         String fullName = (tf_FullName.getText()).trim(); // trim to remove last space (if exists) because it is allowed by the regex
         String phone = tf_Phone.getText();
@@ -270,6 +272,11 @@ public class MarksController implements Initializable {
             );
             // display
             studentsTable.setItems(FXCollections.observableArrayList(result));
+            
+            this.label_TotalStudents.setText(result.size() + "");
+            this.label_TotalSubscriptions.setText(
+                    "" + model.getNumberOfActiveSubscriptions(null, fullName, phone, grade, language, null, null, null)
+            );
         } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -300,7 +307,7 @@ public class MarksController implements Initializable {
             stage.showAndWait();
             
             // adopt to data changes
-            this.refresh();
+            this.Read();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
@@ -317,21 +324,6 @@ public class MarksController implements Initializable {
         this.comboBox_Grade.setValue(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
         this.comboBox_Language.setValue(ComboBoxInitializer.OPTION_DEFAULT_LANGUAGE);
         this.comboBox_MarksOrder.setValue(ComboBoxInitializer.OPTION_DEFAULT_MARKORDER);
-    }
-    
-    /*
-     * refresh data (stats, and table based on inputs)
-     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
-     */
-    public void refresh() {
-        // refresh statistical data
-        try {
-            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
-            this.Read();
-        } catch (SQLException | IOException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
     }
     
     public void export() {

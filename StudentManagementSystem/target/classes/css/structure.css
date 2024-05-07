@@ -17,3 +17,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .body {
     -fx-spacing: 10px;
 }
+
+.stats-container {
+    -fx-spacing: 15px;
+}
+
+.title {
+    -fx-pref-width: 200px;
+    -fx-alignment: center;
+}

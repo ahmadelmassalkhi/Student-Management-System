@@ -155,7 +155,7 @@ public class StudentsController implements Initializable {
         }
         
         // set students data
-        this.refresh();
+        this.Read();
     }
     
     /*******************************************************************/
@@ -209,7 +209,7 @@ public class StudentsController implements Initializable {
             
             // adopt to data changes
             this.clearTextFields(); // make adding another new student easier
-            this.refresh();
+            this.Read();
         } catch (NullPointerException | SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -220,7 +220,7 @@ public class StudentsController implements Initializable {
     }
     
     // READ
-    private void Read() {
+    public void Read() {
         // extract data from input-fields
         String fullName = tf_FullName.getText();
         String phone = tf_Phone.getText();
@@ -255,6 +255,11 @@ public class StudentsController implements Initializable {
                     null); // marks order
             // display them
             studentsTable.setItems(FXCollections.observableArrayList(result));
+            
+            label_TotalStudents.setText(result.size() + "");
+            label_TotalSubscriptions.setText(
+                    "" + model.getNumberOfActiveSubscriptions(null, fullName, phone, grade, language, null, null, null)
+            );
         } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -286,7 +291,7 @@ public class StudentsController implements Initializable {
             stage.showAndWait();
             
             // adopt to data changes
-            this.refresh();
+            this.Read();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
@@ -308,7 +313,7 @@ public class StudentsController implements Initializable {
             model.deleteStudentsByIDs(IDs);
             
             // adopt to data changes
-            this.refresh();
+            this.Read();
         } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
@@ -318,36 +323,18 @@ public class StudentsController implements Initializable {
     /*******************************************************************/
     // HELPER METHODS
     
-    /*
-     * refresh data (stats, and table based on inputs)
-     * public because it is used in `Controller` to make sure data is up to date with possible changes to the database, made by other pages
-     */
-    public void refresh() {
-        // set statistical data
-        try {
-            label_TotalStudents.setText(model.getNumberOfStudents() + "");
-            label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
-
-            // refresh table data
-            this.Read();
-        } catch (SQLException | IOException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
     // called by `Clear` button
     public void Clear() {
         // clear all inputs
         this.clearTextFields();
         
         // clear combo-boxes
-        comboBox_Language.setValue("Any");
-        comboBox_SubscriptionStatus.setValue("Any");
-        comboBox_Grade.setValue("Any");
+        comboBox_Language.setValue(ComboBoxInitializer.OPTION_DEFAULT_LANGUAGE);
+        comboBox_SubscriptionStatus.setValue(ComboBoxInitializer.OPTION_DEFAULT_SUBSCRIPTION);
+        comboBox_Grade.setValue(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
         
         // refresh data
-        this.refresh();
+        this.Read();
     }
     
     private void clearTextFields() {

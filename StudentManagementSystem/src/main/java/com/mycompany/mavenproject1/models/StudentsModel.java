@@ -289,8 +289,17 @@ public final class StudentsModel extends Model {
         return (new Query(query, null)).execute(database.connect()).getInt("rowCount");
     }
     
-    public long getNumberOfSubscriptions() throws SQLException, IOException {
-        return subscriptionsModel.GetAllActiveSubscriptions();
+    public long getNumberOfActiveSubscriptions(
+            Long id,
+            String fullName,
+            String phone,
+            String grade,
+            String language,
+            Float minMark,
+            Float maxMark,
+            String marksOrder) throws SQLException, IOException {
+        Query query = this.queryFilter("SELECT COUNT(*) AS activeSubscriptions FROM " + TABLE, id, fullName, phone, grade, language, new Subscription(null, true, null), maxMark);
+        return query.execute(database.connect()).getLong("activeSubscriptions");
     }
     
     /*******************************************************************/

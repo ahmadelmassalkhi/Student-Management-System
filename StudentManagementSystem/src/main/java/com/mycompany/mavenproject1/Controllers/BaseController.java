@@ -71,13 +71,13 @@ public class BaseController implements Initializable {
         
         // handle clicks from `Students` button
         if (actionEvent.getSource() == button_Students) {
-            StudentsController.getController().refresh(); // update data incase other pages made changes to the database
+            StudentsController.getController().Read(); // update data incase other pages made changes to the database
             anchorPane_Students.toFront();
         }
 
         // handle clicks from `Marks` button
         if(actionEvent.getSource() == button_Marks) {
-            MarksController.getController().refresh(); // update data incase other pages made changes to the database
+            MarksController.getController().Read(); // update data incase other pages made changes to the database
             anchorPane_Marks.toFront();
         }
         

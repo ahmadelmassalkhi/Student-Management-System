@@ -29,6 +29,11 @@ public class Subscription {
     
     // CONSTRUCTOR
     public Subscription() {}
+    public Subscription(Long id, Boolean status, LocalDate date) {
+        this.id = id;
+        this.status = status;
+        this.date = date;
+    }
 
     // SETTERS
     public void setId(Long id) { this.id = id; }

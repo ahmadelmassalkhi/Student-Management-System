@@ -15,7 +15,7 @@
          <children>
             <HBox prefHeight="116.0" prefWidth="200.0" styleClass="header" stylesheets="@../css/structure.css">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" styleClass="title" stylesheets="@../css/structure.css">
                      <children>
                             <Label text="Settings" textFill="#322d2d">
                                <font>
