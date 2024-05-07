@@ -1,0 +1,19 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Apr 18, 2024, 3:28:48 PM
+    Author     : AHMAD
+*/
+
+
+
+.header {
+    -fx-pref-height: 54px;
+    -fx-pref-width: 755px;
+}
+
+.body {
+    -fx-spacing: 10px;
+}

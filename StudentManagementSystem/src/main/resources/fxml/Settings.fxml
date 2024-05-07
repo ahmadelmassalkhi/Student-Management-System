@@ -13,20 +13,24 @@
     <children>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: #fff;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="116.0" prefWidth="200.0" styleClass="header" stylesheets="@../css/structure.css">
                <children>
-                      <Label text="Settings" textFill="#322d2d">
-                         <font>
-                         <Font name="System Bold" size="24.0" />
-                         </font>
-                      </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                            <Label text="Settings" textFill="#322d2d">
+                               <font>
+                               <Font name="System Bold" size="24.0" />
+                               </font>
+                            </Label>
+                     </children>
+                  </HBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="100.0" prefWidth="723.0">
                <children>
-                      <VBox prefHeight="67.0" prefWidth="720.0">
+                      <VBox prefHeight="67.0" prefWidth="720.0" HBox.hgrow="ALWAYS">
                           <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="183.0" spacing="5.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="728.0" spacing="5.0">
                            <children>
                                    <Label text="Database:" textFill="#aeaeae">
                                       <font>
@@ -40,7 +44,7 @@
                               </Label>
                            </children>
                         </HBox>
-                             <HBox prefHeight="40.0" prefWidth="624.0" spacing="4.0">
+                             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="717.0" spacing="4.0">
                                 <children>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>

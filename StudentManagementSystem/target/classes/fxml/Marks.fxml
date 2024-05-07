@@ -18,7 +18,7 @@
     <children>
       <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
-            <HBox prefHeight="5.0" prefWidth="755.0" VBox.vgrow="ALWAYS">
+            <HBox prefHeight="5.0" prefWidth="755.0" styleClass="header" stylesheets="@../css/structure.css" VBox.vgrow="ALWAYS">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -64,140 +64,145 @@
                   </HBox>
                </children>
             </HBox>
-                <HBox alignment="CENTER_LEFT" prefHeight="9.0" prefWidth="755.0" spacing="35.0" VBox.vgrow="ALWAYS">
-                    <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="255.0" HBox.hgrow="ALWAYS">
-                        <children>
-                            <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="54.0" prefWidth="124.0" HBox.hgrow="NEVER">
-                                <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <CheckBox fx:id="checkbox_FullName" mnemonicParsing="false" text="Full Name" textFill="#d7d7d7">
-                                       <font>
-                                          <Font name="System Bold" size="10.0" />
-                                       </font>
-                                    </CheckBox>
-                                 </children></HBox>
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                      <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="100.0" promptText="Full Name" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                 </children>
-                              </HBox>
-                                </children>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="54.0" prefWidth="125.0" spacing="2.0" HBox.hgrow="NEVER">
-                                <children>
-                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                    <CheckBox fx:id="checkbox_Phone" mnemonicParsing="false" text="Phone" textFill="#d7d7d7">
-                                       <font>
-                                          <Font name="System Bold" size="10.0" />
-                                       </font>
-                                    </CheckBox>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                        <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="100.0" promptText="Phone" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                    </children>
-                                </HBox>
-                                </children>
-                            </VBox>
-                        </children>
-                    </HBox>
-                    <HBox alignment="CENTER" prefHeight="58.0" prefWidth="213.0" spacing="4.0" HBox.hgrow="ALWAYS">
-                        <children>
-                        <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="111.0" HBox.hgrow="NEVER">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <CheckBox fx:id="checkbox_Grade" mnemonicParsing="false" text="Grade" textFill="#d7d7d7">
-                                       <font>
-                                          <Font name="System Bold" size="10.0" />
-                                       </font>
-                                    </CheckBox>
-                                 </children>
-                              </HBox>
-                                  <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="44.0" promptText="Terminal GS" styleClass="grade" stylesheets="@../css/ComboBox.css" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="BOTTOM_CENTER" layoutX="194.0" layoutY="10.0" prefHeight="58.0" prefWidth="83.0" HBox.hgrow="NEVER">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <CheckBox fx:id="checkbox_Language" mnemonicParsing="false" text="Language" textFill="#d7d7d7">
-                                       <font>
-                                          <Font name="System Bold" size="10.0" />
-                                       </font>
-                                    </CheckBox>
-                                 </children>
-                              </HBox>
-                                  <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
-                           </children>
-                        </VBox>
-                        </children>
-                    </HBox>
-                  <HBox alignment="BOTTOM_LEFT" layoutX="358.0" layoutY="10.0" prefHeight="58.0" prefWidth="167.0" spacing="3.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="197.0">
-                           <children>
-                              <HBox alignment="CENTER" layoutX="10.0" layoutY="37.0" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <ComboBox fx:id="comboBox_MarksOrder" prefHeight="27.0" prefWidth="82.0" promptText="DESC" stylesheets="@../css/ComboBox.css" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="3.0">
-                                 <children>
-                                    <TextField fx:id="tf_MinimumMark" prefHeight="27.0" prefWidth="100.0" promptText="Minimum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                    <TextField fx:id="tf_MaximumMark" layoutX="10.0" layoutY="11.0" prefHeight="27.0" prefWidth="100.0" promptText="Maximum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <HBox alignment="BOTTOM_CENTER" prefHeight="8.0" prefWidth="66.0">
-                     <children>
-                        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <CheckBox fx:id="checkbox_All" mnemonicParsing="false" text="All" textFill="#d7d7d7">
-                                       <font>
-                                          <Font name="System Bold" size="10.0" />
-                                       </font>
-                                    </CheckBox>
-                                 </children>
-                              </HBox>
-                              <Button mnemonicParsing="false" onAction="#Clear" prefWidth="81.0" stylesheets="@../css/Button.css">
-                                 <graphic>
-                                    <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/icons8-clear-24.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                    </children>
-                </HBox>
-            <HBox prefHeight="334.0" prefWidth="755.0" styleClass="container" stylesheets="@../css/TableView.css" VBox.vgrow="ALWAYS">
+            <VBox prefHeight="565.0" prefWidth="755.0" styleClass="body" stylesheets="@../css/structure.css">
                <children>
-                      <TableView fx:id="studentsTable" stylesheets="@../css/TableView.css" HBox.hgrow="ALWAYS">
-                      <columns>
-                        <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />
-                          <TableColumn fx:id="col_FullName" minWidth="50.0" prefWidth="204.0" text="Full Name" />
-                          <TableColumn fx:id="col_Phone" minWidth="50.0" prefWidth="145.0" text="Phone" />
-                          <TableColumn fx:id="col_Grade" minWidth="50.0" prefWidth="115.0" text="Grade" />
-                          <TableColumn fx:id="col_Language" minWidth="38.0" prefWidth="116.0" text="Language" />
-                          <TableColumn fx:id="col_Mark" minWidth="50.0" prefWidth="174.0" text="Mark /20" />
-                      </columns>
-                      </TableView>
+                      <HBox alignment="CENTER_LEFT" prefHeight="9.0" prefWidth="755.0" spacing="35.0" VBox.vgrow="ALWAYS">
+                          <children>
+                          <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="255.0" HBox.hgrow="ALWAYS">
+                              <children>
+                                  <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="54.0" prefWidth="124.0" HBox.hgrow="NEVER">
+                                      <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <CheckBox fx:id="checkbox_FullName" mnemonicParsing="false" text="Full Name" textFill="#d7d7d7">
+                                             <font>
+                                                <Font name="System Bold" size="10.0" />
+                                             </font>
+                                          </CheckBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                            <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="100.0" promptText="Full Name" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                       </children>
+                                    </HBox>
+                                      </children>
+                                  </VBox>
+                                  <VBox alignment="BOTTOM_CENTER" fillWidth="false" prefHeight="54.0" prefWidth="125.0" spacing="2.0" HBox.hgrow="NEVER">
+                                      <children>
+                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                          <children>
+                                          <CheckBox fx:id="checkbox_Phone" mnemonicParsing="false" text="Phone" textFill="#d7d7d7">
+                                             <font>
+                                                <Font name="System Bold" size="10.0" />
+                                             </font>
+                                          </CheckBox>
+                                          </children>
+                                      </HBox>
+                                      <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                                          <children>
+                                              <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="100.0" promptText="Phone" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                          </children>
+                                      </HBox>
+                                      </children>
+                                  </VBox>
+                              </children>
+                          </HBox>
+                          <HBox alignment="CENTER" prefHeight="58.0" prefWidth="213.0" spacing="4.0" HBox.hgrow="ALWAYS">
+                              <children>
+                              <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="111.0" HBox.hgrow="NEVER">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <CheckBox fx:id="checkbox_Grade" mnemonicParsing="false" text="Grade" textFill="#d7d7d7">
+                                             <font>
+                                                <Font name="System Bold" size="10.0" />
+                                             </font>
+                                          </CheckBox>
+                                       </children>
+                                    </HBox>
+                                        <ComboBox fx:id="comboBox_Grade" prefHeight="27.0" prefWidth="44.0" promptText="Terminal GS" styleClass="grade" stylesheets="@../css/ComboBox.css" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="BOTTOM_CENTER" layoutX="194.0" layoutY="10.0" prefHeight="58.0" prefWidth="83.0" HBox.hgrow="NEVER">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <CheckBox fx:id="checkbox_Language" mnemonicParsing="false" text="Language" textFill="#d7d7d7">
+                                             <font>
+                                                <Font name="System Bold" size="10.0" />
+                                             </font>
+                                          </CheckBox>
+                                       </children>
+                                    </HBox>
+                                        <ComboBox fx:id="comboBox_Language" prefHeight="27.0" prefWidth="82.0" promptText="English" styleClass="language" stylesheets="@../css/ComboBox.css" />
+                                 </children>
+                              </VBox>
+                              </children>
+                          </HBox>
+                        <HBox alignment="BOTTOM_LEFT" layoutX="358.0" layoutY="10.0" prefHeight="58.0" prefWidth="167.0" spacing="3.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <VBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="197.0">
+                                 <children>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="37.0" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <ComboBox fx:id="comboBox_MarksOrder" prefHeight="27.0" prefWidth="82.0" promptText="DESC" stylesheets="@../css/ComboBox.css" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="3.0">
+                                       <children>
+                                          <TextField fx:id="tf_MinimumMark" prefHeight="27.0" prefWidth="100.0" promptText="Minimum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                          <TextField fx:id="tf_MaximumMark" layoutX="10.0" layoutY="11.0" prefHeight="27.0" prefWidth="100.0" promptText="Maximum" style="-fx-background-color: #fff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" styleClass="text-field" stylesheets="@../css/TextField.css" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="BOTTOM_CENTER" prefHeight="8.0" prefWidth="66.0">
+                           <children>
+                              <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <CheckBox fx:id="checkbox_All" mnemonicParsing="false" text="All" textFill="#d7d7d7">
+                                             <font>
+                                                <Font name="System Bold" size="10.0" />
+                                             </font>
+                                          </CheckBox>
+                                       </children>
+                                    </HBox>
+                                    <Button mnemonicParsing="false" onAction="#Clear" prefWidth="81.0" stylesheets="@../css/Button.css">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/icons8-clear-24.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                          </children>
+                      </HBox>
+                  <HBox prefHeight="334.0" prefWidth="755.0" styleClass="container" stylesheets="@../css/TableView.css" VBox.vgrow="ALWAYS">
+                     <children>
+                            <TableView fx:id="studentsTable" stylesheets="@../css/TableView.css" HBox.hgrow="ALWAYS">
+                            <columns>
+                              <TableColumn fx:id="col_ID" editable="false" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" resizable="false" text="ID" visible="false" />
+                                <TableColumn fx:id="col_FullName" minWidth="50.0" prefWidth="204.0" text="Full Name" />
+                                <TableColumn fx:id="col_Phone" minWidth="50.0" prefWidth="145.0" text="Phone" />
+                                <TableColumn fx:id="col_Grade" minWidth="50.0" prefWidth="115.0" text="Grade" />
+                                <TableColumn fx:id="col_Language" minWidth="38.0" prefWidth="116.0" text="Language" />
+                                <TableColumn fx:id="col_Mark" minWidth="50.0" prefWidth="174.0" text="Mark /20" />
+                            </columns>
+                            </TableView>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+            </VBox>
          </children>
       </VBox>
     </children>
