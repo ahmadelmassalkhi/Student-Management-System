@@ -25,7 +25,7 @@ public abstract class Model {
     }
     
     public static final String NULL = "NULL";
-    protected abstract void CreateTable() throws SQLException;
+    protected abstract void CreateTable() throws Exception;
     
     /*******************************************************************/
     // QUERY HELPERS

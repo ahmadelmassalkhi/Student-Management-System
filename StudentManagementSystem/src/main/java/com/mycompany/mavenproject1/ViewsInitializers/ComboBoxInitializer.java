@@ -5,6 +5,7 @@
 package com.mycompany.mavenproject1.ViewsInitializers;
 
 import com.mycompany.mavenproject1.App;
+import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,20 +25,45 @@ import javafx.scene.control.ListCell;
  */
 public class ComboBoxInitializer {
     
-    /* OPTIONS */
-    public static final List<String> OPTIONS_GRADE = Arrays.asList("Any", "8", "Brevet", "10", "11", "Terminal", "Terminal SE", "Terminal LS", "Terminal GS", "Terminal LH");
-    public static final List<String> OPTIONS_SUBSCRIPTION = Arrays.asList("Any", "Active", "InActive");
-    public static final List<String> OPTIONS_LANGUAGE = Arrays.asList("Any", "English", "French");
-    public static final List<String> OPTIONS_MARKSORDER = Arrays.asList("Any", "ASC", "DESC");
-    public static final List<String> OPTIONS_COUNTRYCODES = getCountryCodes();
+    /* GRADE OPTIONS */
+    public static final String OPTION_GRADE_8 = "8";
+    public static final String OPTION_GRADE_9 = "Brevet";
+    public static final String OPTION_GRADE_10 = "10";
+    public static final String OPTION_GRADE_11 = "11";
+    public static final String OPTION_GRADE_12 = "Terminal";
+    public static final String OPTION_GRADE_12_LS = OPTION_GRADE_12 + " LS";
+    public static final String OPTION_GRADE_12_GS = OPTION_GRADE_12 + " GS";
+    public static final String OPTION_GRADE_12_SE = OPTION_GRADE_12 + " SE";
+    public static final String OPTION_GRADE_12_LH = OPTION_GRADE_12 + " LH";
+    
+    /* SUBSCRIPTION OPTIONS */
+    public static final String OPTION_SUBSCRIPTION_ACTIVE = Subscription.ACTIVE_STRING;
+    public static final String OPTION_SUBSCRIPTION_INACTIVE = Subscription.INACTIVE_STRING;
+
+    /* LANGUAGE OPTIONS */
+    public static final String OPTION_LANGUAGE_ENGLISH = "English";
+    public static final String OPTION_LANGUAGE_FRENCH = "French";
+    
+    /* MARKSORDER OPTIONS */
+    public static final String OPTION_MARKSORDER_ASC = "ASC";
+    public static final String OPTION_MARKSORDER_DESC = "DESC";
+    
+    /*******************************************************************/
     
     /* DEFAULT OPTIONS */
     public static final String ANY = "Any";
     public static final String OPTION_DEFAULT_LANGUAGE = ANY;
     public static final String OPTION_DEFAULT_GRADE = ANY;
     public static final String OPTION_DEFAULT_SUBSCRIPTION = ANY;
-    public static final String OPTION_DEFAULT_MARKORDER = "DESC";
+    public static final String OPTION_DEFAULT_MARKORDER = OPTION_MARKSORDER_DESC;
     public static final String OPTION_DEFAULT_COUNTRYCODE = "+961";
+    
+    /* OPTIONS */
+    public static final List<String> OPTIONS_GRADE = Arrays.asList("Any", OPTION_GRADE_8, OPTION_GRADE_9, OPTION_GRADE_10, OPTION_GRADE_11, OPTION_GRADE_12, OPTION_GRADE_12_SE, OPTION_GRADE_12_LS, OPTION_GRADE_12_GS, OPTION_GRADE_12_LH);
+    public static final List<String> OPTIONS_SUBSCRIPTION = Arrays.asList("Any", OPTION_SUBSCRIPTION_ACTIVE, OPTION_SUBSCRIPTION_INACTIVE);
+    public static final List<String> OPTIONS_LANGUAGE = Arrays.asList("Any", OPTION_LANGUAGE_ENGLISH, OPTION_LANGUAGE_FRENCH);
+    public static final List<String> OPTIONS_MARKSORDER = Arrays.asList("Any", OPTION_MARKSORDER_ASC, OPTION_MARKSORDER_DESC);
+    public static final List<String> OPTIONS_COUNTRYCODES = getCountryCodes();
 
     /* OPTIONS AS OBSERVABLE LIST */
     public static final ObservableList<String> OPTIONS_OBSERVABLE_LANGUAGE = FXCollections.observableArrayList(OPTIONS_LANGUAGE);

@@ -43,6 +43,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -208,7 +210,7 @@ public class StudentsController implements Initializable {
             // adopt to data changes
             this.clearTextFields(); // make adding another new student easier
             this.refresh();
-        } catch (NullPointerException | SQLException ex) {
+        } catch (NullPointerException | SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
@@ -253,7 +255,7 @@ public class StudentsController implements Initializable {
                     null); // marks order
             // display them
             studentsTable.setItems(FXCollections.observableArrayList(result));
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -307,7 +309,7 @@ public class StudentsController implements Initializable {
             
             // adopt to data changes
             this.refresh();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -328,7 +330,7 @@ public class StudentsController implements Initializable {
 
             // refresh table data
             this.Read();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

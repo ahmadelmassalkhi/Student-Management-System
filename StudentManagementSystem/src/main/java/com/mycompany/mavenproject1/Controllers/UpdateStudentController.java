@@ -77,6 +77,7 @@ public class UpdateStudentController implements Initializable {
         // Add items to the `Grade` ComboBox
         options = new ArrayList<>(ComboBoxInitializer.OPTIONS_GRADE);
         options.remove(ComboBoxInitializer.OPTION_DEFAULT_GRADE);
+        options.remove(ComboBoxInitializer.OPTION_GRADE_12);
         comboBox_Grade.setItems(FXCollections.observableArrayList(options));
 
         // Add items to the `Code` ComboBox
@@ -228,7 +229,7 @@ public class UpdateStudentController implements Initializable {
         } catch (MissingInputFieldException | PhoneAlreadyExistsException ex) {
             ErrorAlert alert = new ErrorAlert("Error", "Invalid Input !", ex.getMessage());
             alert.showAndWait();
-        } catch (NullPointerException | SQLException ex) {
+        } catch (NullPointerException | SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

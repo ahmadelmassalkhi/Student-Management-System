@@ -41,6 +41,8 @@ import java.util.ResourceBundle;
 import java.io.FileNotFoundException;
 import com.itextpdf.text.DocumentException;
 import com.mycompany.mavenproject1.ViewsInitializers.TextFieldInitializer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -268,7 +270,7 @@ public class MarksController implements Initializable {
             );
             // display
             studentsTable.setItems(FXCollections.observableArrayList(result));
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -326,7 +328,7 @@ public class MarksController implements Initializable {
         try {
             label_TotalSubscriptions.setText(model.getNumberOfSubscriptions() + "");
             this.Read();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

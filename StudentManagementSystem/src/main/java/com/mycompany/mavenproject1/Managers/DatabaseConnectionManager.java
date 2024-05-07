@@ -6,15 +6,11 @@ package com.mycompany.mavenproject1.Managers;
 
 // other imports
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.Blob;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -48,68 +44,6 @@ public final class DatabaseConnectionManager {
     }
     
     public ResultSet getSchemaInfo() throws SQLException { return getSchemaInfo(connection); }
-    
-    /*******************************************************/
-    // QUERY EXECUTION
-    
-    public static final int TYPE_NULL = -1;
-    public static final int TYPE_INTEGER = 0;
-    public static final int TYPE_LONG = 1;
-    public static final int TYPE_FLOAT = 2;
-    public static final int TYPE_DOUBLE = 3;
-    public static final int TYPE_STRING = 4;
-    public static final int TYPE_BLOB = 5;
-
-    // helper function to process prepared-statement parameters
-    private List<Integer> processParameters(Object[] params) throws IllegalArgumentException {
-        List<Integer> types = new ArrayList();
-        for (Object param : params) {
-            if(param == null) {
-                types.add(TYPE_NULL); // null
-            } else if (param instanceof Integer) {
-                types.add(TYPE_INTEGER); // Integer
-            } else if (param instanceof Long) {
-                types.add(TYPE_LONG); // Long
-            } else if(param instanceof Float) {
-                types.add(TYPE_FLOAT); // Float
-            } else if (param instanceof Double) {
-                types.add(TYPE_DOUBLE); // Double
-            } else if (param instanceof String) {
-                types.add(TYPE_STRING); // String
-            } else if (param instanceof Blob) {
-                types.add(TYPE_BLOB); // Blob
-            } else throw new IllegalArgumentException("Unknown or invalid type encountered while processing query parameters: " + param.getClass().getName());
-        }
-        return types;
-    }
-    
-    public ResultSet executeQuery(String query, Object... params) throws SQLException, IllegalArgumentException {
-        
-        // Create a statement
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        
-        // Bind parameters if provided
-        if (params != null && params.length > 0) {
-            List<Integer> types = processParameters(params);
-            for (int i = 0; i < types.size(); i++) {
-                switch (types.get(i)) {
-                    case TYPE_NULL -> preparedStatement.setNull(i+1, java.sql.Types.NULL);
-                    case TYPE_INTEGER -> preparedStatement.setInt(i+1, (int) params[i]);
-                    case TYPE_FLOAT -> preparedStatement.setFloat(i+1, (float) params[i]);
-                    case TYPE_DOUBLE -> preparedStatement.setDouble(i+1, (double) params[i]);
-                    case TYPE_STRING -> preparedStatement.setString(i+1, (String) params[i]);
-                    case TYPE_LONG -> preparedStatement.setLong(i+1, (long) params[i]);
-                    case TYPE_BLOB -> preparedStatement.setBlob(i+1, (Blob) params[i]);
-                }
-            }
-        }
-        
-        // Execute query
-        preparedStatement.execute();
-
-        // get & return ResultSet
-        return preparedStatement.getResultSet();
-    }
     
     /*******************************************************/
 

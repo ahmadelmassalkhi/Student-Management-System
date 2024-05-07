@@ -27,6 +27,8 @@ import java.net.URL;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.DatePicker;
 
 /**
@@ -154,7 +156,7 @@ public class UpdateStudentMarkController implements Initializable {
         try {
             model.UpdateMark(student.getId(), mark);
             this.Cancel();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
         }

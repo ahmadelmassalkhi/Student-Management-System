@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -44,7 +45,7 @@ public final class StudentsModel extends Model {
     }
     
     @Override
-    protected void CreateTable() throws SQLException {
+    protected void CreateTable() throws SQLException, IOException {
         // Create tables
         String query = String.format(
             "CREATE TABLE IF NOT EXISTS %s (" // TABLE
@@ -69,8 +70,8 @@ public final class StudentsModel extends Model {
         );
         
         // execute
-        database.executeQuery(query, new Object[] {});
-        
+        (new Query(query, null)).execute(database.connect());
+
         // create trigger (to delete subscription when student is deleted)
         this.createDeleteTrigger();
         
@@ -78,7 +79,7 @@ public final class StudentsModel extends Model {
         System.out.println(TABLE + " table created successfully.");
     }
     
-    private void createDeleteTrigger() throws SQLException {
+    private void createDeleteTrigger() throws SQLException, IOException {
         String query = String.format(
                 "CREATE TRIGGER IF NOT EXISTS delete_subscription "
                         + "AFTER DELETE ON %s " // this table
@@ -91,14 +92,14 @@ public final class StudentsModel extends Model {
                 SubscriptionsModel.COL_ID,
                 COL_SUBSCRIPTION_ID
         );
-        database.executeQuery(query, new Object[] {});
+        (new Query(query, null)).execute(database.connect());
     }
 
     /*******************************************************************/
     // CRUD OPERATIONS
     
     // CREATE
-    public void Create(Student s) throws PhoneAlreadyExistsException, SQLException {
+    public void Create(Student s) throws PhoneAlreadyExistsException, SQLException, IOException {
         // check if student already exists
         if(this.existsStudent(s)) throw new PhoneAlreadyExistsException();
 
@@ -126,16 +127,16 @@ public final class StudentsModel extends Model {
         params.add(subscriptionsModel.GetLastInsertedRowId()); // treat boolean as integer
         
         // execute query
-        database.executeQuery(query, params.toArray());
+        (new Query(query, params)).execute(database.connect());
     }
     
     /*******************************************************************/
     // READ
     
-    public List<Student> Read() throws SQLException { return Read(null, null, null, null, null, null, null, null, null); }
-    public List<Student> Read(Long id) throws SQLException { return Read(id, null, null, null, null, null, null, null, null); }
-    public List<Student> Read(String fullName) throws SQLException { return Read(null, fullName, null, null, null, null, null, null, null); }
-    public List<Student> Read(Subscription subscription) throws SQLException { return Read(null, null, null, null, null, subscription, null, null, null); }
+    public List<Student> Read() throws SQLException, IOException { return Read(null, null, null, null, null, null, null, null, null); }
+    public List<Student> Read(Long id) throws SQLException, IOException { return Read(id, null, null, null, null, null, null, null, null); }
+    public List<Student> Read(String fullName) throws SQLException, IOException { return Read(null, fullName, null, null, null, null, null, null, null); }
+    public List<Student> Read(Subscription subscription) throws SQLException, IOException { return Read(null, null, null, null, null, subscription, null, null, null); }
     public List<Student> Read(
             Long id,
             String fullName,
@@ -145,14 +146,207 @@ public final class StudentsModel extends Model {
             Subscription subscription,
             Float minMark,
             Float maxMark,
-            String marksOrder) throws SQLException {
+            String marksOrder) throws SQLException, IOException {
 
         // prepare query
-        String query = "SELECT * FROM " + TABLE;
-
-        // filter the query
-        boolean first = true;
+        Query query = this.queryFilter("SELECT * FROM " + TABLE, id, fullName, phone, grade, language, subscription, minMark, maxMark, marksOrder);
+        
+        // execute query
+        ResultSet result = query.execute(database.connect());
+        
+        // fetch and return results
+        List<Student> students = new ArrayList<>();
+        while(result.next()) {
+            // create student
+            Student s = new Student();
+            s.setId(result.getLong(COL_ID));
+            s.setFullName(result.getString(COL_FULLNAME));
+            s.setPhone(result.getString(COL_PHONE));
+            s.setGrade(result.getString(COL_GRADE));
+            s.setLanguage(result.getString(COL_LANGUAGE));
+            s.setMark(result.getString(COL_MARK));
+            s.setSubscription(subscriptionsModel.Read(result.getLong(COL_SUBSCRIPTION_ID)).get(0));
+            
+            // add student to results
+            students.add(s);
+        }
+        
+        // close resources
+        result.close();
+        
+        // return
+        return students;
+    }
+    
+    /*******************************************************************/
+    // UPDATE
+    
+    public void UpdateMark(long id, Float mark) throws SQLException, IOException {
+        // set query
+        String queryString = String.format("UPDATE %s SET %s = ? WHERE %s = ?", TABLE, COL_MARK, COL_ID);
+        
+        // set parameters
+        List<Object> queryParams = new ArrayList<>();
+        queryParams.add(mark);
+        queryParams.add(id);
+        
+        // execute query
+        (new Query(queryString, queryParams)).execute(database.connect());
+    }
+    
+    public void Update(Student oldS, Student updatedS) throws SQLException, PhoneAlreadyExistsException, IOException {
+        
+        // check if updated phone number (UNIQUE attribute)
+        if(oldS.getPhone().equals(updatedS.getPhone()) == false) {
+            // check if the updated phone number already exists in the database
+            if(this.existsStudent(updatedS)) throw new PhoneAlreadyExistsException();
+        }
+        
+        /* update student information */
+        // prepare query
+        String query = String.format(
+                "UPDATE %s SET %s=?, %s=?, %s=?, %s=? WHERE %s=?;",
+                TABLE,
+                COL_FULLNAME,
+                COL_PHONE,
+                COL_GRADE,
+                COL_LANGUAGE,
+                COL_ID
+        );
+        
+        // set parameters
         List<Object> params = new ArrayList<>();
+        params.add(updatedS.getFullName());
+        params.add(updatedS.getPhone());
+        params.add(updatedS.getGrade());
+        params.add(updatedS.getLanguage());
+        params.add(oldS.getId());
+        
+        // execute query
+        (new Query(query, params)).execute(database.connect());
+
+        // update subscription to match student's new subscription
+        subscriptionsModel.Update(oldS.getSubscription(), updatedS.getSubscription());
+    }
+    
+    /*******************************************************************/
+    // DELETE    
+
+    public void deleteStudentsByIDs(List<Long> IDs) throws SQLException, IOException {
+        // Check if the list is empty
+        if (IDs.isEmpty()) return;
+
+        // Construct the IN clause with properly formatted phone numbers
+        StringBuilder idListString = new StringBuilder();
+        for (Long id : IDs) {
+            if(id != null) idListString.append("?,");
+        }
+
+        // Remove the trailing comma
+        idListString.deleteCharAt(idListString.length() - 1);
+
+        // Construct the SQL query
+        String query = String.format("DELETE FROM %s WHERE %s IN (%s)", TABLE, COL_ID, idListString.toString());
+
+        // execute query
+        List<Object> params = IDs.stream().map(Long::valueOf).collect(Collectors.toList());
+        (new Query(query, params)).execute(database.connect());
+    }
+    
+    public void Delete() throws SQLException, IOException { Delete(null, null, null, null, null, null, null); }
+    public void Delete(
+            Long id,
+            String fullName,
+            String phone,
+            String grade,
+            String language,
+            Subscription subscription,
+            Float mark) throws SQLException, IOException {
+        
+        // prepare the query
+        Query query = this.queryFilter("DELETE FROM " + TABLE, id, fullName, phone, grade, language, subscription, mark);
+        
+        query.execute(database.connect());
+    }
+    
+    /*******************************************************************/
+    // PUBLIC GETTERS
+    
+    public boolean existsStudent(Student s) throws SQLException, IOException {
+        // set query
+        String query = String.format("SELECT * FROM %s WHERE %s = ?", TABLE, COL_PHONE);
+        
+        // set parameters
+        List<Object> params = new ArrayList<>();
+        params.add(s.getPhone());
+        
+        return (new Query(query, params)).execute(database.connect()).next();
+    }
+    
+    // time complexity = O(1)
+    public int getNumberOfStudents() throws SQLException, IOException {
+        String query = "SELECT COUNT(*) AS rowCount FROM " + TABLE;
+        return (new Query(query, null)).execute(database.connect()).getInt("rowCount");
+    }
+    
+    public long getNumberOfSubscriptions() throws SQLException, IOException {
+        return subscriptionsModel.GetAllActiveSubscriptions();
+    }
+    
+    /*******************************************************************/
+    
+    // for Read()
+    private Query queryFilter(
+            String query,
+            Long id,
+            String fullName,
+            String phone,
+            String grade,
+            String language,
+            Subscription subscription,
+            Float minMark,
+            Float maxMark,
+            String marksOrder) throws SQLException {
+        return queryFilter(query, id, fullName, phone, grade, language, subscription, null, minMark, maxMark, marksOrder);
+    }
+    
+    // for Delete()
+    private Query queryFilter(
+            String query,
+            Long id,
+            String fullName,
+            String phone,
+            String grade,
+            String language,
+            Subscription subscription,
+            Float mark) throws SQLException {
+        return queryFilter(query, id, fullName, phone, grade, language, subscription, mark, null, null, null);
+    }
+    
+    private Query queryFilter(
+            String query,
+            Long id,
+            String fullName,
+            String phone,
+            String grade,
+            String language,
+            Subscription subscription,
+            Float mark,
+            Float minMark,
+            Float maxMark,
+            String marksOrder) throws SQLException {
+        
+        // filter the query
+        List<Object> params = new ArrayList<>();
+        
+        // id is unique
+        if(id != null) {
+            query += this.whereEqual(COL_ID);
+            params.add(id);
+            return new Query(query, params);
+        }
+        
+        boolean first = true;
         if(subscription != null) {
             query += String.format(
                     " JOIN %s ON %s=%s", 
@@ -202,224 +396,51 @@ public final class StudentsModel extends Model {
             params.add(language);
             first = false;
         }
-        if(minMark != null || maxMark != null) {
-            if(first) {
-                if(minMark == null) {
-                    // only use max
-                    query += this.whereLessEqual(COL_MARK);
-                    params.add(maxMark);
-                } else if(maxMark == null) {
-                    // only use min
-                    query += this.whereGreaterEqual(COL_MARK);
-                    params.add(minMark);
-                } else {
-                    // both were given
-                    query += this.whereBetween(COL_MARK);
-                    params.add(minMark);
-                    params.add(maxMark);
-                }
-            } else {
-                if(minMark == null) {
-                    // only use max
-                    query += this.andLessEqual(COL_MARK);
-                    params.add(maxMark);
-                } else if(maxMark == null) {
-                    // only use min
-                    query += this.andGreaterEqual(COL_MARK);
-                    params.add(minMark);
-                } else {
-                    query += this.andBetween(COL_MARK);
-                    params.add(minMark);
-                    params.add(maxMark);
-                }
-            }
-        }
-        // ORDER must be last
-        if(marksOrder != null) {
-            if(marksOrder.equalsIgnoreCase("asc")) query += this.orderByASC(COL_MARK);
-            else query += this.orderByDESC(COL_MARK);
-        }
-        
-        // execute query
-        ResultSet result = database.executeQuery(query, params.toArray());
-        
-        // fetch and return results
-        List<Student> students = new ArrayList<>();
-        while(result.next()) {
-            // create student
-            Student s = new Student();
-            s.setId(result.getLong(COL_ID));
-            s.setFullName(result.getString(COL_FULLNAME));
-            s.setPhone(result.getString(COL_PHONE));
-            s.setGrade(result.getString(COL_GRADE));
-            s.setLanguage(result.getString(COL_LANGUAGE));
-            s.setMark(result.getString(COL_MARK));
-            s.setSubscription(subscriptionsModel.Read(result.getLong(COL_SUBSCRIPTION_ID)).get(0));
-            
-            // add student to results
-            students.add(s);
-        }
-        
-        // close resources
-        result.close();
-        
-        // return
-        return students;
-    }
-    
-    /*******************************************************************/
-    // UPDATE
-    
-    public void UpdateMark(long id, Float mark) throws SQLException {
-        String query = String.format("UPDATE %s SET %s = ? WHERE %s = ?", TABLE, COL_MARK, COL_ID);
-        database.executeQuery(query, new Object[] { mark, id });
-    }
-    
-    public void Update(Student oldS, Student updatedS) throws SQLException, PhoneAlreadyExistsException {
-        
-        // check if updated phone number (UNIQUE attribute)
-        if(oldS.getPhone().equals(updatedS.getPhone()) == false) {
-            // check if the updated phone number already exists in the database
-            if(this.existsStudent(updatedS)) throw new PhoneAlreadyExistsException();
-        }
-        
-        /* update student information */
-        // prepare query
-        String query = String.format(
-                "UPDATE %s SET %s=?, %s=?, %s=?, %s=? WHERE %s=?;",
-                TABLE,
-                COL_FULLNAME,
-                COL_PHONE,
-                COL_GRADE,
-                COL_LANGUAGE,
-                COL_ID
-        );
-        
-        // set parameters
-        Object[] params = new Object[] {
-            updatedS.getFullName(),
-            updatedS.getPhone(),
-            updatedS.getGrade(),
-            updatedS.getLanguage(),
-            oldS.getId()
-        };
-        
-        // execute query
-        database.executeQuery(query, params);
-
-        // update subscription to match student's new subscription
-        subscriptionsModel.Update(oldS.getSubscription(), updatedS.getSubscription());
-    }
-    
-    /*******************************************************************/
-    // DELETE    
-
-    public void deleteStudentsByIDs(List<Long> IDs) throws SQLException {
-        // Check if the list is empty
-        if (IDs.isEmpty()) return;
-
-        // Construct the IN clause with properly formatted phone numbers
-        StringBuilder idListString = new StringBuilder();
-        for (Long id : IDs) idListString.append("?,");
-
-        // Remove the trailing comma
-        idListString.deleteCharAt(idListString.length() - 1);
-
-        // Construct the SQL query
-        String query = String.format("DELETE FROM %s WHERE %s IN (%s)", TABLE, COL_ID, idListString.toString());
-
-        // execute query
-        database.executeQuery(query, IDs.toArray());
-    }
-    
-    public void Delete() throws SQLException { Delete(null, null, null, null, null, null, null); }
-    public void Delete(
-            Long id,
-            String fullName,
-            String phone,
-            String grade,
-            String language,
-            Subscription subscription,
-            Float mark) throws SQLException {
-        // prepare the query
-        String query = "DELETE FROM " + TABLE;
-    
-        // filter the query
-        boolean first = true;
-        List<Object> params = new ArrayList<>();
-        if(subscription != null) {
-            query += String.format(" JOIN %s ON %s=%s", SubscriptionsModel.TABLE, SubscriptionsModel.COL_ID, COL_ID);
-            if(subscription.getId() != null) {
-                query += this.whereEqual(SubscriptionsModel.COL_ID);
-                params.add(id);
-                first = false;
-            }
-            if(subscription.getStatus() != null) {
-                if(first) query += this.whereEqual(SubscriptionsModel.COL_STATUS);
-                else query += this.andEqual(SubscriptionsModel.COL_STATUS);
-                params.add(subscription.getStatus() ? Subscription.ACTIVE : Subscription.INACTIVE);
-                first = false;
-            }
-            if(subscription.getDate() != null) {
-                if(first) query += this.whereEqual(SubscriptionsModel.COL_EXPIRATION_DATE);
-                else query += this.andEqual(SubscriptionsModel.COL_EXPIRATION_DATE);
-                params.add(subscription.getDate().toString());
-                first = false;
-            }
-            first = false;
-        }
-        if(fullName != null) {
-            if(first) query += this.whereLike(COL_FULLNAME);
-            else query += this.andLike(COL_FULLNAME);
-            params.add("%" + fullName + "%");
-            first = false;
-        }
-        if(phone != null) {
-            if(first) query += this.whereLike(COL_PHONE);
-            else query += this.andLike(COL_PHONE);
-            params.add("%" + phone + "%");
-            first = false;
-        }
-        if(grade != null) {
-            if(first) query += this.whereEqual(COL_GRADE);
-            else query += this.andEqual(COL_GRADE);
-            params.add(grade);
-            first = false;
-        }
-        if(language != null) {
-            if(first) query += this.whereEqual(COL_LANGUAGE);
-            else query += this.andEqual(COL_LANGUAGE);
-            params.add(language);
-            first = false;
-        }
         if(mark != null) {
             if(first) query += this.whereEqual(COL_MARK);
             else query += this.andEqual(COL_MARK);
             params.add(mark);
             first = false;
+        } else {
+            if(minMark != null || maxMark != null) {
+                if(first) {
+                    if(minMark == null) {
+                        // only use max
+                        query += this.whereLessEqual(COL_MARK);
+                        params.add(maxMark);
+                    } else if(maxMark == null) {
+                        // only use min
+                        query += this.whereGreaterEqual(COL_MARK);
+                        params.add(minMark);
+                    } else {
+                        // both were given
+                        query += this.whereBetween(COL_MARK);
+                        params.add(minMark);
+                        params.add(maxMark);
+                    }
+                } else {
+                    if(minMark == null) {
+                        // only use max
+                        query += this.andLessEqual(COL_MARK);
+                        params.add(maxMark);
+                    } else if(maxMark == null) {
+                        // only use min
+                        query += this.andGreaterEqual(COL_MARK);
+                        params.add(minMark);
+                    } else {
+                        query += this.andBetween(COL_MARK);
+                        params.add(minMark);
+                        params.add(maxMark);
+                    }
+                }
+            }
+            // ORDER must be last
+            if(marksOrder != null) {
+                if(marksOrder.equalsIgnoreCase("asc")) query += this.orderByASC(COL_MARK);
+                else query += this.orderByDESC(COL_MARK);
+            }
         }
         
-        // execute query
-        database.executeQuery(query, params.toArray());
+        return new Query(query, params);
     }
-    
-    /*******************************************************************/
-    // PUBLIC GETTERS
-    
-    public boolean existsStudent(Student s) throws SQLException {
-        String query = String.format("SELECT * FROM %s WHERE %s = ?", TABLE, COL_PHONE);
-        return database.executeQuery(query, new Object[] {s.getPhone()}).next();
-    }
-    
-    // time complexity = O(1)
-    public int getNumberOfStudents() throws SQLException {
-        String query = "SELECT COUNT(*) AS rowCount FROM " + TABLE;
-        return database.executeQuery(query, new Object[] {}).getInt("rowCount");
-    }
-    
-    public long getNumberOfSubscriptions() throws SQLException {
-        return subscriptionsModel.GetAllActiveSubscriptions();
-    }
-    
-    /*******************************************************************/
 }
