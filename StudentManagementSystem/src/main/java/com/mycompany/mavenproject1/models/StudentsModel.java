@@ -8,13 +8,13 @@ package com.mycompany.mavenproject1.models;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
 import com.mycompany.mavenproject1.ModelObjects.Student;
 import com.mycompany.mavenproject1.Exceptions.PhoneAlreadyExistsException;
-import java.io.IOException;
-import java.sql.ResultSet;
 
 // other imports
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.IOException;
+import java.sql.ResultSet;
 
 /**
  *
@@ -191,9 +191,9 @@ public final class StudentsModel extends Model {
             first = false;
         }
         if(grade != null) {
-            if(first) query += this.whereEqual(COL_GRADE);
-            else query += this.andEqual(COL_GRADE);
-            params.add(grade);
+            if(first) query += this.whereLike(COL_GRADE);
+            else query += this.andLike(COL_GRADE);
+            params.add("%" + grade + "%");
             first = false;
         }
         if(language != null) {

@@ -6,6 +6,7 @@ package com.mycompany.mavenproject1.Common;
 
 import com.mycompany.mavenproject1.Exceptions.MissingInputFieldException;
 import com.mycompany.mavenproject1.ModelObjects.Subscription;
+import com.mycompany.mavenproject1.ViewsInitializers.ComboBoxInitializer;
 
 /**
  *
@@ -15,10 +16,10 @@ public class InputValidatorForStudentFields {
     
     private static boolean validFullName(String fullName) { return fullName != null && !fullName.isEmpty(); }
     private static boolean validPhone(String phone) { return phone != null && !phone.isEmpty(); }
-    private static boolean validGrade(String grade) { return grade != null && !grade.isEmpty() && !grade.equalsIgnoreCase("any"); }
-    private static boolean validLanguage(String language) { return language != null && !language.isEmpty() && !language.equalsIgnoreCase("any"); }
+    private static boolean validGrade(String grade) { return grade != null && !grade.isEmpty() && !grade.equalsIgnoreCase(ComboBoxInitializer.ANY) && !grade.equalsIgnoreCase("terminal"); }
+    private static boolean validLanguage(String language) { return language != null && !language.isEmpty() && !language.equalsIgnoreCase(ComboBoxInitializer.ANY); }
     private static boolean validCountryCode(String countryCode) { return countryCode != null && !countryCode.isEmpty(); }
-    private static boolean validSubscriptionStatus(String status) { return status != null && !status.isEmpty() && !status.equalsIgnoreCase("any"); }
+    private static boolean validSubscriptionStatus(String status) { return status != null && !status.isEmpty() && !status.equalsIgnoreCase(ComboBoxInitializer.ANY); }
     private static boolean validSubscription(Subscription s) { return !(s.getStatus() && s.getDate() == null); }
     
     public static void validateAddFields(
@@ -35,7 +36,7 @@ public class InputValidatorForStudentFields {
                 || !validGrade(grade) 
                 || !validLanguage(language) 
                 || !validSubscriptionStatus(subscriptionStatus) 
-                || !validCountryCode(countryCode)) throw new MissingInputFieldException();
+                || !validCountryCode(countryCode)) throw new MissingInputFieldException("Please fill all fields with EXACT values !");
     }
     
     public static void validateUpdateFields(
