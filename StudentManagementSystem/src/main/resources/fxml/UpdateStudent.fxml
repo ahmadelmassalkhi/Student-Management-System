@@ -73,7 +73,7 @@
                                     <VBox alignment="CENTER_RIGHT" fillWidth="false" prefHeight="57.0" prefWidth="147.0" spacing="3.0">
                                        <children>
                                           <TextField fx:id="tf_FullName" prefHeight="27.0" prefWidth="145.0" promptText="Full Name" styleClass="text-field" stylesheets="@../css/TextField.css" />
-                                          <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" style="-fx-pref-width: 120px;" />
+                                          <TextField fx:id="tf_Phone" prefHeight="27.0" prefWidth="224.0" promptText="Phone" stylesheets="@../css/TextField.css" />
                                        </children>
                                     </VBox>
                                  </children>
